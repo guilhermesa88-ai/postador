@@ -69,12 +69,23 @@ SECOES = [
 MIN_CAPITAIS = 18          # abaixo disso o layout mudou; nao publique
 VAR_MIN, VAR_MAX = -30.0, 60.0
 
-# O informe compara a variacao do indice com a inflacao. O numero do IPCA e
-# de terceiro (IBGE), citado dentro do texto -- entao nao invento pattern
-# rigido: pego toda mencao a IPCA junto com o percentual mais proximo E o
-# trecho literal em que ele aparece. O trecho e o que permite conferir a que
-# horizonte aquele numero se refere, sem eu ter que adivinhar.
-_IPCA = re.compile(r"IPCA[^.;]{0,120}?\(?([+-]?\d{1,2},\d{1,2})\s*%", re.I)
+# O informe traz uma linha de tabela comparando o indice com a inflacao:
+#
+#   IPCA* IBGE  -0,40%  +0,07%  +3,02%  +4,14%  -
+#
+# nesta ordem de coluna: mes de referencia, mes anterior, acumulado no ano,
+# ultimos 12 meses, preco medio (vazio para indice de inflacao).
+#
+# A primeira versao desta extracao pegava "IPCA seguido do percentual mais
+# proximo" no texto corrido. Parecia funcionar e estava errada: num paragrafo
+# o percentual mais proximo da palavra IPCA era o do IGP-M, e o numero teria
+# ido para o campo rotulado como IPCA. Numero certo com rotulo errado e pior
+# que numero ausente -- o validador nao pega, porque o numero existe mesmo.
+# Por isso agora so a linha da tabela conta, com as quatro colunas de uma vez.
+_IPCA_TABELA = re.compile(
+    r"IPCA\s*\*?\s+IBGE\s+([+-]?\d{1,2},\d{2})%\s+([+-]?\d{1,2},\d{2})%\s+"
+    r"([+-]?\d{1,2},\d{2})%\s+([+-]?\d{1,2},\d{2})%"
+)
 IPCA_MIN, IPCA_MAX = -5.0, 30.0
 
 
@@ -152,32 +163,35 @@ def indice_geral(fatia: str, horizonte: str) -> float | None:
     return float(m.group(1).replace(",", ".")) if m else None
 
 
-def referencias_ipca(texto: str) -> list[dict]:
-    """Mencoes ao IPCA no informe, com o trecho literal em volta.
+def inflacao_ipca(texto: str) -> dict | None:
+    """A linha do IPCA na tabela comparativa do informe, com rotulo por coluna.
 
-    Devolve lista vazia se o informe nao citar o IPCA -- e isso e um resultado
-    valido, nao um erro. O efeito de nao achar e o perfil nao poder comparar o
-    imovel com a inflacao naquele mes. O efeito de eu "achar" um numero errado
-    seria publicar uma comparacao falsa. Entre os dois, a lista vazia.
+    Devolve None se a linha nao for encontrada -- e isso e um resultado valido,
+    nao um erro. O efeito de nao achar e o perfil nao poder comparar imovel com
+    inflacao naquele mes. O efeito de achar errado seria publicar uma
+    comparacao falsa. Entre os dois, None.
     """
     plano = re.sub(r"\s+", " ", texto)
-    achados: list[dict] = []
-    vistos: set[tuple[str, float]] = set()
+    m = _IPCA_TABELA.search(plano)
+    if not m:
+        return None
 
-    for m in _IPCA.finditer(plano):
-        v = float(m.group(1).replace(",", "."))
-        if not (IPCA_MIN <= v <= IPCA_MAX):
-            continue
-        ini = max(0, m.start() - 160)
-        fim = min(len(plano), m.end() + 60)
-        trecho = plano[ini:fim].strip()
-        chave = (trecho[-90:], v)
-        if chave in vistos:
-            continue
-        vistos.add(chave)
-        achados.append({"variacao_pct": v, "trecho": trecho})
+    vals = [float(g.replace(",", ".")) for g in m.groups()]
+    if not all(IPCA_MIN <= v <= IPCA_MAX for v in vals):
+        return None
 
-    return achados
+    mensal, mes_anterior, ano, doze_meses = vals
+    return {
+        "fonte": "IPCA/IBGE, conforme a tabela comparativa do informe do FipeZap",
+        "observacao": ("Cada campo e uma coluna da linha do IPCA na tabela do "
+                       "informe. Compare cada horizonte com o horizonte "
+                       "correspondente do indice; nunca cruze horizontes."),
+        "mensal_pct": mensal,
+        "mes_anterior_pct": mes_anterior,
+        "ano_pct": ano,
+        "doze_meses_pct": doze_meses,
+        "trecho_literal": plano[m.start():m.end()],
+    }
 
 
 def ingerir(ano: int, mes: int) -> Path:
@@ -221,15 +235,9 @@ def ingerir(ano: int, mes: int) -> Path:
         "horizontes": horizontes,
     }
 
-    ipca = referencias_ipca(texto)
+    ipca = inflacao_ipca(texto)
     if ipca:
-        facts["inflacao_ipca"] = {
-            "fonte": "IPCA/IBGE, conforme citado no informe do FipeZap",
-            "observacao": ("Cada item traz o trecho literal do informe. Use o "
-                           "trecho para saber a que horizonte o numero se "
-                           "refere; nao compare horizontes diferentes."),
-            "mencoes": ipca,
-        }
+        facts["inflacao_ipca"] = ipca
 
     destino = RAIZ / "facts" / "fipezap-capitais.json"
     destino.parent.mkdir(exist_ok=True)
@@ -246,12 +254,13 @@ def ingerir(ano: int, mes: int) -> Path:
 
     # Impresso no log de proposito: e assim que se confere o IPCA contra o PDF
     # antes de deixar o perfil comparar imovel com inflacao.
-    print("\n  IPCA citado no informe:")
+    print("\n  IPCA na tabela do informe:")
     if ipca:
-        for m in ipca:
-            print(f"    {m['variacao_pct']:+.2f}%  ...{m['trecho'][-150:]}")
+        print(f"    mes {ipca['mensal_pct']:+.2f}%   mes anterior {ipca['mes_anterior_pct']:+.2f}%   "
+              f"ano {ipca['ano_pct']:+.2f}%   12 meses {ipca['doze_meses_pct']:+.2f}%")
+        print(f"    linha lida: {ipca['trecho_literal']}")
     else:
-        print("    nenhuma mencao encontrada — o perfil nao vai comparar com inflacao")
+        print("    linha nao encontrada — o perfil nao vai comparar com inflacao")
 
     print(f"\n  gravado em {destino}")
     return destino
