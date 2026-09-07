@@ -1,0 +1,17 @@
+name: Inspecionar PDF
+
+# Descoberta, nao producao. Roda so na mao, imprime o texto extraido do
+# informe e nao grava nada. Serve para escrever o parser contra o documento
+# real em vez de contra o que se imagina que ele contenha.
+on:
+  workflow_dispatch:
+
+jobs:
+  inspecionar:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with: { python-version: '3.12' }
+      - run: pip install requests pdfplumber
+      - run: python inspecionar_pdf.py
