@@ -46,8 +46,11 @@
   .sub { font-size: 34px; line-height: 1.45; color: {{ c.ink_secundario }};
          font-weight: 300; margin-top: 32px; max-width: 860px; }
 
+  /* pre-line: o modelo separa paragrafos com \n\n. Sem isso o HTML colapsa
+     tudo num bloco unico e o slide vira parede de texto. <br> continua
+     funcionando para quem preferir escrever a quebra explicita. */
   .corpo { font-size: 38px; line-height: 1.5; color: {{ c.ink }};
-           font-weight: 300; margin-top: 40px; }
+           font-weight: 300; margin-top: 40px; white-space: pre-line; }
   .corpo strong { font-weight: 600; }
 
   .espaco { flex: 1; }
@@ -87,6 +90,13 @@
   .cta em { font-style: normal; color: {{ c.acento }}; }
 
   .selo-ia { font-size: 20px; color: {{ c.ink_muted }}; }
+
+  /* Linha de fecho acima do rodape. Vale para qualquer tipo de slide: antes
+     so a capa renderizava `rodape_destaque`, e o campo escrito pelo modelo
+     em outro slide sumia sem aviso. */
+  .destaque { font-size: 32px; line-height: 1.4; font-weight: 400;
+              color: {{ c.ink_secundario }}; margin-bottom: 40px; }
+  .destaque strong { font-weight: 600; color: {{ c.ink }}; }
 </style>
 </head>
 <body>
@@ -96,9 +106,6 @@
     <div class="eyebrow">{{ s.eyebrow }}</div>
     <h1>{{ s.titulo }}</h1>
     {% if s.sub %}<p class="sub">{{ s.sub }}</p>{% endif %}
-    {% if s.rodape_destaque %}
-      <div class="corpo" style="margin-top:56px">{{ s.rodape_destaque|safe }}</div>
-    {% endif %}
     <div class="espaco"></div>
 
   {% elif s.tipo == 'grafico' %}
@@ -139,6 +146,10 @@
     {% if s.corpo %}<div class="corpo">{{ s.corpo|safe }}</div>{% endif %}
     <div class="espaco"></div>
     <div class="cta">{{ s.cta|safe }}</div>
+  {% endif %}
+
+  {% if s.rodape_destaque %}
+    <div class="destaque">{{ s.rodape_destaque|safe }}</div>
   {% endif %}
 
   <div class="rodape">
