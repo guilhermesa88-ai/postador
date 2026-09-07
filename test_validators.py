@@ -72,6 +72,11 @@ ano["slides"][0]["sub"] = "Dados coletados em 2026."
 r = checar_ancoragem(ano, FACTS)
 checa("aceita ano", r.ok, str(r.erros))
 
+barra = json.loads(json.dumps(BRIEF))
+barra["slides"][1]["dados"][0]["valor"] = 9.7
+r = checar_ancoragem(barra, FACTS)
+checa("barra inventada no gráfico", not r.ok, str(r.erros))
+
 trivial = json.loads(json.dumps(BRIEF))
 trivial["slides"][0]["sub"] = "São 3 leituras possíveis."
 r = checar_ancoragem(trivial, FACTS)

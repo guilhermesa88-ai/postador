@@ -178,10 +178,20 @@ def checar_ancoragem(brief: dict, facts: Any, tolerancia: float = 0.051) -> Resu
     r = Resultado()
     base = numeros_dos_facts(facts)
 
-    # os valores do próprio gráfico entram na base: vieram dos facts via seleção
-    for s in brief.get("slides", []):
-        for d in s.get("dados", []) or []:
-            base.add(round(abs(float(d["valor"])), 4))
+    # O gráfico é checado como todo o resto.
+    #
+    # A versão anterior fazia o contrário: jogava os valores do gráfico DENTRO
+    # da base, com o comentário "vieram dos facts via seleção". Isso era uma
+    # suposição, não uma checagem — e deixava o caminho mais fácil de inventar
+    # número (a barra, que é o que o leitor olha primeiro) passar sem exame,
+    # ao mesmo tempo em que legitimava esse número para o texto dos slides.
+    for i, s in enumerate(brief.get("slides", []), start=1):
+        for j, d in enumerate(s.get("dados", []) or [], start=1):
+            v = round(abs(float(d["valor"])), 4)
+            if v in _TOLERADOS or any(abs(v - b) <= tolerancia for b in base):
+                continue
+            r.falhar(f"slide {i}.gráfico, barra {j} ({d.get('label', '?')}): "
+                     f"valor {d['valor']:g} não existe nos facts de origem")
 
     for origem, texto in _textos_do_brief(brief):
         for n in extrair_numeros(texto):
