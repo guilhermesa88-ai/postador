@@ -1,0 +1,193 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<style>
+  /* ------------------------------------------------------------------
+     Reel 1080x1920. Toda a animacao e CSS: o Playwright grava a pagina
+     rodando, entao nao existe frame a frame aqui. As porcentagens de
+     keyframe vem calculadas do reel.py -- ver _linha_do_tempo().
+     ------------------------------------------------------------------ */
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  html, body {
+    width: {{ W }}px; height: {{ H }}px; overflow: hidden;
+    background: {{ c.surface }}; color: {{ c.ink }};
+    font-family: {{ t.familia }};
+    -webkit-font-smoothing: antialiased;
+  }
+
+  .palco { position: relative; width: {{ W }}px; height: {{ H }}px; }
+
+  .barra-topo {
+    position: absolute; top: 0; left: 0; width: {{ W }}px; height: 12px;
+    background: {{ c.acento }}; z-index: 10;
+  }
+
+  .cena {
+    position: absolute; inset: 0;
+    padding: 150px 90px 190px;
+    display: flex; flex-direction: column; justify-content: center;
+    opacity: 0;
+    animation-duration: {{ total_s }}s;
+    animation-timing-function: ease;
+    animation-fill-mode: forwards;
+    animation-iteration-count: 1;
+  }
+
+  {% for nome, k in cenas.items() %}
+  @keyframes k-{{ nome }} {
+    0%, {{ '%.3f'|format(k.p_oculta_antes) }}%   { opacity: 0; transform: translateY(30px); }
+    {{ '%.3f'|format(k.p_visivel_ini) }}%        { opacity: 1; transform: translateY(0); }
+    {%- if k.ultima %}
+    100% { opacity: 1; transform: translateY(0); }
+    {%- else %}
+    {{ '%.3f'|format(k.p_visivel_fim) }}%        { opacity: 1; transform: translateY(0); }
+    {{ '%.3f'|format(k.p_oculta_depois) }}%, 100% { opacity: 0; transform: translateY(-20px); }
+    {%- endif %}
+  }
+  .cena.{{ nome }} { animation-name: k-{{ nome }}; }
+  {% endfor %}
+
+  /* gancho ----------------------------------------------------------- */
+  .gancho h1 {
+    font-size: 112px; line-height: 1.02; font-weight: {{ t.peso_titulo }};
+    letter-spacing: -.03em;
+  }
+  .gancho .sub {
+    font-size: 44px; line-height: 1.35; font-weight: 300;
+    color: {{ c.ink_secundario }}; margin-top: 48px;
+  }
+
+  /* grafico ----------------------------------------------------------- */
+  .grafico h2 {
+    font-size: 66px; line-height: 1.1; font-weight: {{ t.peso_titulo }};
+    letter-spacing: -.02em; margin-bottom: 76px;
+  }
+  .linhas { display: flex; flex-direction: column; gap: 30px; }
+
+  .linha { display: flex; align-items: center; gap: 26px; }
+  .linha .nome {
+    width: 260px; text-align: right; flex: none;
+    font-size: 34px; font-weight: 400; color: {{ c.ink_secundario }};
+  }
+  .trilho { position: relative; flex: 1; height: 54px; }
+
+  /* a linha do zero: hairline recessiva, referencia fixa das barras */
+  .zero {
+    position: absolute; top: -14px; bottom: -14px;
+    left: {{ '%.3f'|format(zero_pct) }}%;
+    width: 2px; background: {{ c.baseline }};
+  }
+
+  .barra {
+    position: absolute; top: 0; height: 54px;
+    border-radius: 10px;
+    transform: scaleX(0);
+    animation-duration: {{ total_s }}s;
+    animation-timing-function: cubic-bezier(.22,.9,.3,1);
+    animation-fill-mode: forwards;
+  }
+  .barra.pos { background: {{ c.positivo }}; transform-origin: left center; }
+  .barra.neg { background: {{ c.negativo }}; transform-origin: right center; }
+
+  .valor {
+    position: absolute; top: 4px;
+    font-size: 34px; font-weight: 600; color: {{ c.ink }};
+    opacity: 0;
+    animation-duration: {{ total_s }}s;
+    animation-timing-function: ease;
+    animation-fill-mode: forwards;
+    white-space: nowrap;
+  }
+
+  {% for b in barras %}
+  @keyframes cresce-{{ loop.index }} {
+    0%, {{ '%.3f'|format(b.atraso_pct) }}% { transform: scaleX(0); }
+    {{ '%.3f'|format(b.atraso_pct + 5.0) }}%, 100% { transform: scaleX(1); }
+  }
+  @keyframes surge-{{ loop.index }} {
+    0%, {{ '%.3f'|format(b.atraso_pct + 3.4) }}% { opacity: 0; }
+    {{ '%.3f'|format(b.atraso_pct + 5.6) }}%, 100% { opacity: 1; }
+  }
+  .b{{ loop.index }} { animation-name: cresce-{{ loop.index }}; }
+  .v{{ loop.index }} { animation-name: surge-{{ loop.index }}; }
+  {% endfor %}
+
+  /* leitura ----------------------------------------------------------- */
+  .leitura p {
+    font-size: 84px; line-height: 1.14; font-weight: {{ t.peso_titulo }};
+    letter-spacing: -.02em;
+  }
+
+  /* fecho ------------------------------------------------------------- */
+  .fecho .handle {
+    font-size: 76px; font-weight: {{ t.peso_titulo }}; color: {{ c.acento }};
+  }
+  .fecho .cta {
+    font-size: 46px; line-height: 1.35; font-weight: 300;
+    color: {{ c.ink_secundario }}; margin-top: 40px;
+  }
+
+  /* rodape fixo -------------------------------------------------------- */
+  .rodape {
+    position: absolute; left: 90px; right: 90px; bottom: 92px;
+    display: flex; justify-content: space-between; align-items: flex-end;
+    font-size: 28px; color: {{ c.ink_muted }}; z-index: 5;
+  }
+  .rodape .handle { font-weight: 600; color: {{ c.ink_secundario }}; }
+  .rodape .selo { font-size: 22px; }
+</style>
+</head>
+<body>
+<div class="palco">
+  <div class="barra-topo"></div>
+
+  <section class="cena gancho">
+    <h1>{{ gancho }}</h1>
+    {% if gancho_sub %}<p class="sub">{{ gancho_sub }}</p>{% endif %}
+  </section>
+
+  <section class="cena grafico">
+    <h2>{{ grafico_titulo }}</h2>
+    <div class="linhas">
+      {% for b in barras %}
+      <div class="linha">
+        <div class="nome">{{ b.label }}</div>
+        <div class="trilho">
+          <div class="zero"></div>
+          <div class="barra {{ 'pos' if b.positiva else 'neg' }} b{{ loop.index }}"
+               style="left: {{ '%.3f'|format(b.esquerda_pct) }}%;
+                      width: {{ '%.3f'|format(b.largura_pct) }}%;"></div>
+          <div class="valor v{{ loop.index }}"
+               style="{% if b.positiva %}left: {{ '%.3f'|format(b.esquerda_pct + b.largura_pct) }}%; margin-left: 20px;
+                      {% else %}right: {{ '%.3f'|format(100 - b.esquerda_pct) }}%; margin-right: 20px;{% endif %}">
+            {{ b.texto }}
+          </div>
+        </div>
+      </div>
+      {% endfor %}
+    </div>
+  </section>
+
+  {% if leitura %}
+  <section class="cena leitura">
+    <p>{{ leitura|safe }}</p>
+  </section>
+  {% endif %}
+
+  <section class="cena fecho">
+    <div class="handle">{{ marca.handle }}</div>
+    {% if cta %}<div class="cta">{{ cta|safe }}</div>{% endif %}
+  </section>
+
+  <div class="rodape">
+    <div>
+      <div class="handle">{{ marca.handle }}</div>
+      <div style="margin-top:8px">{{ marca.fonte_padrao }}</div>
+    </div>
+    {% if selo_ia %}<div class="selo">{{ selo_ia }}</div>{% endif %}
+  </div>
+</div>
+</body>
+</html>
