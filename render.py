@@ -44,6 +44,7 @@ LABEL_COL = 300     # coluna de rotulos de bairro, alinhada a direita
 LABEL_GAP = 34      # respiro entre o rotulo e o inicio da area de plotagem
 VAL_GAP = 18        # respiro entre a ponta da barra e o valor
 VAL_W = 130         # espaco reservado para o rotulo de valor de cada lado
+ALTURA_GRAFICO = 700  # px do slide reservados para a area do grafico
 
 
 def _bar_path(x0: float, y: float, largura: float, altura: float, r: float,
@@ -88,23 +89,35 @@ def grafico_svg(dados: list[dict], cores: dict, unidade: str = "%") -> str:
     v_pos = max(valores) if max(valores) > 0 else 0.0
     total = (v_neg + v_pos) or 1.0
 
-    # O zero fica proporcional a amplitude de cada lado, e cada lado reserva
-    # VAL_W para o rotulo de valor -- e assim que se evita o rotulo do bairro
-    # colidir com o numero da barra negativa.
-    espaco_neg = plot_w * (v_neg / total)
-    espaco_pos = plot_w * (v_pos / total)
-    zero_x = plot_x0 + espaco_neg
+    # Escala das barras.
+    #
+    # A versao anterior repartia a largura proporcionalmente aos dois lados e so
+    # depois descontava VAL_W de cada um. Quando o lado negativo era pequeno --
+    # -0,25% contra +1,31% no lado positivo -- o espaco proporcional dele ficava
+    # menor que o rotulo, o desconto ia a zero, e o `min()` levava a escala do
+    # grafico inteiro junto: as barras sairam com 50px num canvas de 1080.
+    #
+    # Agora e o contrario: reserva-se o rotulo primeiro, uma vez por lado que
+    # exista, e o que sobra e dividido pela amplitude total. A escala passa a
+    # depender do dado, nao do lado mais apertado.
+    reserva = VAL_W * ((1 if v_neg else 0) + (1 if v_pos else 0))
+    util = max(plot_w - reserva, 50)
+    escala = util / total
+    zero_x = plot_x0 + (VAL_W if v_neg else 0) + v_neg * escala
 
-    escalas = []
-    if v_neg:
-        escalas.append(max(espaco_neg - VAL_W, 10) / v_neg)
-    if v_pos:
-        escalas.append(max(espaco_pos - VAL_W, 10) / v_pos)
-    escala = min(escalas)
+    # O SVG e desenhado num viewBox de W de largura mas exibido com
+    # `largura_util`, entao o conteudo encolhe nessa proporcao. A altura do
+    # elemento precisa encolher junto, senao ele ocupa no layout mais do que
+    # desenha e o rodape do slide sai cortado -- foi o que aconteceu com um
+    # grafico de 10 barras.
+    esc_svg = largura_util / W
+    gap = BAR_GAP if n <= 8 else 22
+    disponivel = ALTURA_GRAFICO / esc_svg
+    bar_h = min(BAR_H, max((disponivel - 20 - (n - 1) * gap) / n, 24))
 
-    altura = n * BAR_H + (n - 1) * BAR_GAP
+    altura = n * bar_h + (n - 1) * gap
     partes: list[str] = [
-        f'<svg width="{largura_util}" height="{altura + 20}" '
+        f'<svg width="{largura_util}" height="{(altura + 20) * esc_svg:.0f}" '
         f'viewBox="0 0 {W} {altura + 20}" xmlns="http://www.w3.org/2000/svg" '
         f'font-family="Poppins, DejaVu Sans, sans-serif">'
     ]
@@ -116,20 +129,20 @@ def grafico_svg(dados: list[dict], cores: dict, unidade: str = "%") -> str:
     )
 
     for i, d in enumerate(dados):
-        y = i * (BAR_H + BAR_GAP)
+        y = i * (bar_h + gap)
         v = d["valor"]
         comprimento = max(abs(v) * escala, 6)
         cor = cores["positivo"] if v >= 0 else cores["negativo"]
         direita = v >= 0
 
         partes.append(
-            f'<path d="{_bar_path(zero_x, y, comprimento, BAR_H, BAR_RADIUS, direita)}" '
+            f'<path d="{_bar_path(zero_x, y, comprimento, bar_h, BAR_RADIUS, direita)}" '
             f'fill="{cor}"/>'
         )
 
         # rotulo do bairro: ink secundario, nunca a cor da serie
         partes.append(
-            f'<text x="{PAD + LABEL_COL}" y="{y + BAR_H * 0.72}" text-anchor="end" '
+            f'<text x="{PAD + LABEL_COL}" y="{y + bar_h * 0.72}" text-anchor="end" '
             f'font-size="32" font-weight="400" fill="{cores["ink_secundario"]}">'
             f'{d["label"]}</text>'
         )
@@ -138,7 +151,7 @@ def grafico_svg(dados: list[dict], cores: dict, unidade: str = "%") -> str:
         vx = zero_x + comprimento + VAL_GAP if direita else zero_x - comprimento - VAL_GAP
         anchor = "start" if direita else "end"
         partes.append(
-            f'<text x="{vx:.1f}" y="{y + BAR_H * 0.72}" text-anchor="{anchor}" '
+            f'<text x="{vx:.1f}" y="{y + bar_h * 0.72}" text-anchor="{anchor}" '
             f'font-size="32" font-weight="600" fill="{cores["ink"]}">'
             f'{_fmt(v, unidade)}</text>'
         )
