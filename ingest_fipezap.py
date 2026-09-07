@@ -42,6 +42,18 @@ PRECO_MIN, PRECO_MAX = 1_000, 60_000
 VAR_MIN, VAR_MAX = -50.0, 50.0
 MIN_LINHAS = 5
 
+# O servidor da Fipe recusa com 403 quem chega sem User-Agent de navegador --
+# filtro generico de bot, nao politica contra acesso automatizado (o PDF e
+# publico e linkado na propria pagina do indice). Identificamos o cliente de
+# forma honesta, dizendo quem somos e para onde escrever se incomodar.
+HEADERS = {
+    "User-Agent": ("metro-de-bh-bot/1.0 "
+                   "(+https://github.com/guilhermesa88-ai/postador) "
+                   "Mozilla/5.0"),
+    "Accept": "application/pdf,*/*",
+    "Accept-Language": "pt-BR,pt;q=0.9",
+}
+
 # BAIRRO  R$ 17.432  -0,4%   (o R$ as vezes vem colado, as vezes ausente)
 LINHA = re.compile(
     r"^([A-ZÀ-Ú][A-ZÀ-Ú\s\.\-']{2,34})\s+"       # nome em caixa alta
@@ -63,7 +75,7 @@ def baixar(ano: int, mes: int) -> tuple[bytes, str]:
     erros = []
     for u in url_do_informe(ano, mes):
         try:
-            r = requests.get(u, timeout=90)
+            r = requests.get(u, timeout=90, headers=HEADERS)
             if r.status_code == 200 and r.content[:4] == b"%PDF":
                 return r.content, u
             erros.append(f"{r.status_code} {u}")
