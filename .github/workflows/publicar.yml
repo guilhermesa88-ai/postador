@@ -10,6 +10,15 @@ on:
         description: 'Ingerir, compor, renderizar e subir a midia, sem publicar'
         type: boolean
         default: false
+      formato:
+        description: 'O que publicar'
+        type: choice
+        options: [reel, carrossel]
+        default: reel
+      forcar:
+        description: 'Publicar mesmo que este informe ja tenha virado post'
+        type: boolean
+        default: false
 
 concurrency:
   group: publicar
@@ -22,6 +31,10 @@ concurrency:
 # de ja ter gasto a chamada do modelo. Quem precisa achar "o mais recente" agora
 # e o proprio Python (render.py --ultimo / publicar.py --ultima), onde a logica
 # e testavel e nao passa por camada de escape. Mantenha assim.
+#
+# A guarda tambem segue essa regra: em vez de capturar codigo de saida em
+# variavel, ela usa `continue-on-error` e os passos seguintes olham para
+# `steps.guarda.outcome`. Sem novidade, o job termina verde sem publicar.
 
 jobs:
   publicar:
@@ -41,6 +54,7 @@ jobs:
         run: |
           pip install jinja2 playwright requests jsonschema anthropic pdfplumber
           playwright install --with-deps chromium
+          ffmpeg -version | head -1
 
       # Poppins nao existe como pacote apt no runner. Baixo os cinco pesos do
       # repositorio oficial do Google Fonts, um curl por arquivo -- sem loop,
@@ -68,9 +82,20 @@ jobs:
       - name: Ingerir o informe do FipeZap
         run: python ingest_fipezap.py
 
+      # A guarda roda ANTES do compose de proposito: se nao ha o que dizer, nao
+      # se gasta a chamada do modelo. Sai 78 quando este informe ja virou post
+      # no mesmo angulo; `continue-on-error` transforma isso em "pula o resto",
+      # nao em falha do job.
+      - name: Ha o que dizer hoje?
+        id: guarda
+        continue-on-error: true
+        run: python guarda.py facts/fipezap-capitais.json ${{ vars.MARCA }} --angulo padrao ${{ github.event.inputs.forcar == 'true' && '--forcar' || '' }}
+
       - name: Compor o brief a partir dos facts
+        if: steps.guarda.outcome == 'success'
         env:
           ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
+          ANGULO: padrao
         run: python compose.py facts/fipezap-capitais.json ${{ vars.MARCA }}
 
       # Versiona o que a maquina leu (facts) e o que ela escreveu (brief).
@@ -89,11 +114,17 @@ jobs:
           git pull --rebase --autostash || true
           git push || true
 
-      - name: Renderizar os slides
+      - name: Montar o Reel
+        if: steps.guarda.outcome == 'success' && github.event.inputs.formato != 'carrossel'
+        run: python reel.py --ultimo ${{ vars.MARCA }}
+
+      - name: Renderizar o carrossel
+        if: steps.guarda.outcome == 'success' && github.event.inputs.formato == 'carrossel'
         run: python render.py --ultimo ${{ vars.MARCA }}
 
       - name: Publicar
-        if: ${{ github.event.inputs.dry_run != 'true' }}
+        id: publicar
+        if: steps.guarda.outcome == 'success' && github.event.inputs.dry_run != 'true'
         env:
           IG_USER_ID:      ${{ secrets.IG_USER_ID }}
           IG_ACCESS_TOKEN: ${{ secrets.IG_ACCESS_TOKEN }}
@@ -101,6 +132,26 @@ jobs:
           GH_OWNER:        ${{ github.repository_owner }}
           GH_REPO:         ${{ github.event.repository.name }}
         run: python publicar.py --ultima ${{ vars.MARCA }}
+
+      # Registra (informe, angulo, media_id). E o que impede a rodada de amanha
+      # de republicar o mesmo dado -- e o que da rastro do post de volta ao PDF.
+      - name: Registrar o post
+        if: steps.publicar.outcome == 'success' && github.event.inputs.dry_run != 'true'
+        run: |
+          python guarda.py --registrar-ultima ${{ vars.MARCA }}
+          git config user.name  "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add -f estado/ || true
+          git commit -m "estado: post publicado" || echo "sem mudanca"
+          git pull --rebase --autostash || true
+          git push || true
+
+      - name: Sem publicacao nesta rodada
+        if: steps.guarda.outcome != 'success'
+        run: |
+          echo "A guarda barrou esta rodada."
+          echo "Se foi 'NADA NOVO', esperado: o informe do FipeZap e mensal."
+          echo "Se foi traceback, e bug — leia o passo 'Ha o que dizer hoje?'."
 
       - name: Guardar o registro do post
         if: always()
@@ -111,6 +162,8 @@ jobs:
             out/**/manifest.json
             out/**/resultado.json
             out/**/*.jpg
+            out/**/*.mp4
             facts/fipezap-capitais.json
             briefs/*.json
+            estado/*.json
           retention-days: 30
