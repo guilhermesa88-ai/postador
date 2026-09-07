@@ -15,6 +15,105 @@ concurrency:
   group: publicar
   cancel-in-progress: false
 
+# NOTA DE MANUTENCAO
+# Nenhum passo abaixo usa $(...) nem variavel de shell. A versao anterior usava,
+# e um backslash a mais na hora de gravar o arquivo virou `\$(ls -t ...)` no
+# repositorio: o YAML aceitou, o shell nao, e o pipeline morreu no render depois
+# de ja ter gasto a chamada do modelo. Quem precisa achar "o mais recente" agora
+# e o proprio Python (render.py --ultimo / publicar.py --ultima), onde a logica
+# e testavel e nao passa por camada de escape. Mantenha assim.
+
+jobs:
+  publicar:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+          cache: pip
+
+      - name: Instalar dependencias
+        run: |
+          pip install jinja2 playwright requests jsonschema anthropic pdfplumber
+          playwright install --with-deps chromium
+
+      - name: Fonte Poppins
+        run: |
+          sudo apt-get update -qq
+          sudo apt-get install -y -qq fonts-poppins
+          sudo fc-cache -f
+          fc-list | grep -i poppins | head -3
+
+      - name: Testes dos validadores
+        run: python test_validators.py
+
+      - name: Ingerir o informe do FipeZap
+        run: python ingest_fipezap.py
+
+      # Versiona os dados extraidos. Serve para tres coisas: conferir os numeros
+      # contra o PDF antes de publicar, ter historico da serie no git, e nao
+      # depender de baixar artifact para ver o que a maquina leu.
+      - name: Versionar os facts
+        run: |
+          git config user.name  "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add -f facts/fipezap-capitais.json
+          git commit -m "facts: informe FipeZap" || echo "sem mudanca"
+          git pull --rebase --autostash || true
+          git push || true
+
+      - name: Compor o brief a partir dos facts
+        env:
+          ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
+        run: python compose.py facts/fipezap-capitais.json ${{ vars.MARCA }}
+
+      - name: Renderizar os slides
+        run: python render.py --ultimo ${{ vars.MARCA }}
+
+      - name: Publicar
+        if: ${{ github.event.inputs.dry_run != 'true' }}
+        env:
+          IG_USER_ID:      ${{ secrets.IG_USER_ID }}
+          IG_ACCESS_TOKEN: ${{ secrets.IG_ACCESS_TOKEN }}
+          GITHUB_TOKEN:    ${{ github.token }}
+          GH_OWNER:        ${{ github.repository_owner }}
+          GH_REPO:         ${{ github.event.repository.name }}
+        run: python publicar.py --ultima ${{ vars.MARCA }}
+
+      - name: Guardar o registro do post
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: saida-${{ github.run_number }}
+          path: |
+            out/**/manifest.json
+            out/**/resultado.json
+            out/**/*.jpg
+            facts/fipezap-capitais.json
+            briefs/*.json
+          retention-days: 30
+name: Publicar carrossel
+
+# Roda de segunda a sexta as 07:30 em Brasilia (UTC-3 -> 10:30 UTC).
+on:
+  schedule:
+    - cron: '30 10 * * 1-5'
+  workflow_dispatch:
+    inputs:
+      dry_run:
+        description: 'Ingerir, compor, renderizar e subir a midia, sem publicar'
+        type: boolean
+        default: false
+
+concurrency:
+  group: publicar
+  cancel-in-progress: false
+
 jobs:
   publicar:
     runs-on: ubuntu-latest
