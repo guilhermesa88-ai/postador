@@ -54,6 +54,18 @@ jobs:
       - name: Ingerir o informe do FipeZap
         run: python ingest_fipezap.py
 
+      # Versiona os dados extraidos. Serve para tres coisas: conferir os numeros
+      # contra o PDF antes de publicar, ter historico da serie no git, e nao
+      # depender de baixar artifact para ver o que a maquina leu.
+      - name: Versionar os facts
+        run: |
+          git config user.name  "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add -f facts/fipezap-capitais.json
+          git commit -m "facts: informe FipeZap" || echo "sem mudanca"
+          git pull --rebase --autostash || true
+          git push || true
+
       - name: Compor o brief a partir dos facts
         env:
           ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
