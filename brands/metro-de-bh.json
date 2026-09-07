@@ -2,7 +2,7 @@
   "slug": "metro-de-bh",
   "nome": "Metro de BH",
   "handle": "@metro_de_bh",
-  "fonte_padrao": "Fonte: FipeZap",
+  "fonte_padrao": "Fonte: Índice FipeZap",
   "cores": {
     "surface": "#141518",
     "surface_alt": "#1b1c20",
@@ -25,6 +25,7 @@
     "sempre": [
       "todo post traz um número verificável e diz de onde ele veio",
       "o gancho é uma leitura contraintuitiva do dado, nunca um adjetivo",
+      "compara BH com as outras capitais — é a comparação que dá sentido ao número",
       "escreve para quem vai comprar o primeiro imóvel, não para investidor"
     ],
     "nunca": [
@@ -47,7 +48,9 @@
   },
   "pauta": {
     "publico": "Primeiro imóvel, 25-35 anos, BH e região metropolitana",
-    "formato_padrao": "carrossel de 5 slides: capa, grafico, lista, texto, fechamento"
+    "formato_padrao": "carrossel de 5 slides: capa, grafico, lista, texto, fechamento",
+    "fonte": "Índice FipeZap de Venda Residencial, informe mensal",
+    "granularidade": "cidade — a Fipe NÃO divulga dado por bairro; nunca prometa recorte de bairro nem escreva como se tivesse"
   },
-  "bio": "O preço do m² em BH, bairro por bairro.\nTodo número com fonte. Nenhuma opinião de corretor.\nDados novos toda semana ↓"
+  "bio": "O preço do imóvel em BH, comparado às 22 capitais.\nTodo número com fonte e link. Nenhuma opinião de corretor.\nDados novos todo mês ↓"
 }
