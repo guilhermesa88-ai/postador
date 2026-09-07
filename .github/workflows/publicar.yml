@@ -68,22 +68,26 @@ jobs:
       - name: Ingerir o informe do FipeZap
         run: python ingest_fipezap.py
 
-      # Versiona os dados extraidos. Serve para tres coisas: conferir os numeros
-      # contra o PDF antes de publicar, ter historico da serie no git, e nao
-      # depender de baixar artifact para ver o que a maquina leu.
-      - name: Versionar os facts
-        run: |
-          git config user.name  "github-actions[bot]"
-          git config user.email "github-actions[bot]@users.noreply.github.com"
-          git add -f facts/fipezap-capitais.json
-          git commit -m "facts: informe FipeZap" || echo "sem mudanca"
-          git pull --rebase --autostash || true
-          git push || true
-
       - name: Compor o brief a partir dos facts
         env:
           ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
         run: python compose.py facts/fipezap-capitais.json ${{ vars.MARCA }}
+
+      # Versiona o que a maquina leu (facts) e o que ela escreveu (brief).
+      # Serve para conferir numero por numero contra o PDF antes de publicar,
+      # ter historico da serie e do editorial no git, e nao depender de baixar
+      # artifact para ler qualquer um dos dois. Roda mesmo se o compose falhar:
+      # nesse caso o brief nao existe, mas os facts do dia ficam registrados.
+      - name: Versionar facts e brief
+        if: always()
+        run: |
+          git config user.name  "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add -f facts/fipezap-capitais.json || true
+          git add -f briefs/ || true
+          git commit -m "dados: informe FipeZap e brief do dia" || echo "sem mudanca"
+          git pull --rebase --autostash || true
+          git push || true
 
       - name: Renderizar os slides
         run: python render.py --ultimo ${{ vars.MARCA }}
