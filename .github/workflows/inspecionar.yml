@@ -1,17 +1,29 @@
 name: Inspecionar PDF
 
-# Descoberta, nao producao. Roda so na mao, imprime o texto extraido do
-# informe e nao grava nada. Serve para escrever o parser contra o documento
-# real em vez de contra o que se imagina que ele contenha.
+# Descoberta, nao producao. Roda so na mao, extrai o texto do informe e grava
+# em inspecao.txt no repositorio -- o log do Actions e dificil de ler de fora,
+# o arquivo nao e.
 on:
   workflow_dispatch:
 
 jobs:
   inspecionar:
     runs-on: ubuntu-latest
+    permissions:
+      contents: write
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-python@v5
         with: { python-version: '3.12' }
       - run: pip install requests pdfplumber
-      - run: python inspecionar_pdf.py
+
+      - name: Extrair e gravar
+        run: python inspecionar_pdf.py > inspecao.txt 2>&1 || true
+
+      - name: Commitar a inspecao
+        run: |
+          git config user.name  "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add inspecao.txt
+          git commit -m "inspecao do informe FipeZap" || echo "sem mudanca"
+          git push
