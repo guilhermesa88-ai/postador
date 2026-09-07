@@ -1,26 +1,25 @@
 name: Publicar carrossel
 
 # Roda de segunda a sexta as 07:30 em Brasilia (UTC-3 -> 10:30 UTC).
-# workflow_dispatch permite disparar na mao para testar.
 on:
   schedule:
     - cron: '30 10 * * 1-5'
   workflow_dispatch:
     inputs:
       dry_run:
-        description: 'So renderizar e subir a midia, sem publicar'
+        description: 'Ingerir, compor, renderizar e subir a midia, sem publicar'
         type: boolean
         default: false
 
 concurrency:
   group: publicar
-  cancel-in-progress: false     # nunca dois posts ao mesmo tempo
+  cancel-in-progress: false
 
 jobs:
   publicar:
     runs-on: ubuntu-latest
     permissions:
-      contents: write           # para commitar a midia no proprio repo
+      contents: write
 
     steps:
       - uses: actions/checkout@v4
@@ -32,7 +31,7 @@ jobs:
 
       - name: Instalar dependencias
         run: |
-          pip install jinja2 playwright requests jsonschema anthropic
+          pip install jinja2 playwright requests jsonschema anthropic pdfplumber
           playwright install --with-deps chromium
 
       - name: Fonte Poppins
@@ -41,28 +40,30 @@ jobs:
           sudo apt-get install -y -qq fonts-poppins || {
             mkdir -p /tmp/p && cd /tmp/p
             for w in Regular Medium Bold Light; do
-              curl -sSL -o "Poppins-$w.ttf" \
-                "https://github.com/google/fonts/raw/main/ofl/poppins/Poppins-$w.ttf"
+              curl -sSL -o "Poppins-\$w.ttf" \
+                "https://github.com/google/fonts/raw/main/ofl/poppins/Poppins-\$w.ttf"
             done
             sudo mkdir -p /usr/share/fonts/truetype/poppins
             sudo cp *.ttf /usr/share/fonts/truetype/poppins/
           }
           sudo fc-cache -f
-          fc-list | grep -i poppins | head -3
 
       - name: Testes dos validadores
         run: python test_validators.py
 
+      - name: Ingerir o informe do FipeZap
+        run: python ingest_fipezap.py
+
       - name: Compor o brief a partir dos facts
         env:
           ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
-        run: python compose.py facts/${{ vars.FACTS_ATUAL }} ${{ vars.MARCA }}
+        run: python compose.py facts/fipezap-bh.json ${{ vars.MARCA }}
 
       - name: Renderizar os slides
         run: |
-          BRIEF=$(ls -t briefs/${{ vars.MARCA }}-*.json | head -1)
-          echo "brief: $BRIEF"
-          python render.py "$BRIEF"
+          BRIEF=\$(ls -t briefs/${{ vars.MARCA }}-*.json | head -1)
+          echo "brief: \$BRIEF"
+          python render.py "\$BRIEF"
 
       - name: Publicar
         if: ${{ github.event.inputs.dry_run != 'true' }}
@@ -73,9 +74,9 @@ jobs:
           GH_OWNER:        ${{ github.repository_owner }}
           GH_REPO:         ${{ github.event.repository.name }}
         run: |
-          PASTA=$(ls -td out/${{ vars.MARCA }}/*/ | head -1)
-          echo "pasta: $PASTA"
-          python publicar.py "$PASTA"
+          PASTA=\$(ls -td out/${{ vars.MARCA }}/*/ | head -1)
+          echo "pasta: \$PASTA"
+          python publicar.py "\$PASTA"
 
       - name: Guardar o registro do post
         if: always()
@@ -86,4 +87,6 @@ jobs:
             out/**/manifest.json
             out/**/resultado.json
             out/**/*.jpg
+            facts/fipezap-bh.json
+            briefs/*.json
           retention-days: 30
