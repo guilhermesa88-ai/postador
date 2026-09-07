@@ -216,12 +216,27 @@ def ingerir(ano: int, mes: int) -> Path:
 
         ordenado = sorted(caps.items(), key=lambda x: -x[1])
         posicao = [c for c, _ in ordenado].index("Belo Horizonte") + 1
+
+        # Agregados calculados aqui, e nao deixados para o modelo deduzir.
+        # Motivo concreto: numa rodada o modelo escreveu na capa que BH foi "a
+        # unica grande capital com preco negativo no mes". Eram quatro capitais
+        # em queda, e uma delas aparecia no proprio grafico do post. A
+        # ancoragem numerica nao pega isso, porque a frase nao tem numero. O
+        # jeito de fechar a brecha e o fato existir pronto, contado, em vez de
+        # ser inferido.
+        em_queda = [c for c, v in ordenado if v < 0]
+        em_alta = [c for c, v in ordenado if v > 0]
+
         horizontes[nome] = {
             "indice_geral_pct": indice_geral(fatia, nome),
             "capitais": [{"cidade": c, "variacao_pct": v} for c, v in ordenado],
             "bh_pct": caps["Belo Horizonte"],
             "bh_posicao": posicao,
             "total_capitais": len(caps),
+            "capitais_em_queda": em_queda,
+            "quantas_em_queda": len(em_queda),
+            "capitais_em_alta": em_alta,
+            "quantas_em_alta": len(em_alta),
         }
 
     facts = {
