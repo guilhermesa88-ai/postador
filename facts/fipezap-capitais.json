@@ -3,7 +3,7 @@
   "fonte_url": "https://downloads.fipe.org.br/indices/fipezap/fipezap-202608-residencial-venda.pdf",
   "descricao": "Variação percentual do preço de venda de imóveis residenciais nas 22 capitais monitoradas, em três horizontes",
   "periodo": "2026-08",
-  "extraido_em": "2026-09-07T14:29:13.909384+00:00",
+  "extraido_em": "2026-09-07T15:04:20.711602+00:00",
   "hash_pdf": "31f85f8101e19d61",
   "horizontes": {
     "mensal": {
@@ -294,5 +294,31 @@
       "bh_posicao": 20,
       "total_capitais": 22
     }
+  },
+  "inflacao_ipca": {
+    "fonte": "IPCA/IBGE, conforme citado no informe do FipeZap",
+    "observacao": "Cada item traz o trecho literal do informe. Use o trecho para saber a que horizonte o numero se refere; nao compare horizontes diferentes.",
+    "mencoes": [
+      {
+        "variacao_pct": -0.4,
+        "trecho": "tóriosapresentaramamenorvariaçãomensal (+0,29%). Em relação a outros índices de referência, o resultado superou a prévia da inflação ao consumidor, medida pelo IPCA-15/IBGE (-0,40%), bem como a variação do IGP-M/FGV (-0,22%). Individualment"
+      },
+      {
+        "variacao_pct": 1.85,
+        "trecho": "eZAPdeVendaResidencialacumuloualtade3,44%entrejaneiroeagostode2026.Emtermoscomparativos,oresultado acumuladodoanosuperouainflaçãoaoconsumidor(+3,02%)—medidapeloIPCAacumuladonoanoatéjulho,acrescidodapréviadeagosto,dadapeloIPCA-15* — e a variação acumulada do IGP-M/FGV (+1,85%). Em termos de abrangência, a valorização alcançou todas as"
+      },
+      {
+        "variacao_pct": 4.14,
+        "trecho": "stode2026,oÍndiceFipeZAPpassouaregistraraltade5,49%najanelamóvelde 12 meses, superando a variação do IGP-M/FGV (+2,16%) e a inflação ao consumidor, medida pelo IPCA acumulado nos últimos 11 meses encerrados em julho, acrescidodapréviadeagostodadapeloIPCA-15(+4,14%).Nessehorizonteampliado,imóveiscomumdormitóriolideraramaval"
+      },
+      {
+        "variacao_pct": -0.4,
+        "trecho": "tais monitoradas Variação Mensal Variação em 2026 Variação Anual Preço médio Índice/Cidade (acumulada no ano) (últimos 12 meses) (R$/m²) agosto/2026 julho/2026 IPCA* IBGE -0,40% +0,07% +3,02% +4,14% - IGP-M FGV -0,22% -1,16% +1,85% +2,16"
+      },
+      {
+        "variacao_pct": -0.4,
+        "trecho": "ades monitoradas Variação Mensal Variação em 2026 Variação Anual Preço médio Índice/Cidade (acumulada no ano) (últimos 12 meses) (R$/m²) agosto/2026 julho/2026 IPCA * IBGE -0,40% +0,07% +3,02% +4,14% - IGP-M FGV -0,22% -1,16% +1,85% +2,16"
+      }
+    ]
   }
 }
