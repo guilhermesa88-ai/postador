@@ -57,7 +57,7 @@ jobs:
       - name: Compor o brief a partir dos facts
         env:
           ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
-        run: python compose.py facts/fipezap-bh.json ${{ vars.MARCA }}
+        run: python compose.py facts/fipezap-capitais.json ${{ vars.MARCA }}
 
       - name: Renderizar os slides
         run: |
@@ -87,6 +87,6 @@ jobs:
             out/**/manifest.json
             out/**/resultado.json
             out/**/*.jpg
-            facts/fipezap-bh.json
+            facts/fipezap-capitais.json
             briefs/*.json
           retention-days: 30
