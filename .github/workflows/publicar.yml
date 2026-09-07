@@ -42,12 +42,25 @@ jobs:
           pip install jinja2 playwright requests jsonschema anthropic pdfplumber
           playwright install --with-deps chromium
 
+      # Poppins nao existe como pacote apt no runner. Baixo os cinco pesos do
+      # repositorio oficial do Google Fonts, um curl por arquivo -- sem loop,
+      # porque loop pede variavel de shell e e exatamente isso que ja quebrou
+      # este workflow uma vez. Falha aqui derruba o run de proposito: sem a
+      # fonte o slide sai com fallback e a identidade visual muda sem aviso.
       - name: Fonte Poppins
         run: |
-          sudo apt-get update -qq
-          sudo apt-get install -y -qq fonts-poppins
+          mkdir -p /tmp/poppins
+          cd /tmp/poppins
+          curl -fsSLO https://raw.githubusercontent.com/google/fonts/main/ofl/poppins/Poppins-Light.ttf
+          curl -fsSLO https://raw.githubusercontent.com/google/fonts/main/ofl/poppins/Poppins-Regular.ttf
+          curl -fsSLO https://raw.githubusercontent.com/google/fonts/main/ofl/poppins/Poppins-Medium.ttf
+          curl -fsSLO https://raw.githubusercontent.com/google/fonts/main/ofl/poppins/Poppins-SemiBold.ttf
+          curl -fsSLO https://raw.githubusercontent.com/google/fonts/main/ofl/poppins/Poppins-Bold.ttf
+          sudo mkdir -p /usr/share/fonts/truetype/poppins
+          sudo cp /tmp/poppins/*.ttf /usr/share/fonts/truetype/poppins/
           sudo fc-cache -f
-          fc-list | grep -i poppins | head -3
+          fc-list | grep -i poppins | head -5
+          fc-list | grep -qi poppins
 
       - name: Testes dos validadores
         run: python test_validators.py
