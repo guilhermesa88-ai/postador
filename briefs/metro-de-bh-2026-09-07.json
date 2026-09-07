@@ -1,0 +1,76 @@
+{
+  "marca": "metro-de-bh",
+  "data": "2026-09-07",
+  "legenda": "BH registrou queda de 0,08% no preço de venda de imóveis em agosto de 2026, enquanto a média das capitais subiu 0,53%. No ano, BH acumula alta de apenas 0,01% — a penúltima colocação entre 22 capitais.\n\nA diferença entre BH e o restante do país é real. Vitória lidera com 1,31% no mês e 10,24% no ano. Brasília vem logo atrás: 1,28% no mês e 5,88% no ano.\n\nPara quem compra o primeiro imóvel em BH, isso significa preços mais estáveis. Para quem já tem imóvel e esperava alta rápida, os números mostram outro cenário.\n\nFonte: FipeZap — Índice de Venda Residencial, agosto de 2026\n\n#MetroDeBH #MercadoImobiliarioBH #BeloHorizonte #PrimeiroImovel #DadosImobiliarios #FipeZap",
+  "slides": [
+    {
+      "tipo": "capa",
+      "eyebrow": "FipeZap Agosto/2026",
+      "titulo": "BH cai 0,08% enquanto a média das capitais sobe 0,53%",
+      "sub": "A capital mineira está na 19ª posição entre 22 capitais monitoradas"
+    },
+    {
+      "tipo": "grafico",
+      "eyebrow": "Variação mensal",
+      "titulo": "BH entre as poucas capitais em queda no mês",
+      "unidade": "%",
+      "fonte": "FipeZap",
+      "dados": [
+        {
+          "label": "Vitória",
+          "valor": 1.31
+        },
+        {
+          "label": "Brasília",
+          "valor": 1.28
+        },
+        {
+          "label": "Rio de Janeiro",
+          "valor": 0.77
+        },
+        {
+          "label": "Média geral",
+          "valor": 0.53
+        },
+        {
+          "label": "São Paulo",
+          "valor": 0.37
+        },
+        {
+          "label": "Belo Horizonte",
+          "valor": -0.08
+        },
+        {
+          "label": "Curitiba",
+          "valor": -0.25
+        }
+      ]
+    },
+    {
+      "tipo": "lista",
+      "eyebrow": "Três horizontes",
+      "titulo": "BH fica para trás em todos os prazos",
+      "itens": [
+        "<strong>No mês:</strong> -0,08% em BH contra +0,53% na média das capitais",
+        "<strong>No ano:</strong> +0,01% em BH (21ª posição) contra +3,44% na média",
+        "<strong>Doze meses:</strong> +2,92% em BH (20ª posição) contra +5,49% na média",
+        "<strong>Comparação com IPCA:</strong> No ano, BH subiu 0,01% enquanto a inflação foi de 3,02%"
+      ]
+    },
+    {
+      "tipo": "texto",
+      "eyebrow": "Contexto",
+      "titulo": "O que significa para quem está comprando",
+      "corpo": "BH está entre as capitais com menor variação de preço no mercado imobiliário. No acumulado do ano, a alta foi de 0,01% — praticamente estabilidade.\n\nEnquanto isso, Vitória registrou 10,24% no mesmo período. Brasília, 5,88%. Salvador, 7,27%.\n\nPara quem busca o primeiro imóvel, isso não é bom nem ruim por si só. É informação: o mercado de BH se comporta diferente da maioria das outras capitais.",
+      "rodape_destaque": "A inflação no ano foi de 3,02%. BH subiu 0,01%."
+    },
+    {
+      "tipo": "fechamento",
+      "eyebrow": "Metro de BH",
+      "titulo": "Acompanhe os dados do mercado imobiliário de BH",
+      "corpo": "Todo mês, a gente traz os números do FipeZap e compara BH com as outras capitais. Sem achismo, sem promessa de valorização — só o dado verificável.",
+      "cta": "Salve este post para comparar com o próximo mês"
+    }
+  ],
+  "selo_ia": "Conteúdo produzido com apoio de IA"
+}
