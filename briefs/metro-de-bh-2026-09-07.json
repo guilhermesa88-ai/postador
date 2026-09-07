@@ -1,18 +1,18 @@
 {
   "marca": "metro-de-bh",
   "data": "2026-09-07",
-  "legenda": "BH caiu 0,08% em agosto enquanto 18 capitais subiram e a média nacional marcou 0,53%. No ano, BH acumula apenas 0,01% — penúltima posição entre as 22 capitais monitoradas. Nos últimos doze meses, a variação foi de 2,92%, bem abaixo da média de 5,49%.\n\nTodos os números são do FipeZap — Índice de Venda Residencial, agosto de 2026.\n\n#bhimóveis #beloHorizonte #mercadoimobiliário #FipeZap #imóveisBH #preçoDeImóveis",
+  "legenda": "BH teve queda de 0,08% no preço de venda de imóveis em agosto de 2026, enquanto a média das 22 capitais subiu 0,53%. É a 19ª posição no ranking mensal.\n\nNo ano, BH acumula 0,01% de alta — 21ª entre 22 capitais. Em doze meses, a variação é de 2,92%, metade da média nacional de 5,49%.\n\nQuatro capitais tiveram queda no mês: BH, Belém, Campo Grande e Curitiba. As outras 18 subiram, lideradas por Vitória (1,31%), Brasília (1,28%) e Aracaju (1,07%).\n\nDados: FipeZap — Índice de Venda Residencial, agosto de 2026.\n\n#ImoveisBH #MercadoImobiliario #BeloHorizonte #FipeZap #PrimeiroImovel #DadosImobiliarios",
   "slides": [
     {
       "tipo": "capa",
-      "eyebrow": "FipeZap • Agosto 2026",
-      "titulo": "BH caiu 0,08% enquanto a média subiu 0,53%",
-      "sub": "18 capitais em alta, 4 em queda. BH ficou na 19ª posição entre 22."
+      "eyebrow": "FipeZap · Agosto 2026",
+      "titulo": "BH caiu 0,08% enquanto a média das capitais subiu 0,53%",
+      "sub": "Apenas 4 capitais tiveram queda no mês. BH é a 19ª no ranking mensal de variação de preços."
     },
     {
       "tipo": "grafico",
-      "eyebrow": "Variação mensal — agosto 2026",
-      "titulo": "BH e outras 3 capitais em queda",
+      "eyebrow": "Variação mensal · Agosto 2026",
+      "titulo": "BH entre as capitais com queda",
       "unidade": "%",
       "fonte": "FipeZap",
       "dados": [
@@ -29,19 +29,7 @@
           "valor": 1.07
         },
         {
-          "label": "Recife",
-          "valor": 0.88
-        },
-        {
-          "label": "Goiânia",
-          "valor": 0.77
-        },
-        {
-          "label": "Rio de Janeiro",
-          "valor": 0.77
-        },
-        {
-          "label": "Média nacional",
+          "label": "Média 22 capitais",
           "valor": 0.53
         },
         {
@@ -49,8 +37,16 @@
           "valor": 0.37
         },
         {
+          "label": "Natal",
+          "valor": 0.03
+        },
+        {
           "label": "Belo Horizonte",
           "valor": -0.08
+        },
+        {
+          "label": "Belém",
+          "valor": -0.19
         },
         {
           "label": "Curitiba",
@@ -60,28 +56,28 @@
     },
     {
       "tipo": "lista",
-      "eyebrow": "Três horizontes",
-      "titulo": "BH entre as mais lentas em todos os prazos",
+      "eyebrow": "O que os números dizem",
+      "titulo": "BH desacelera em todos os horizontes",
       "itens": [
-        "<strong>No mês:</strong> BH caiu 0,08%. Média nacional subiu 0,53%. Posição 19 de 22.",
-        "<strong>No ano:</strong> BH subiu 0,01%. Média nacional subiu 3,44%. Posição 21 de 22.",
-        "<strong>Em doze meses:</strong> BH subiu 2,92%. Média nacional subiu 5,49%. Posição 20 de 22.",
-        "<strong>IPCA em doze meses:</strong> 4,14%. BH ficou abaixo da inflação acumulada no período."
+        "<strong>No mês:</strong> BH caiu 0,08%, enquanto 18 capitais subiram. Média nacional: +0,53%.",
+        "<strong>No ano:</strong> BH acumula 0,01%, contra 3,44% da média. É a 21ª posição entre 22 capitais.",
+        "<strong>Em doze meses:</strong> BH subiu 2,92%, metade da média de 5,49%. Posição: 20ª de 22.",
+        "<strong>Inflação:</strong> O IPCA caiu 0,4% no mês. Em doze meses, o IPCA acumula 4,14%."
       ]
     },
     {
       "tipo": "texto",
-      "eyebrow": "O que isso significa",
-      "titulo": "Preço real de imóvel em BH caiu no último ano",
-      "corpo": "Quando o preço sobe 2,92% e a inflação vai a 4,14%, o valor real do imóvel diminuiu.\n\nEm agosto, BH foi uma das 4 capitais em queda. No ano, acumula praticamente zero. Vitória lidera com 10,24% no ano e Manaus com 11,42% em doze meses.\n\nO FipeZap mede o preço anunciado de venda em 22 capitais. Não projeta — registra o que está à venda.",
-      "rodape_destaque": "Todos os valores são variação percentual do preço de venda"
+      "eyebrow": "Contexto",
+      "titulo": "Quando a média sobe e sua cidade cai",
+      "corpo": "A média nacional de +0,53% no mês esconde que 4 capitais caíram. BH está entre elas, com -0,08%.\n\nEm doze meses, todas as 22 capitais subiram. Mas BH acumula 2,92%, enquanto Salvador subiu 10,84% e Manaus 11,42%.\n\nA comparação importa: o preço médio não te diz se BH é cara ou barata. Te diz se está subindo mais devagar que o resto do país.",
+      "rodape_destaque": "BH é a 20ª capital em variação de preço em doze meses."
     },
     {
       "tipo": "fechamento",
       "eyebrow": "Fonte",
       "titulo": "FipeZap — Índice de Venda Residencial",
-      "corpo": "Agosto de 2026. 22 capitais monitoradas. Dados extraídos em 7 de setembro de 2026.",
-      "cta": "Salvou? Marca quem tá de olho no mercado de BH"
+      "corpo": "Variação percentual do preço de venda de imóveis residenciais em 22 capitais. Dados de agosto de 2026.\n\nO @metro_de_bh traz os números do mercado imobiliário de BH e região metropolitana, sempre com a fonte.",
+      "cta": "Salva este post e acompanha os próximos."
     }
   ],
   "selo_ia": "Conteúdo produzido com apoio de IA"
