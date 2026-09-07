@@ -111,7 +111,27 @@ def publicar(pasta: Path, dry_run: bool = False) -> int:
     return 0
 
 
+def ultima_pasta(marca: str) -> Path:
+    """A pasta de saida mais recente da marca. Mesmo motivo do render.py:
+    tirar `$(ls -td ...)` do YAML, onde o escape ja falhou uma vez."""
+    raiz = Path(__file__).parent / "out" / marca
+    candidatos = sorted((p for p in raiz.glob("*") if (p / "manifest.json").exists()),
+                        key=lambda p: p.stat().st_mtime, reverse=True)
+    if not candidatos:
+        raise SystemExit(f"nenhuma pasta renderizada em out/{marca}/ — rode render.py antes")
+    return candidatos[0]
+
+
 if __name__ == "__main__":
     if len(sys.argv) < 2:
-        raise SystemExit("uso: python publicar.py <pasta com manifest.json> [--dry-run]")
-    sys.exit(publicar(Path(sys.argv[1]), dry_run="--dry-run" in sys.argv))
+        raise SystemExit("uso: python publicar.py <pasta> | --ultima <marca>  [--dry-run]")
+
+    if sys.argv[1] == "--ultima":
+        if len(sys.argv) < 3:
+            raise SystemExit("uso: python publicar.py --ultima <marca> [--dry-run]")
+        pasta = ultima_pasta(sys.argv[2])
+        print(f"pasta: {pasta}")
+    else:
+        pasta = Path(sys.argv[1])
+
+    sys.exit(publicar(pasta, dry_run="--dry-run" in sys.argv))

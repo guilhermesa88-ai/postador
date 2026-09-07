@@ -204,8 +204,31 @@ def render(brief_path: Path) -> Path:
     return destino
 
 
+def ultimo_brief(marca: str) -> Path:
+    """O brief mais recente da marca.
+
+    Existe para o workflow nao precisar de `$(ls -t ... | head -1)`: aspas e
+    cifrao dentro de YAML dentro de shell ja quebraram este pipeline uma vez.
+    Aqui a mesma logica e Python, testavel e sem camada de escape.
+    """
+    candidatos = sorted((RAIZ / "briefs").glob(f"{marca}-*.json"),
+                        key=lambda p: p.stat().st_mtime, reverse=True)
+    if not candidatos:
+        raise SystemExit(f"nenhum brief de '{marca}' em briefs/ — rode compose.py antes")
+    return candidatos[0]
+
+
 if __name__ == "__main__":
     if len(sys.argv) < 2:
-        raise SystemExit("uso: python render.py <brief.json>")
-    saida = render(Path(sys.argv[1]))
+        raise SystemExit("uso: python render.py <brief.json> | --ultimo <marca>")
+
+    if sys.argv[1] == "--ultimo":
+        if len(sys.argv) < 3:
+            raise SystemExit("uso: python render.py --ultimo <marca>")
+        brief = ultimo_brief(sys.argv[2])
+        print(f"brief: {brief.relative_to(RAIZ)}")
+    else:
+        brief = Path(sys.argv[1])
+
+    saida = render(brief)
     print(f"\nPronto: {saida}")

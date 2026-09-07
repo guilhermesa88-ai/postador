@@ -69,6 +69,14 @@ SECOES = [
 MIN_CAPITAIS = 18          # abaixo disso o layout mudou; nao publique
 VAR_MIN, VAR_MAX = -30.0, 60.0
 
+# O informe compara a variacao do indice com a inflacao. O numero do IPCA e
+# de terceiro (IBGE), citado dentro do texto -- entao nao invento pattern
+# rigido: pego toda mencao a IPCA junto com o percentual mais proximo E o
+# trecho literal em que ele aparece. O trecho e o que permite conferir a que
+# horizonte aquele numero se refere, sem eu ter que adivinhar.
+_IPCA = re.compile(r"IPCA[^.;]{0,120}?\(?([+-]?\d{1,2},\d{1,2})\s*%", re.I)
+IPCA_MIN, IPCA_MAX = -5.0, 30.0
+
 
 class IngestError(RuntimeError):
     pass
@@ -144,12 +152,41 @@ def indice_geral(fatia: str, horizonte: str) -> float | None:
     return float(m.group(1).replace(",", ".")) if m else None
 
 
+def referencias_ipca(texto: str) -> list[dict]:
+    """Mencoes ao IPCA no informe, com o trecho literal em volta.
+
+    Devolve lista vazia se o informe nao citar o IPCA -- e isso e um resultado
+    valido, nao um erro. O efeito de nao achar e o perfil nao poder comparar o
+    imovel com a inflacao naquele mes. O efeito de eu "achar" um numero errado
+    seria publicar uma comparacao falsa. Entre os dois, a lista vazia.
+    """
+    plano = re.sub(r"\s+", " ", texto)
+    achados: list[dict] = []
+    vistos: set[tuple[str, float]] = set()
+
+    for m in _IPCA.finditer(plano):
+        v = float(m.group(1).replace(",", "."))
+        if not (IPCA_MIN <= v <= IPCA_MAX):
+            continue
+        ini = max(0, m.start() - 160)
+        fim = min(len(plano), m.end() + 60)
+        trecho = plano[ini:fim].strip()
+        chave = (trecho[-90:], v)
+        if chave in vistos:
+            continue
+        vistos.add(chave)
+        achados.append({"variacao_pct": v, "trecho": trecho})
+
+    return achados
+
+
 def ingerir(ano: int, mes: int) -> Path:
     print(f"Buscando informe de {mes:02d}/{ano}...")
     blob, url = baixar(ano, mes)
     print(f"  {url}  ({len(blob)//1024} KB)")
 
-    fatias = fatiar(texto_do_pdf(blob))
+    texto = texto_do_pdf(blob)
+    fatias = fatiar(texto)
     horizontes: dict[str, dict] = {}
 
     for nome, fatia in fatias.items():
@@ -184,6 +221,16 @@ def ingerir(ano: int, mes: int) -> Path:
         "horizontes": horizontes,
     }
 
+    ipca = referencias_ipca(texto)
+    if ipca:
+        facts["inflacao_ipca"] = {
+            "fonte": "IPCA/IBGE, conforme citado no informe do FipeZap",
+            "observacao": ("Cada item traz o trecho literal do informe. Use o "
+                           "trecho para saber a que horizonte o numero se "
+                           "refere; nao compare horizontes diferentes."),
+            "mencoes": ipca,
+        }
+
     destino = RAIZ / "facts" / "fipezap-capitais.json"
     destino.parent.mkdir(exist_ok=True)
     destino.write_text(json.dumps(facts, ensure_ascii=False, indent=2), encoding="utf-8")
@@ -196,6 +243,15 @@ def ingerir(ano: int, mes: int) -> Path:
               f"(posicao {h['bh_posicao']} de {h['total_capitais']})")
         topo = h["capitais"][0]
         print(f"    topo: {topo['cidade']} {topo['variacao_pct']:+.2f}%")
+
+    # Impresso no log de proposito: e assim que se confere o IPCA contra o PDF
+    # antes de deixar o perfil comparar imovel com inflacao.
+    print("\n  IPCA citado no informe:")
+    if ipca:
+        for m in ipca:
+            print(f"    {m['variacao_pct']:+.2f}%  ...{m['trecho'][-150:]}")
+    else:
+        print("    nenhuma mencao encontrada — o perfil nao vai comparar com inflacao")
 
     print(f"\n  gravado em {destino}")
     return destino
