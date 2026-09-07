@@ -1,0 +1,8 @@
+token.json
+token-*.json
+*.env
+.env
+out/
+__pycache__/
+*.pyc
+log-*.txt
