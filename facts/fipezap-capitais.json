@@ -3,7 +3,7 @@
   "fonte_url": "https://downloads.fipe.org.br/indices/fipezap/fipezap-202608-residencial-venda.pdf",
   "descricao": "Variação percentual do preço de venda de imóveis residenciais nas 22 capitais monitoradas, em três horizontes",
   "periodo": "2026-08",
-  "extraido_em": "2026-09-07T15:31:50.923164+00:00",
+  "extraido_em": "2026-09-07T15:46:19.009959+00:00",
   "hash_pdf": "31f85f8101e19d61",
   "horizontes": {
     "mensal": {
@@ -100,7 +100,35 @@
       ],
       "bh_pct": -0.08,
       "bh_posicao": 19,
-      "total_capitais": 22
+      "total_capitais": 22,
+      "capitais_em_queda": [
+        "Belo Horizonte",
+        "Belém",
+        "Campo Grande",
+        "Curitiba"
+      ],
+      "quantas_em_queda": 4,
+      "capitais_em_alta": [
+        "Vitória",
+        "Brasília",
+        "Aracaju",
+        "Recife",
+        "Goiânia",
+        "Rio de Janeiro",
+        "São Luís",
+        "Manaus",
+        "Fortaleza",
+        "João Pessoa",
+        "Florianópolis",
+        "Salvador",
+        "Porto Alegre",
+        "São Paulo",
+        "Cuiabá",
+        "Maceió",
+        "Teresina",
+        "Natal"
+      ],
+      "quantas_em_alta": 18
     },
     "ano": {
       "indice_geral_pct": 3.44,
@@ -196,7 +224,34 @@
       ],
       "bh_pct": 0.01,
       "bh_posicao": 21,
-      "total_capitais": 22
+      "total_capitais": 22,
+      "capitais_em_queda": [],
+      "quantas_em_queda": 0,
+      "capitais_em_alta": [
+        "Vitória",
+        "Manaus",
+        "Aracaju",
+        "Salvador",
+        "Florianópolis",
+        "Brasília",
+        "Fortaleza",
+        "Teresina",
+        "Natal",
+        "Recife",
+        "João Pessoa",
+        "Goiânia",
+        "Campo Grande",
+        "Belém",
+        "São Luís",
+        "Rio de Janeiro",
+        "Maceió",
+        "Cuiabá",
+        "São Paulo",
+        "Curitiba",
+        "Belo Horizonte",
+        "Porto Alegre"
+      ],
+      "quantas_em_alta": 22
     },
     "doze_meses": {
       "indice_geral_pct": 5.49,
@@ -292,7 +347,34 @@
       ],
       "bh_pct": 2.92,
       "bh_posicao": 20,
-      "total_capitais": 22
+      "total_capitais": 22,
+      "capitais_em_queda": [],
+      "quantas_em_queda": 0,
+      "capitais_em_alta": [
+        "Manaus",
+        "Salvador",
+        "Vitória",
+        "Brasília",
+        "Aracaju",
+        "Fortaleza",
+        "Natal",
+        "Florianópolis",
+        "João Pessoa",
+        "São Luís",
+        "Teresina",
+        "Goiânia",
+        "Belém",
+        "Recife",
+        "Maceió",
+        "Rio de Janeiro",
+        "Cuiabá",
+        "Campo Grande",
+        "São Paulo",
+        "Belo Horizonte",
+        "Curitiba",
+        "Porto Alegre"
+      ],
+      "quantas_em_alta": 22
     }
   },
   "inflacao_ipca": {

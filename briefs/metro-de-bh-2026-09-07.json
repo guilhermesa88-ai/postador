@@ -1,18 +1,18 @@
 {
   "marca": "metro-de-bh",
   "data": "2026-09-07",
-  "legenda": "BH ficou na 19ª posição entre 22 capitais no mês de agosto de 2026. Foi a única grande capital com variação negativa no período mensal.\n\nNo acumulado do ano, BH registrou 0,01% — praticamente estável. Porto Alegre e Curitiba tiveram variação similar.\n\nEnquanto isso, Vitória liderou com 10,24% no ano e Manaus com 11,42% em doze meses.\n\nPara quem acompanha o mercado de BH, o dado mostra que os preços aqui se comportam diferente do resto do país. A média nacional no mês foi 0,53%.\n\nFonte: FipeZap — Índice de Venda Residencial, agosto de 2026\n\n#mercadoimobiliario #belohorizonte #precoimovel #fipezap #dadosbh #primeiroimovel",
+  "legenda": "BH caiu 0,08% em agosto enquanto 18 capitais subiram e a média nacional marcou 0,53%. No ano, BH acumula apenas 0,01% — penúltima posição entre as 22 capitais monitoradas. Nos últimos doze meses, a variação foi de 2,92%, bem abaixo da média de 5,49%.\n\nTodos os números são do FipeZap — Índice de Venda Residencial, agosto de 2026.\n\n#bhimóveis #beloHorizonte #mercadoimobiliário #FipeZap #imóveisBH #preçoDeImóveis",
   "slides": [
     {
       "tipo": "capa",
       "eyebrow": "FipeZap • Agosto 2026",
-      "titulo": "BH foi a única grande capital com preço negativo no mês",
-      "sub": "Entre 22 cidades, BH ficou em 19º lugar com variação de -0,08%"
+      "titulo": "BH caiu 0,08% enquanto a média subiu 0,53%",
+      "sub": "18 capitais em alta, 4 em queda. BH ficou na 19ª posição entre 22."
     },
     {
       "tipo": "grafico",
-      "eyebrow": "Variação mensal • Agosto 2026",
-      "titulo": "Capitais selecionadas no mês",
+      "eyebrow": "Variação mensal — agosto 2026",
+      "titulo": "BH e outras 3 capitais em queda",
       "unidade": "%",
       "fonte": "FipeZap",
       "dados": [
@@ -23,6 +23,18 @@
         {
           "label": "Brasília",
           "valor": 1.28
+        },
+        {
+          "label": "Aracaju",
+          "valor": 1.07
+        },
+        {
+          "label": "Recife",
+          "valor": 0.88
+        },
+        {
+          "label": "Goiânia",
+          "valor": 0.77
         },
         {
           "label": "Rio de Janeiro",
@@ -49,27 +61,27 @@
     {
       "tipo": "lista",
       "eyebrow": "Três horizontes",
-      "titulo": "BH nas últimas posições em todos os períodos",
+      "titulo": "BH entre as mais lentas em todos os prazos",
       "itens": [
-        "<strong>Mensal (agosto):</strong> -0,08% • posição 19 de 22",
-        "<strong>No ano (2026):</strong> 0,01% • posição 21 de 22",
-        "<strong>Doze meses:</strong> 2,92% • posição 20 de 22",
-        "Apenas Porto Alegre teve variação menor que BH no acumulado do ano: 0,01%",
-        "A média nacional foi 0,53% no mês, 3,44% no ano e 5,49% em doze meses"
+        "<strong>No mês:</strong> BH caiu 0,08%. Média nacional subiu 0,53%. Posição 19 de 22.",
+        "<strong>No ano:</strong> BH subiu 0,01%. Média nacional subiu 3,44%. Posição 21 de 22.",
+        "<strong>Em doze meses:</strong> BH subiu 2,92%. Média nacional subiu 5,49%. Posição 20 de 22.",
+        "<strong>IPCA em doze meses:</strong> 4,14%. BH ficou abaixo da inflação acumulada no período."
       ]
     },
     {
       "tipo": "texto",
-      "eyebrow": "Contexto",
-      "titulo": "BH se descola da média nacional",
-      "corpo": "Enquanto a média das 22 capitais subiu 0,53% em agosto, BH caiu 0,08%.\n\nNo acumulado do ano, a diferença é maior: 3,44% na média nacional contra 0,01% em BH.\n\nVitória lidera em quase todos os horizontes. No ano, subiu 10,24%. Em doze meses, Manaus puxa com 11,42%.\n\nPara comparação: o IPCA de doze meses foi 4,14%. BH ficou abaixo da inflação no período anual."
+      "eyebrow": "O que isso significa",
+      "titulo": "Preço real de imóvel em BH caiu no último ano",
+      "corpo": "Quando o preço sobe 2,92% e a inflação vai a 4,14%, o valor real do imóvel diminuiu.\n\nEm agosto, BH foi uma das 4 capitais em queda. No ano, acumula praticamente zero. Vitória lidera com 10,24% no ano e Manaus com 11,42% em doze meses.\n\nO FipeZap mede o preço anunciado de venda em 22 capitais. Não projeta — registra o que está à venda.",
+      "rodape_destaque": "Todos os valores são variação percentual do preço de venda"
     },
     {
       "tipo": "fechamento",
-      "eyebrow": "Metro de BH",
-      "titulo": "Todo número do mercado de BH, sem enrolação",
-      "cta": "Acompanhe para receber os próximos dados",
-      "rodape_destaque": "Fonte: FipeZap • Agosto 2026"
+      "eyebrow": "Fonte",
+      "titulo": "FipeZap — Índice de Venda Residencial",
+      "corpo": "Agosto de 2026. 22 capitais monitoradas. Dados extraídos em 7 de setembro de 2026.",
+      "cta": "Salvou? Marca quem tá de olho no mercado de BH"
     }
   ],
   "selo_ia": "Conteúdo produzido com apoio de IA"
