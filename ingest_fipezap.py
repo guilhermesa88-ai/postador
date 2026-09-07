@@ -1,19 +1,26 @@
 """
-ingest_fipezap.py — baixa o informe do FipeZap e extrai a tabela de bairros
-de Belo Horizonte para facts/.
+ingest_fipezap.py — extrai do informe do FipeZap a variacao de preco das 22
+capitais, em tres horizontes, e grava em facts/fipezap-capitais.json.
 
-    python ingest_fipezap.py                 # mes mais recente disponivel
-    python ingest_fipezap.py 2026 8          # mes especifico
+    python ingest_fipezap.py            # mes mais recente disponivel
+    python ingest_fipezap.py 2026 8     # mes especifico
 
-Por que parser deterministico e nao "eu li o PDF e anotei": o perfil inteiro se
-apoia em "todo numero com fonte". Numero que passa por leitura humana ou por
-resumo de modelo pode chegar trocado sem ninguem perceber. Aqui o texto sai do
-PDF por extracao, cada linha e conferida contra faixas plausiveis, e **se a
-tabela nao for encontrada o programa falha em vez de inventar**.
+HISTORICO QUE VALE LER ANTES DE MEXER
 
-Essa ultima parte e proposital. Ha uma nota no proprio informe dizendo que a
-Fipe nao divulga tabela por bairro; se isso significar que a tabela nao existe
-em algum mes, este script para e ninguem publica nada.
+A primeira versao deste arquivo tentava extrair uma tabela de precos POR BAIRRO
+de Belo Horizonte. Essa tabela nao existe. Ela apareceu num resumo de IA do PDF,
+duas vezes seguidas, com numeros identicos -- o que parecia confirmacao e era o
+mesmo modelo inventando a mesma coisa. Quatro informes reais foram baixados e
+nenhum tinha uma linha sequer. O proprio PDF diz, por escrito, que "a Fipe nao
+divulga informacoes detalhadas ou tabelas de preco medio por zona, distrito ou
+bairro".
+
+O que salvou foi o parser falhar alto em vez de aceitar o que encontrasse.
+Mantenha assim: **se a extracao nao bater com o esperado, nada e gravado.**
+
+O que o informe REALMENTE traz, e o que esta versao extrai: a variacao
+percentual de cada uma das 22 capitais, em tres horizontes -- mes, acumulado no
+ano e janela movel de 12 meses -- em paragrafos de texto corrido.
 
 Dependencias: requests, pdfplumber
 """
@@ -32,48 +39,45 @@ import requests
 
 RAIZ = Path(__file__).parent
 BASE = "https://downloads.fipe.org.br/indices/fipezap"
-
-# Sufixos que a Fipe alterna entre meses. Tentados em ordem.
 SUFIXOS = ["residencial-venda", "residencial-venda-pub", "residencial-venda-publico"]
 
-# Faixas de sanidade. Nao sao chute: preco de m2 residencial em capital
-# brasileira fora de 1.000-60.000 e erro de parse, nao mercado.
-PRECO_MIN, PRECO_MAX = 1_000, 60_000
-VAR_MIN, VAR_MAX = -50.0, 50.0
-MIN_LINHAS = 5
-
 # O servidor da Fipe recusa com 403 quem chega sem User-Agent de navegador --
-# filtro generico de bot, nao politica contra acesso automatizado (o PDF e
-# publico e linkado na propria pagina do indice). Identificamos o cliente de
-# forma honesta, dizendo quem somos e para onde escrever se incomodar.
+# filtro generico de bot, nao politica contra acesso automatizado. O PDF e
+# publico e linkado na propria pagina do indice.
 HEADERS = {
     "User-Agent": ("metro-de-bh-bot/1.0 "
-                   "(+https://github.com/guilhermesa88-ai/postador) "
-                   "Mozilla/5.0"),
+                   "(+https://github.com/guilhermesa88-ai/postador) Mozilla/5.0"),
     "Accept": "application/pdf,*/*",
-    "Accept-Language": "pt-BR,pt;q=0.9",
 }
 
-# BAIRRO  R$ 17.432  -0,4%   (o R$ as vezes vem colado, as vezes ausente)
-LINHA = re.compile(
-    r"^([A-ZÀ-Ú][A-ZÀ-Ú\s\.\-']{2,34})\s+"       # nome em caixa alta
-    r"R?\$?\s*([\d]{1,2}\.[\d]{3})\s+"            # 17.432
-    r"([+-]?\d{1,2},\d)\s*%?$"                    # -0,4%
-)
+# Vocabulario fechado: as 22 capitais da cesta do indice. Fechado de proposito --
+# e o que impede o parser de "achar" cidade que nao existe.
+CAPITAIS = [
+    "Aracaju", "Belém", "Belo Horizonte", "Brasília", "Campo Grande", "Cuiabá",
+    "Curitiba", "Florianópolis", "Fortaleza", "Goiânia", "João Pessoa", "Maceió",
+    "Manaus", "Natal", "Porto Alegre", "Recife", "Rio de Janeiro", "Salvador",
+    "São Luís", "São Paulo", "Teresina", "Vitória",
+]
+
+# Marcadores das tres secoes, ja sem espacos (o PDF extrai palavras coladas).
+SECOES = [
+    ("mensal",     "Análisedoúltimomês"),
+    ("ano",        "Balançoparcialde"),
+    ("doze_meses", "Análisedosúltimos12meses"),
+]
+
+MIN_CAPITAIS = 18          # abaixo disso o layout mudou; nao publique
+VAR_MIN, VAR_MAX = -30.0, 60.0
 
 
 class IngestError(RuntimeError):
     pass
 
 
-def url_do_informe(ano: int, mes: int) -> list[str]:
-    ref = f"{ano}{mes:02d}"
-    return [f"{BASE}/fipezap-{ref}-{s}.pdf" for s in SUFIXOS]
-
-
 def baixar(ano: int, mes: int) -> tuple[bytes, str]:
     erros = []
-    for u in url_do_informe(ano, mes):
+    for s in SUFIXOS:
+        u = f"{BASE}/fipezap-{ano}{mes:02d}-{s}.pdf"
         try:
             r = requests.get(u, timeout=90, headers=HEADERS)
             if r.status_code == 200 and r.content[:4] == b"%PDF":
@@ -81,7 +85,7 @@ def baixar(ano: int, mes: int) -> tuple[bytes, str]:
             erros.append(f"{r.status_code} {u}")
         except requests.RequestException as e:
             erros.append(f"{e} {u}")
-    raise IngestError(f"informe de {mes:02d}/{ano} nao encontrado:\n  " + "\n  ".join(erros))
+    raise IngestError(f"informe de {mes:02d}/{ano} nao baixado:\n  " + "\n  ".join(erros))
 
 
 def texto_do_pdf(blob: bytes) -> str:
@@ -94,40 +98,50 @@ def texto_do_pdf(blob: bytes) -> str:
         caminho.unlink(missing_ok=True)
 
 
-def achar_secao_bh(texto: str) -> str:
-    """Recorta o pedaco do documento que fala de Belo Horizonte."""
-    linhas = texto.split("\n")
-    ini = None
-    for i, l in enumerate(linhas):
-        if re.search(r"belo\s+horizonte", l, re.I):
-            ini = i
-            break
-    if ini is None:
-        raise IngestError("nenhuma mencao a Belo Horizonte no informe")
-    # a tabela de bairros vem logo depois; 120 linhas cobrem com folga
-    return "\n".join(linhas[ini:ini + 120])
+def fatiar(texto: str) -> dict[str, str]:
+    """Recorta as tres secoes de analise. Unica transformacao: tirar espaco.
+
+    Nao normalizo acento: o PDF os preserva, e manter o texto o mais proximo
+    possivel do original reduz a chance de casar coisa errada.
+    """
+    h = re.sub(r"\s+", "", texto)
+    pos = {nome: h.find(marca) for nome, marca in SECOES}
+    faltando = [n for n, p in pos.items() if p < 0]
+    if faltando:
+        raise IngestError(
+            f"secoes nao encontradas no informe: {faltando}. "
+            f"O texto do PDF mudou de formato. Nada foi gravado."
+        )
+    nomes = [n for n, _ in SECOES]
+    fatias = {}
+    for i, n in enumerate(nomes):
+        fim = pos[nomes[i + 1]] if i + 1 < len(nomes) else len(h)
+        fatias[n] = h[pos[n]:fim]
+    return fatias
 
 
-def extrair_bairros(secao: str) -> list[dict]:
-    achados: list[dict] = []
-    vistos: set[str] = set()
-    for linha in secao.split("\n"):
-        m = LINHA.match(linha.strip())
+def capitais_da_fatia(fatia: str) -> dict[str, float]:
+    achados: dict[str, float] = {}
+    for cap in CAPITAIS:
+        agulha = cap.replace(" ", "")
+        m = re.search(re.escape(agulha) + r"\(([+-]?\d{1,2},\d{2})%\)", fatia, re.I)
         if not m:
             continue
-        nome = " ".join(m.group(1).split()).title()
-        preco = int(m.group(2).replace(".", ""))
-        var = float(m.group(3).replace(",", "."))
-
-        if not (PRECO_MIN <= preco <= PRECO_MAX):
-            continue
-        if not (VAR_MIN <= var <= VAR_MAX):
-            continue
-        if nome in vistos:
-            continue
-        vistos.add(nome)
-        achados.append({"bairro": nome, "preco_m2": preco, "variacao_12m_pct": var})
+        v = float(m.group(1).replace(",", "."))
+        if VAR_MIN <= v <= VAR_MAX:
+            achados[cap] = v
     return achados
+
+
+def indice_geral(fatia: str, horizonte: str) -> float | None:
+    """A variacao do indice como um todo, para comparar a capital com a media."""
+    padroes = {
+        "mensal": r"aumentomédiode([+-]?\d{1,2},\d{2})%",
+        "ano": r"acumuloualtade([+-]?\d{1,2},\d{2})%",
+        "doze_meses": r"registraraltade([+-]?\d{1,2},\d{2})%",
+    }
+    m = re.search(padroes[horizonte], fatia, re.I)
+    return float(m.group(1).replace(",", ".")) if m else None
 
 
 def ingerir(ano: int, mes: int) -> Path:
@@ -135,66 +149,64 @@ def ingerir(ano: int, mes: int) -> Path:
     blob, url = baixar(ano, mes)
     print(f"  {url}  ({len(blob)//1024} KB)")
 
-    texto = texto_do_pdf(blob)
-    secao = achar_secao_bh(texto)
-    bairros = extrair_bairros(secao)
+    fatias = fatiar(texto_do_pdf(blob))
+    horizontes: dict[str, dict] = {}
 
-    if len(bairros) < MIN_LINHAS:
-        raise IngestError(
-            f"so {len(bairros)} bairro(s) reconhecido(s) — abaixo do minimo de "
-            f"{MIN_LINHAS}. O layout do informe pode ter mudado, ou a tabela por "
-            f"bairro pode nao existir neste mes. Nada foi gravado.\n"
-            f"Confira o PDF na mao antes de mexer no parser: {url}"
-        )
+    for nome, fatia in fatias.items():
+        caps = capitais_da_fatia(fatia)
+        if len(caps) < MIN_CAPITAIS:
+            raise IngestError(
+                f"secao '{nome}': so {len(caps)} de 22 capitais reconhecidas "
+                f"(minimo {MIN_CAPITAIS}). Formato mudou. Nada foi gravado.\n"
+                f"Rode o workflow 'Inspecionar PDF' e olhe o texto real: {url}"
+            )
+        if "Belo Horizonte" not in caps:
+            raise IngestError(f"secao '{nome}': Belo Horizonte ausente. Nada foi gravado.")
 
-    bairros.sort(key=lambda b: b["variacao_12m_pct"], reverse=True)
-    variacoes = [b["variacao_12m_pct"] for b in bairros]
+        ordenado = sorted(caps.items(), key=lambda x: -x[1])
+        posicao = [c for c, _ in ordenado].index("Belo Horizonte") + 1
+        horizontes[nome] = {
+            "indice_geral_pct": indice_geral(fatia, nome),
+            "capitais": [{"cidade": c, "variacao_pct": v} for c, v in ordenado],
+            "bh_pct": caps["Belo Horizonte"],
+            "bh_posicao": posicao,
+            "total_capitais": len(caps),
+        }
 
     facts = {
-        "fonte": "FipeZap",
+        "fonte": "FipeZap — Índice de Venda Residencial",
         "fonte_url": url,
-        "descricao": ("Preço médio do m² anunciado e variação em 12 meses, por bairro, "
-                      "em Belo Horizonte"),
+        "descricao": ("Variação percentual do preço de venda de imóveis residenciais "
+                      "nas 22 capitais monitoradas, em três horizontes"),
         "periodo": f"{ano}-{mes:02d}",
-        "unidade_variacao": "% em 12 meses",
         "extraido_em": datetime.now(timezone.utc).isoformat(),
         "hash_pdf": hashlib.sha256(blob).hexdigest()[:16],
-        "series": bairros,
-        "agregados": {
-            "bairros_na_tabela": len(bairros),
-            "maior_alta_pct": max(variacoes),
-            "maior_queda_pct": min(variacoes),
-            "amplitude_pp": round(max(variacoes) - min(variacoes), 1),
-            "bairros_em_alta": sum(1 for v in variacoes if v > 0),
-            "bairros_em_queda": sum(1 for v in variacoes if v < 0),
-            "preco_maximo": max(b["preco_m2"] for b in bairros),
-            "preco_minimo": min(b["preco_m2"] for b in bairros),
-        },
+        "horizontes": horizontes,
     }
 
-    destino = RAIZ / "facts" / "fipezap-bh.json"
+    destino = RAIZ / "facts" / "fipezap-capitais.json"
     destino.parent.mkdir(exist_ok=True)
     destino.write_text(json.dumps(facts, ensure_ascii=False, indent=2), encoding="utf-8")
 
-    print(f"\n  {len(bairros)} bairros extraidos, periodo {facts['periodo']}")
-    for b in bairros:
-        print(f"    {b['bairro']:<20} R$ {b['preco_m2']:>7,}/m²   {b['variacao_12m_pct']:+.1f}%"
-              .replace(",", "."))
-    print(f"\n  amplitude: {facts['agregados']['amplitude_pp']} pontos percentuais")
-    print(f"  gravado em {destino}")
+    for nome, h in horizontes.items():
+        print(f"\n  {nome}: {h['total_capitais']} capitais, indice geral "
+              f"{h['indice_geral_pct']:+.2f}%" if h["indice_geral_pct"] is not None
+              else f"\n  {nome}: {h['total_capitais']} capitais")
+        print(f"    Belo Horizonte {h['bh_pct']:+.2f}%  "
+              f"(posicao {h['bh_posicao']} de {h['total_capitais']})")
+        topo = h["capitais"][0]
+        print(f"    topo: {topo['cidade']} {topo['variacao_pct']:+.2f}%")
+
+    print(f"\n  gravado em {destino}")
     return destino
 
 
 def main() -> int:
     if len(sys.argv) >= 3:
-        ano, mes = int(sys.argv[1]), int(sys.argv[2])
-        candidatos = [(ano, mes)]
+        candidatos = [(int(sys.argv[1]), int(sys.argv[2]))]
     else:
-        # o informe do mes corrente costuma sair no meio do mes seguinte;
-        # tenta do mais recente para tras
         hoje = date.today()
-        candidatos = []
-        a, m = hoje.year, hoje.month
+        candidatos, a, m = [], hoje.year, hoje.month
         for _ in range(4):
             m -= 1
             if m == 0:
