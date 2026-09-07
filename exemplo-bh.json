@@ -1,0 +1,78 @@
+{
+  "marca": "metro-de-bh",
+  "data": "2026-09-07",
+  "selo_ia": "Conteúdo produzido com apoio de IA",
+  "legenda": "O m² em BH não se move igual em toda a cidade. No último trimestre, a diferença entre o bairro que mais subiu e o que mais caiu passou de 6 pontos percentuais.\n\nQuem compara a cidade inteira pela média perde exatamente essa informação: a média esconde que existem dois mercados acontecendo ao mesmo tempo.\n\nSalve para consultar antes da próxima visita.\n\nFonte: FipeZap — variação trimestral do preço médio do m² anunciado.\n\n#belohorizonte #imoveisbh #mercadoimobiliario #primeiroimovel #bh",
+  "slides": [
+    {
+      "tipo": "capa",
+      "eyebrow": "Trimestre  ·  BH",
+      "titulo": "A média da cidade esconde dois mercados",
+      "sub": "A variação do m² por bairro em Belo Horizonte no último trimestre.",
+      "rodape_destaque": "Entre o topo e a base da lista: <strong>6,1 pontos percentuais</strong>."
+    },
+    {
+      "tipo": "grafico",
+      "eyebrow": "Variação do m² · trimestre",
+      "titulo": "Onde subiu e onde caiu",
+      "unidade": "%",
+      "dados": [
+        {
+          "label": "Vale do Sereno",
+          "valor": 3.8
+        },
+        {
+          "label": "Belvedere",
+          "valor": 2.9
+        },
+        {
+          "label": "Savassi",
+          "valor": 2.1
+        },
+        {
+          "label": "Funcionários",
+          "valor": 1.4
+        },
+        {
+          "label": "Santo Antônio",
+          "valor": 0.6
+        },
+        {
+          "label": "Barreiro",
+          "valor": -0.9
+        },
+        {
+          "label": "Venda Nova",
+          "valor": -1.7
+        },
+        {
+          "label": "Ribeiro de Abreu",
+          "valor": -2.3
+        }
+      ]
+    },
+    {
+      "tipo": "lista",
+      "eyebrow": "O que os números dizem",
+      "titulo": "Três leituras",
+      "itens": [
+        "A alta se concentra no <b>vetor sul</b>. Quatro dos cinco bairros em alta estão na mesma direção da cidade.",
+        "A queda não é generalizada: é <b>periférica e específica</b>. Três bairros, nenhum deles no centro.",
+        "A média da cidade ficou perto de <b>zero</b> — e não descreve nenhum dos oito bairros da lista."
+      ]
+    },
+    {
+      "tipo": "texto",
+      "eyebrow": "Como usar isso",
+      "titulo": "Antes de negociar",
+      "corpo": "Se o imóvel está num bairro em alta, a tabela do vendedor já incorporou o movimento — e a margem de negociação está no <strong>prazo</strong>, não no preço.<br><br>Se está num bairro em queda, o inverso: o preço anunciado costuma estar <strong>desatualizado para cima</strong>."
+    },
+    {
+      "tipo": "fechamento",
+      "eyebrow": "Metro de BH",
+      "titulo": "Dados do m² em BH, toda semana",
+      "corpo": "Sem opinião de corretor. Só o número e de onde ele veio.",
+      "cta": "Salve este post e <em>siga para acompanhar</em>."
+    }
+  ]
+}

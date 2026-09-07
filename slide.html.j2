@@ -1,0 +1,157 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<style>
+  /* ------------------------------------------------------------------
+     Canvas de 1080x1350. Todas as medidas em px reais desse canvas.
+     A imagem e vista a ~400px de largura no feed, entao a escala visual
+     efetiva e ~2.7x -- e por isso que os tamanhos parecem grandes aqui.
+     ------------------------------------------------------------------ */
+  @page { margin: 0; }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  html, body {
+    width: {{ W }}px; height: {{ H }}px;
+    background: {{ c.surface }};
+    color: {{ c.ink }};
+    font-family: {{ t.familia }};
+    -webkit-font-smoothing: antialiased;
+  }
+
+  .slide {
+    width: {{ W }}px; height: {{ H }}px;
+    padding: {{ PAD }}px;
+    display: flex; flex-direction: column;
+    position: relative; overflow: hidden;
+  }
+
+  /* faixa de acento no topo */
+  .slide::before {
+    content: ''; position: absolute; top: 0; left: 0;
+    width: {{ W }}px; height: 10px; background: {{ c.acento }};
+  }
+
+  .eyebrow {
+    font-size: 26px; font-weight: 600; letter-spacing: .16em;
+    text-transform: uppercase; color: {{ c.acento }};
+    margin-bottom: 28px;
+  }
+
+  h1 { font-size: 88px; line-height: 1.06; font-weight: {{ t.peso_titulo }};
+       letter-spacing: -.025em; }
+  h2 { font-size: 60px; line-height: 1.12; font-weight: {{ t.peso_titulo }};
+       letter-spacing: -.02em; }
+
+  .sub { font-size: 34px; line-height: 1.45; color: {{ c.ink_secundario }};
+         font-weight: 300; margin-top: 32px; max-width: 860px; }
+
+  .corpo { font-size: 38px; line-height: 1.5; color: {{ c.ink }};
+           font-weight: 300; margin-top: 40px; }
+  .corpo strong { font-weight: 600; }
+
+  .espaco { flex: 1; }
+
+  /* rodape ---------------------------------------------------------- */
+  .rodape {
+    display: flex; justify-content: space-between; align-items: flex-end;
+    border-top: 2px solid {{ c.regra }}; padding-top: 26px;
+    font-size: 24px; color: {{ c.ink_muted }};
+  }
+  .rodape .handle { font-weight: 600; color: {{ c.ink_secundario }}; }
+
+  /* paginacao ------------------------------------------------------- */
+  .pag { display: flex; gap: 10px; align-items: center; }
+  .pag i { width: 12px; height: 12px; border-radius: 50%;
+           background: {{ c.regra }}; display: block; }
+  .pag i.on { background: {{ c.acento }}; }
+
+  /* lista ----------------------------------------------------------- */
+  .lista { margin-top: 48px; display: flex; flex-direction: column; gap: 34px; }
+  .item { display: flex; gap: 28px; align-items: baseline; }
+  .item .n { font-size: 34px; font-weight: 700; color: {{ c.acento }};
+             min-width: 56px; font-variant-numeric: tabular-nums; }
+  .item .txt { font-size: 36px; line-height: 1.36; font-weight: 300;
+               color: {{ c.ink }}; }
+  .item .txt b { font-weight: 600; }
+
+  /* grafico --------------------------------------------------------- */
+  .grafico { margin-top: 44px; }
+  .legenda { display: flex; gap: 40px; margin-top: 34px;
+             font-size: 26px; color: {{ c.ink_secundario }}; }
+  .legenda span { display: flex; align-items: center; gap: 12px; }
+  .legenda i { width: 26px; height: 14px; border-radius: 4px; display: block; }
+
+  .cta { font-size: 40px; line-height: 1.4; font-weight: 600;
+         color: {{ c.ink }}; margin-top: 40px; margin-bottom: 48px; }
+  .cta em { font-style: normal; color: {{ c.acento }}; }
+
+  .selo-ia { font-size: 20px; color: {{ c.ink_muted }}; }
+</style>
+</head>
+<body>
+<div class="slide">
+
+  {% if s.tipo == 'capa' %}
+    <div class="eyebrow">{{ s.eyebrow }}</div>
+    <h1>{{ s.titulo }}</h1>
+    {% if s.sub %}<p class="sub">{{ s.sub }}</p>{% endif %}
+    {% if s.rodape_destaque %}
+      <div class="corpo" style="margin-top:56px">{{ s.rodape_destaque|safe }}</div>
+    {% endif %}
+    <div class="espaco"></div>
+
+  {% elif s.tipo == 'grafico' %}
+    <div class="eyebrow">{{ s.eyebrow }}</div>
+    <h2>{{ s.titulo }}</h2>
+    <div class="espaco"></div>
+    <div class="grafico">{{ chart_svg|safe }}</div>
+    <div class="legenda">
+      <span><i style="background:{{ c.positivo }}"></i> alta</span>
+      <span><i style="background:{{ c.negativo }}"></i> queda</span>
+    </div>
+    <div class="espaco"></div>
+
+  {% elif s.tipo == 'lista' %}
+    <div class="eyebrow">{{ s.eyebrow }}</div>
+    <h2>{{ s.titulo }}</h2>
+    <div class="espaco"></div>
+    <div class="lista">
+      {% for it in s.itens %}
+        <div class="item">
+          <div class="n">{{ "%02d"|format(loop.index) }}</div>
+          <div class="txt">{{ it|safe }}</div>
+        </div>
+      {% endfor %}
+    </div>
+    <div class="espaco"></div>
+
+  {% elif s.tipo == 'texto' %}
+    <div class="eyebrow">{{ s.eyebrow }}</div>
+    <h2>{{ s.titulo }}</h2>
+    <div class="espaco"></div>
+    <div class="corpo">{{ s.corpo|safe }}</div>
+    <div class="espaco"></div>
+
+  {% elif s.tipo == 'fechamento' %}
+    <div class="eyebrow">{{ s.eyebrow }}</div>
+    <h2>{{ s.titulo }}</h2>
+    {% if s.corpo %}<div class="corpo">{{ s.corpo|safe }}</div>{% endif %}
+    <div class="espaco"></div>
+    <div class="cta">{{ s.cta|safe }}</div>
+  {% endif %}
+
+  <div class="rodape">
+    <div>
+      <div class="handle">{{ marca.handle }}</div>
+      <div style="margin-top:8px">{{ s.fonte or marca.fonte_padrao }}</div>
+      {% if selo_ia %}<div class="selo-ia" style="margin-top:8px">{{ selo_ia }}</div>{% endif %}
+    </div>
+    <div class="pag">
+      {% for i in range(total) %}<i class="{{ 'on' if i == idx else '' }}"></i>{% endfor %}
+    </div>
+  </div>
+
+</div>
+</body>
+</html>

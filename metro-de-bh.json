@@ -1,0 +1,53 @@
+{
+  "slug": "metro-de-bh",
+  "nome": "Metro de BH",
+  "handle": "@metro_de_bh",
+  "fonte_padrao": "Fonte: FipeZap",
+  "cores": {
+    "surface": "#141518",
+    "surface_alt": "#1b1c20",
+    "ink": "#f4f3ef",
+    "ink_secundario": "#a8a69e",
+    "ink_muted": "#6e6c66",
+    "regra": "#2c2d32",
+    "acento": "#3987e5",
+    "positivo": "#3987e5",
+    "negativo": "#e66767",
+    "baseline": "#3a3b40"
+  },
+  "tipografia": {
+    "familia": "Poppins, 'DejaVu Sans', sans-serif",
+    "peso_titulo": 700,
+    "peso_corpo": 400
+  },
+  "voz": {
+    "registro": "Direto e numérico. Frases curtas. Nada de jargão de corretor nem de entusiasmo de vendedor.",
+    "sempre": [
+      "todo post traz um número verificável e diz de onde ele veio",
+      "o gancho é uma leitura contraintuitiva do dado, nunca um adjetivo",
+      "escreve para quem vai comprar o primeiro imóvel, não para investidor"
+    ],
+    "nunca": [
+      "prometer valorização futura ou dar recomendação de compra",
+      "usar superlativo sem número atrás",
+      "falar em nome de corretor ou imobiliária"
+    ],
+    "banidas": [
+      "oportunidade única",
+      "invista já",
+      "corre que acaba",
+      "imperdível",
+      "o melhor investimento",
+      "não perca",
+      "garanta já",
+      "explodindo",
+      "bombando",
+      "sonho da casa própria"
+    ]
+  },
+  "pauta": {
+    "publico": "Primeiro imóvel, 25-35 anos, BH e região metropolitana",
+    "formato_padrao": "carrossel de 5 slides: capa, grafico, lista, texto, fechamento"
+  },
+  "bio": "O preço do m² em BH, bairro por bairro.\nTodo número com fonte. Nenhuma opinião de corretor.\nDados novos toda semana ↓"
+}

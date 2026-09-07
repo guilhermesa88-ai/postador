@@ -1,0 +1,23 @@
+{
+  "fonte": "FipeZap",
+  "descricao": "Variação trimestral do preço médio do m² anunciado, por bairro, em Belo Horizonte",
+  "periodo": "2026-T2",
+  "unidade": "%",
+  "coletado_em": "2026-09-01",
+  "series": [
+    { "bairro": "Vale do Sereno",   "variacao_pct": 3.8,  "preco_m2": 14820, "regiao": "Sul" },
+    { "bairro": "Belvedere",        "variacao_pct": 2.9,  "preco_m2": 13640, "regiao": "Sul" },
+    { "bairro": "Savassi",          "variacao_pct": 2.1,  "preco_m2": 11970, "regiao": "Centro-Sul" },
+    { "bairro": "Funcionários",     "variacao_pct": 1.4,  "preco_m2": 11250, "regiao": "Centro-Sul" },
+    { "bairro": "Santo Antônio",    "variacao_pct": 0.6,  "preco_m2": 9880,  "regiao": "Centro-Sul" },
+    { "bairro": "Barreiro",         "variacao_pct": -0.9, "preco_m2": 5210,  "regiao": "Barreiro" },
+    { "bairro": "Venda Nova",       "variacao_pct": -1.7, "preco_m2": 4890,  "regiao": "Venda Nova" },
+    { "bairro": "Ribeiro de Abreu", "variacao_pct": -2.3, "preco_m2": 3960,  "regiao": "Nordeste" }
+  ],
+  "agregados": {
+    "media_cidade_pct": 0.7,
+    "amplitude_pp": 6.1,
+    "bairros_em_alta": 5,
+    "bairros_em_queda": 3
+  }
+}
