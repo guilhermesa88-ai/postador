@@ -1,0 +1,37 @@
+name: Renovar token
+
+# O token do Instagram vale 60 dias e so pode ser renovado depois de 24h de
+# idade. Rodar diario e o que impede um perfil de exigir OAuth manual de novo
+# -- que, como o login forca senha, e trabalho humano.
+on:
+  schedule:
+    - cron: '0 9 * * *'
+  workflow_dispatch:
+
+jobs:
+  renovar:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with: { python-version: '3.12' }
+      - run: pip install requests
+
+      - name: Renovar e avisar se estiver perto de vencer
+        env:
+          IG_ACCESS_TOKEN: ${{ secrets.IG_ACCESS_TOKEN }}
+        run: |
+          python - <<'PY'
+          import os, sys, requests
+          t = os.environ['IG_ACCESS_TOKEN']
+          r = requests.get('https://graph.instagram.com/refresh_access_token',
+                           params={'grant_type': 'ig_refresh_token', 'access_token': t},
+                           timeout=30)
+          if r.status_code != 200:
+              print('::error::falha ao renovar:', r.text[:300]); sys.exit(1)
+          dias = r.json().get('expires_in', 0) / 86400
+          print(f'token renovado, valido por {dias:.0f} dias')
+          if dias < 7:
+              print('::warning::token vence em menos de 7 dias')
+          print('::notice::atualize o secret IG_ACCESS_TOKEN com o token novo')
+          PY
