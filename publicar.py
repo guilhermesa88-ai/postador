@@ -57,7 +57,8 @@ def publicar(pasta: Path, dry_run: bool = False) -> int:
 
     # 1) midia publica -----------------------------------------------------
     storage = GitHubPages(owner=env("GH_OWNER"), repo=env("GH_REPO"))
-    prefixo = f"midia/{manifest['marca']}/{manifest['data']}"
+    prefixo = (f"midia/{manifest['marca']}/{manifest['data']}"
+               f"-{manifest.get('angulo', 'padrao')}")
     print(f"Subindo {len(arquivos)} arquivo(s) para {prefixo}/ ...")
     urls = storage.enviar_lote(arquivos, prefixo)
     for u in urls:

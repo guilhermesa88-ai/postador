@@ -90,19 +90,20 @@ jobs:
         run: python ingest_fipezap.py
 
       # A guarda roda ANTES do compose de proposito: se nao ha o que dizer, nao
-      # se gasta a chamada do modelo. Sai 78 quando este informe ja virou post
-      # no mesmo angulo; `continue-on-error` transforma isso em "pula o resto",
-      # nao em falha do job.
+      # se gasta a chamada do modelo. Ela escolhe o proximo angulo da pauta que
+      # ainda nao virou post neste informe, e sai 78 quando todos acabaram;
+      # `continue-on-error` transforma isso em "pula o resto", nao em falha.
+      # Quem escolhe o angulo de verdade e o compose, chamando a MESMA funcao --
+      # se cada um escolhesse por conta, um dia divergiriam.
       - name: Ha o que dizer hoje?
         id: guarda
         continue-on-error: true
-        run: python guarda.py facts/fipezap-capitais.json ${{ vars.MARCA }} --angulo padrao ${{ github.event.inputs.forcar == 'true' && '--forcar' || '' }}
+        run: python guarda.py facts/fipezap-capitais.json ${{ vars.MARCA }} ${{ github.event.inputs.forcar == 'true' && '--forcar' || '' }}
 
       - name: Compor o brief a partir dos facts
         if: steps.guarda.outcome == 'success'
         env:
           ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
-          ANGULO: padrao
         run: python compose.py facts/fipezap-capitais.json ${{ vars.MARCA }}
 
       # Versiona o que a maquina leu (facts) e o que ela escreveu (brief).
@@ -173,4 +174,5 @@ jobs:
             facts/fipezap-capitais.json
             briefs/*.json
             estado/*.json
+            pautas/*.json
           retention-days: 30

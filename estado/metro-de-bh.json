@@ -3,12 +3,13 @@
     {
       "periodo": "2026-08",
       "hash_pdf": "31f85f8101e19d61",
-      "angulo": "padrao",
-      "formato": "reel",
-      "data": "2026-09-08",
-      "media_id": "18093109655554507",
-      "permalink": "https://www.instagram.com/reel/DdBgSgsj_s7/",
-      "registrado_em": "2026-09-08T10:47:04.238708+00:00"
+      "angulo": "panorama-do-mes",
+      "formato": "carousel",
+      "data": "2026-09-07",
+      "media_id": null,
+      "permalink": "https://www.instagram.com/metro_de_bh/p/DdAQ0n6DpCi/",
+      "registrado_em": "2026-09-07T15:20:00+00:00",
+      "origem": "semeado a mao — o carrossel saiu antes da guarda existir; o media_id nao foi capturado, mas (periodo, hash_pdf, angulo) esta correto."
     }
   ]
 }

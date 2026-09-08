@@ -1,0 +1,77 @@
+{
+  "marca": "metro-de-bh",
+  "min_dias_entre_posts": 0,
+  "_sobre_min_dias": "0 = publica em toda rodada do cron (seg-sex). Os angulos acabam numa semana e o perfil fica quieto ate o informe seguinte. Suba para 2 ou 3 se preferir espalhar os mesmos posts pelo mes inteiro — e o mesmo volume, distribuido.",
+  "_como_funciona": "Cada angulo e uma PERGUNTA diferente sobre o mesmo informe. A resposta vem dos facts, nunca da pauta: por isso as perguntas sao neutras ('subiu ou caiu?'), e nao afirmacoes disfarcadas de pergunta. O campo 'exige' lista os caminhos de fato que precisam existir; sem eles o angulo e pulado, e nao adaptado na marra. E assim que se posta muito sem inventar nada.",
+  "angulos": [
+    {
+      "nome": "panorama-do-mes",
+      "pergunta": "Onde Belo Horizonte ficou entre as 22 capitais na variação do mês, e como isso se compara à média?",
+      "foco": "O ranking do mês. Mostre BH na fila, com as capitais do topo e da base em volta. O gancho é a distância entre BH e a média, não um adjetivo.",
+      "exige": [
+        "horizontes.mensal.bh_pct",
+        "horizontes.mensal.bh_posicao",
+        "horizontes.mensal.indice_geral_pct"
+      ]
+    },
+    {
+      "nome": "contra-a-inflacao",
+      "pergunta": "Em 12 meses, o preço do imóvel em BH subiu mais ou menos que a inflação — ou seja, o valor real subiu ou caiu?",
+      "foco": "Compare o acumulado de 12 meses de BH com o IPCA de 12 MESES — nunca com o IPCA de outro horizonte. Diga qual dos dois é maior e o que isso significa em uma frase. Se BH ficou acima da inflação, a leitura é a oposta: diga isso, não force a queda.",
+      "exige": [
+        "horizontes.doze_meses.bh_pct",
+        "inflacao_ipca.doze_meses_pct"
+      ]
+    },
+    {
+      "nome": "os-tres-horizontes",
+      "pergunta": "Mês, acumulado no ano e 12 meses contam a mesma história sobre BH, ou uma diferente?",
+      "foco": "A comparação é entre os três horizontes de BH, não entre cidades. Se o número de 12 meses é muito maior que o do ano, a alta aconteceu antes deste ano — diga isso com os dois números na tela. Se forem parecidos, a leitura é que o ritmo não mudou; diga isso.",
+      "exige": [
+        "horizontes.mensal.bh_pct",
+        "horizontes.ano.bh_pct",
+        "horizontes.doze_meses.bh_pct"
+      ]
+    },
+    {
+      "nome": "o-topo-e-a-base",
+      "pergunta": "Qual o tamanho da distância entre as capitais que mais subiram no ano e Belo Horizonte?",
+      "foco": "O assunto é a amplitude entre as pontas da lista no acumulado do ano. Use a lista ordenada dos facts: as primeiras colocadas, BH, e a diferença em pontos percentuais entre elas.",
+      "exige": [
+        "horizontes.ano.capitais",
+        "horizontes.ano.bh_pct",
+        "horizontes.ano.bh_posicao"
+      ]
+    },
+    {
+      "nome": "quem-esta-em-queda",
+      "pergunta": "Quais capitais tiveram queda de preço no mês, e BH está entre elas?",
+      "foco": "O assunto é o grupo em queda, não BH sozinha. Nomeie as capitais da lista `capitais_em_queda` e diga quantas são. Não afirme o que elas têm em comum — os facts não trazem isso.",
+      "exige": [
+        "horizontes.mensal.capitais_em_queda",
+        "horizontes.mensal.quantas_em_queda"
+      ],
+      "so_se": [
+        {
+          "caminho": "horizontes.mensal.quantas_em_queda",
+          "minimo": 2
+        }
+      ]
+    },
+    {
+      "nome": "quem-esta-subindo",
+      "pergunta": "Quantas das 22 capitais subiram no mês, e quanto subiram as que lideram?",
+      "foco": "O espelho do ângulo da queda: o grupo em alta. Use `quantas_em_alta` e o topo da lista ordenada do mês. Serve para o mês em que quase ninguém cai e a pauta da queda some.",
+      "exige": [
+        "horizontes.mensal.capitais_em_alta",
+        "horizontes.mensal.quantas_em_alta"
+      ],
+      "so_se": [
+        {
+          "caminho": "horizontes.mensal.quantas_em_alta",
+          "minimo": 2
+        }
+      ]
+    }
+  ]
+}

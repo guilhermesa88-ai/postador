@@ -63,10 +63,19 @@ Escreva em português do Brasil, com acentuação correta.
 Responda APENAS com o JSON do brief, sem cercas de código e sem comentários."""
 
 
-def montar_prompt(facts: dict, marca: dict) -> str:
+def montar_prompt(facts: dict, marca: dict, angulo: dict) -> str:
     voz = marca.get("voz", {})
     pauta = marca.get("pauta", {})
     return f"""{INSTRUCOES}
+
+## A PERGUNTA DESTE POST
+{angulo['pergunta']}
+
+{angulo.get('foco', '')}
+
+Este perfil publica vários posts sobre o mesmo informe, cada um respondendo uma
+pergunta diferente. Responda ESTA. A resposta vem dos FACTS — se eles apontarem
+para o contrário do que a pergunta sugere, escreva o contrário.
 
 ## PERFIL
 Nome: {marca['nome']} ({marca['handle']})
@@ -103,7 +112,8 @@ def extrair_json(texto: str) -> dict:
     return json.loads(t[ini:fim + 1])
 
 
-def compor(facts: dict, marca: dict, dry_run: bool = False) -> tuple[dict | None, list[str]]:
+def compor(facts: dict, marca: dict, angulo: dict,
+           dry_run: bool = False) -> tuple[dict | None, list[str]]:
     """Devolve (brief, log). brief é None se não passou na validação."""
     log: list[str] = []
     voz = marca.get("voz", {})
@@ -117,7 +127,7 @@ def compor(facts: dict, marca: dict, dry_run: bool = False) -> tuple[dict | None
     from anthropic import Anthropic
 
     cliente = Anthropic()
-    mensagens = [{"role": "user", "content": montar_prompt(facts, marca)}]
+    mensagens = [{"role": "user", "content": montar_prompt(facts, marca, angulo)}]
 
     for tentativa in range(1, MAX_TENTATIVAS + 1):
         resp = cliente.messages.create(
@@ -144,7 +154,7 @@ def compor(facts: dict, marca: dict, dry_run: bool = False) -> tuple[dict | None
         # rastrear um post de volta ao PDF meses depois.
         brief.setdefault("periodo", facts.get("periodo"))
         brief.setdefault("hash_pdf", facts.get("hash_pdf"))
-        brief.setdefault("angulo", os.environ.get("ANGULO", "padrao"))
+        brief.setdefault("angulo", angulo["nome"])
 
         r = validar(brief, facts, voz)
         log.append(f"tentativa {tentativa}:\n{r}")
@@ -171,7 +181,17 @@ def main() -> int:
     marca = json.loads((RAIZ / "brands" / f"{sys.argv[2]}.json").read_text(encoding="utf-8"))
     dry = "--dry-run" in sys.argv
 
-    brief, log = compor(facts, marca, dry_run=dry)
+    # Mesma funcao que a guarda usa para decidir se havia o que dizer. Se as
+    # duas escolhessem por conta propria, um dia divergiriam e o post sairia
+    # respondendo uma pergunta e registrado como outra.
+    from guarda import proximo_angulo
+    angulo = proximo_angulo(facts, sys.argv[2])
+    if angulo is None:
+        print("Nenhum angulo disponivel para este informe — nada a compor.")
+        return 1
+    print(f"Angulo: {angulo['nome']} — {angulo['pergunta']}\n")
+
+    brief, log = compor(facts, marca, angulo, dry_run=dry)
     for linha in log:
         print(linha)
 
@@ -179,7 +199,7 @@ def main() -> int:
         print("\nNada gravado. O perfil fica um ciclo sem post — de propósito.")
         return 1
 
-    destino = RAIZ / "briefs" / f"{marca['slug']}-{brief['data']}.json"
+    destino = RAIZ / "briefs" / f"{marca['slug']}-{brief['data']}-{angulo['nome']}.json"
     destino.write_text(json.dumps(brief, ensure_ascii=False, indent=2), encoding="utf-8")
     print(f"\nBrief aprovado: {destino}")
     print(f"Renderize com:  python render.py {destino.relative_to(RAIZ)}")

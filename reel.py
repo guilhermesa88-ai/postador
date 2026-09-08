@@ -246,7 +246,9 @@ def montar(brief_path: Path) -> Path:
     marca = json.loads((RAIZ / "brands" / f"{brief['marca']}.json").read_text(encoding="utf-8"))
 
     hoje = brief.get("data") or date.today().isoformat()
-    destino = RAIZ / "out" / marca["slug"] / hoje
+    # A pasta carrega o angulo: o mesmo informe rende varios posts, e sem isso
+    # o segundo do dia sobrescreveria o manifest do primeiro.
+    destino = RAIZ / "out" / marca["slug"] / f"{hoje}-{brief.get('angulo', 'padrao')}"
     destino.mkdir(parents=True, exist_ok=True)
 
     html, total = montar_html(brief, marca)

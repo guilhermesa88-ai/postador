@@ -25,11 +25,15 @@ A identidade de um post e (dado, angulo):
   - dado  = hash do PDF + periodo do informe
   - angulo = qual pergunta o post responde sobre esse dado
 
-Hoje so existe um angulo, entao na pratica so publica quando muda o informe.
-Quando o motor de angulos existir, ele passa `--angulo <nome>` e a mesma
-guarda libera varios posts do mesmo informe, cada um respondendo outra coisa.
-O seam ja esta aqui de proposito: e onde a cadencia diaria deixa de ser
-repeticao e vira serie.
+Os angulos vivem em pautas/<marca>.json. A cada rodada a guarda escolhe o
+primeiro que ainda nao foi publicado PARA ESTE informe, e so para quando
+todos acabarem -- ai o perfil fica quieto ate sair informe novo.
+
+Um angulo so entra na fila se os fatos de que ele precisa existirem (campo
+`exige`) e se as condicoes dele valerem (campo `so_se`). Isso e o que permite
+publicar muito sem inventar nada: quando o dado nao sustenta a pergunta, o
+angulo some sozinho, em vez de o modelo ter que "dar um jeito" -- que e
+exatamente onde nasce superlativo inventado.
 """
 
 from __future__ import annotations
@@ -90,6 +94,72 @@ def ja_publicado(facts: dict, marca: str, angulo: str) -> dict | None:
     return None
 
 
+def _valor(dados: dict, caminho: str):
+    """Le um caminho pontilhado nos facts. Devolve None se faltar qualquer parte."""
+    no = dados
+    for parte in caminho.split("."):
+        if not isinstance(no, dict) or parte not in no:
+            return None
+        no = no[parte]
+    return no
+
+
+def angulos_possiveis(facts: dict, marca: str) -> list[dict]:
+    """Angulos que ESTE informe sustenta, na ordem da pauta."""
+    caminho = RAIZ / "pautas" / f"{marca}.json"
+    if not caminho.exists():
+        raise SystemExit(f"sem pauta em {caminho.relative_to(RAIZ)} — nada a publicar")
+    pauta = json.loads(caminho.read_text(encoding="utf-8"))
+
+    servem = []
+    for a in pauta.get("angulos", []):
+        faltam = [c for c in a.get("exige", []) if _valor(facts, c) in (None, [], {})]
+        if faltam:
+            print(f"  angulo '{a['nome']}' fora: os facts nao tem {faltam}")
+            continue
+        reprovou = False
+        for cond in a.get("so_se", []):
+            v = _valor(facts, cond["caminho"])
+            if not isinstance(v, (int, float)) or v < cond.get("minimo", 0):
+                print(f"  angulo '{a['nome']}' fora: {cond['caminho']}={v} "
+                      f"< minimo {cond.get('minimo')}")
+                reprovou = True
+        if not reprovou:
+            servem.append(a)
+    return servem
+
+
+def _dias_desde_ultimo(marca: str) -> float | None:
+    hist = _historico(marca)
+    if not hist:
+        return None
+    ultimo = max((r.get("registrado_em") or "" for r in hist), default="")
+    if not ultimo:
+        return None
+    try:
+        quando = datetime.fromisoformat(ultimo)
+    except ValueError:
+        return None
+    return (datetime.now(timezone.utc) - quando).total_seconds() / 86400
+
+
+def proximo_angulo(facts: dict, marca: str) -> dict | None:
+    """O primeiro angulo desta pauta que ainda nao virou post neste informe."""
+    pauta_path = RAIZ / "pautas" / f"{marca}.json"
+    pauta = json.loads(pauta_path.read_text(encoding="utf-8"))
+    espera = pauta.get("min_dias_entre_posts", 0)
+    desde = _dias_desde_ultimo(marca)
+    if espera and desde is not None and desde < espera:
+        print(f"  ultimo post foi ha {desde:.1f} dia(s); a pauta pede {espera}. "
+              f"Segurando.")
+        return None
+
+    for a in angulos_possiveis(facts, marca):
+        if not ja_publicado(facts, marca, a["nome"]):
+            return a
+    return None
+
+
 def registrar(pasta: Path) -> None:
     """Grava o post publicado no historico. Roda depois do publicar.py."""
     manifest = json.loads((pasta / "manifest.json").read_text(encoding="utf-8"))
@@ -140,23 +210,30 @@ def main() -> int:
 
     facts = json.loads(Path(sys.argv[1]).read_text(encoding="utf-8"))
     marca = sys.argv[2]
-    angulo = "padrao"
-    if "--angulo" in sys.argv:
-        angulo = sys.argv[sys.argv.index("--angulo") + 1]
 
-    anterior = ja_publicado(facts, marca, angulo)
+    print(f"Informe {facts.get('periodo')} (hash {facts.get('hash_pdf')}).")
+    servem = angulos_possiveis(facts, marca)
+    usados = {r.get("angulo") for r in _historico(marca)
+              if r.get("periodo") == facts.get("periodo")
+              and r.get("hash_pdf") == facts.get("hash_pdf")}
+    print(f"  {len(servem)} angulo(s) que o dado sustenta; "
+          f"{len(usados & {a['nome'] for a in servem})} ja publicado(s) neste informe.")
 
-    if anterior and "--forcar" not in sys.argv:
-        print(f"NADA NOVO: o informe {facts.get('periodo')} "
-              f"(hash {facts.get('hash_pdf')}) ja virou post no angulo '{angulo}'.")
-        print(f"  publicado em {anterior.get('data')}  {anterior.get('permalink') or ''}")
-        print("  Nao vou repetir. Rode com --forcar, ou traga um angulo novo.")
+    escolhido = proximo_angulo(facts, marca)
+
+    if escolhido is None and "--forcar" in sys.argv:
+        escolhido = servem[0] if servem else None
+        if escolhido:
+            print(f"AVISO: --forcar em uso; repetindo '{escolhido['nome']}'.")
+
+    if escolhido is None:
+        print("NADA NOVO: todos os angulos deste informe ja viraram post.")
+        print("  Nao vou repetir. Espere o informe do mes que vem, "
+              "acrescente um angulo na pauta, ou rode com --forcar.")
         return SEM_NOVIDADE
 
-    if anterior:
-        print(f"AVISO: repetindo (dado, angulo) ja publicado — --forcar foi usado.")
-
-    print(f"Pode publicar: informe {facts.get('periodo')}, angulo '{angulo}'.")
+    print(f"Pode publicar: angulo '{escolhido['nome']}'")
+    print(f"  pergunta: {escolhido['pergunta']}")
     return 0
 
 
