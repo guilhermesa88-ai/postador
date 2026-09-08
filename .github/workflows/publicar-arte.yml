@@ -1,9 +1,18 @@
 name: Publicar arte
 
 # Arte pronta: voce entrega o arquivo, o pipeline entrega o post.
-# Nada de cron aqui -- publica quando voce manda, porque quem enche a fila e
-# voce, nao um informe mensal.
+#
+# CADENCIA. Segunda, quarta e sexta as 09:00 de Brasilia (12:00 UTC), UM post
+# por perfil por rodada -- a fila esvazia espacada, nao de uma vez. Para mudar o
+# ritmo basta trocar o cron: '0 12 * * 1-5' publica todo dia util.
+#
+# O gargalo aqui e estoque, nao politica de cadencia: 4 pecas a 3x por semana
+# duram ~9 dias; a 5x por semana acabam em 4. A tabela do mapa de nichos poe
+# 2-3x/semana em +26% ao ano, entao 3x mantem o perfil na faixa que cresce e da
+# tempo de produzir os videos dos Reels que ainda faltam.
 on:
+  schedule:
+    - cron: '0 12 * * 1,3,5'
   workflow_dispatch:
     inputs:
       marca:
@@ -24,23 +33,38 @@ concurrency:
 #
 # Nenhum passo usa $(...) nem variavel de shell, pela mesma razao do publicar.yml.
 #
+# UM GUARDA SO. Numa rodada agendada os dois perfis entram; num disparo manual,
+# so o escolhido. Em vez de repetir a condicao em cada passo, ela vive em
+# `env.PROCESSAR` e guarda apenas o primeiro passo: se `preparar` nao roda,
+# `tem_post` fica vazio e todo o resto pula junto.
+#
 # SEGREDO POR MARCA. `secrets[format('IG_ACCESS_TOKEN_{0}', ...)]` monta o nome
-# a partir do slug escolhido: estilovidya -> IG_ACCESS_TOKEN_ESTILOVIDYA. Nomes
-# de secret no GitHub sao guardados em maiuscula e a busca no contexto
-# `secrets` nao diferencia caixa. Se algum dia diferenciar, a falha e alta e
-# imediata: `publicar.py` para com "falta a variavel de ambiente
-# IG_ACCESS_TOKEN" no primeiro run. Nao ha caminho silencioso aqui.
+# a partir do slug: estilovidya -> IG_ACCESS_TOKEN_ESTILOVIDYA. Nomes de secret
+# no GitHub sao guardados em maiuscula e a busca no contexto `secrets` nao
+# diferencia caixa. Se algum dia diferenciar, a falha e alta e imediata:
+# `publicar.py` para com "falta a variavel de ambiente IG_ACCESS_TOKEN".
 #
 # FILA VAZIA x ARTE INVALIDA. O `arte.py` nao usa codigo de saida para
 # distinguir os dois -- `outcome` nao separa "nao havia nada" de "o que havia
 # esta quebrado". Ele escreve `tem_post` em GITHUB_OUTPUT e sai 1 so quando a
 # arte e invalida. Fila vazia fica verde; JPEG que nao e JPEG fica vermelho.
+#
+# max-parallel: 1 porque os dois perfis fazem commit no mesmo repositorio.
 
 jobs:
   publicar:
     runs-on: ubuntu-latest
     permissions:
       contents: write
+
+    strategy:
+      fail-fast: false
+      max-parallel: 1
+      matrix:
+        marca: [estilovidya, lentesvidya]
+
+    env:
+      PROCESSAR: ${{ github.event_name != 'workflow_dispatch' || github.event.inputs.marca == matrix.marca }}
 
     steps:
       - uses: actions/checkout@v4
@@ -51,6 +75,7 @@ jobs:
           cache: pip
 
       - name: Instalar dependencias
+        if: env.PROCESSAR == 'true'
         run: |
           pip install requests
           sudo apt-get update -qq
@@ -62,28 +87,29 @@ jobs:
 
       - name: Preparar a arte da fila
         id: preparar
-        run: python arte.py preparar ${{ github.event.inputs.marca }}
+        if: env.PROCESSAR == 'true'
+        run: python arte.py preparar ${{ matrix.marca }}
 
       - name: Publicar
         id: publicar
         if: steps.preparar.outputs.tem_post == 'true' && github.event.inputs.dry_run != 'true'
         env:
-          IG_USER_ID:      ${{ secrets[format('IG_USER_ID_{0}', github.event.inputs.marca)] }}
-          IG_ACCESS_TOKEN: ${{ secrets[format('IG_ACCESS_TOKEN_{0}', github.event.inputs.marca)] }}
+          IG_USER_ID:      ${{ secrets[format('IG_USER_ID_{0}', matrix.marca)] }}
+          IG_ACCESS_TOKEN: ${{ secrets[format('IG_ACCESS_TOKEN_{0}', matrix.marca)] }}
           GITHUB_TOKEN:    ${{ github.token }}
           GH_OWNER:        ${{ github.repository_owner }}
           GH_REPO:         ${{ github.event.repository.name }}
-        run: python publicar.py --ultima ${{ github.event.inputs.marca }}
+        run: python publicar.py --ultima ${{ matrix.marca }}
 
       - name: So validar (dry run)
         if: steps.preparar.outputs.tem_post == 'true' && github.event.inputs.dry_run == 'true'
         env:
-          IG_USER_ID:      ${{ secrets[format('IG_USER_ID_{0}', github.event.inputs.marca)] }}
-          IG_ACCESS_TOKEN: ${{ secrets[format('IG_ACCESS_TOKEN_{0}', github.event.inputs.marca)] }}
+          IG_USER_ID:      ${{ secrets[format('IG_USER_ID_{0}', matrix.marca)] }}
+          IG_ACCESS_TOKEN: ${{ secrets[format('IG_ACCESS_TOKEN_{0}', matrix.marca)] }}
           GITHUB_TOKEN:    ${{ github.token }}
           GH_OWNER:        ${{ github.repository_owner }}
           GH_REPO:         ${{ github.event.repository.name }}
-        run: python publicar.py --ultima ${{ github.event.inputs.marca }} --dry-run
+        run: python publicar.py --ultima ${{ matrix.marca }} --dry-run
 
       # Registra no mesmo estado/<marca>.json que o coletor de metricas le.
       # E o que tira a pasta da fila e o que faz a arte entrar na serie de
@@ -91,7 +117,7 @@ jobs:
       - name: Registrar o post
         if: steps.publicar.outcome == 'success' && github.event.inputs.dry_run != 'true'
         run: |
-          python arte.py registrar ${{ github.event.inputs.marca }}
+          python arte.py registrar ${{ matrix.marca }}
           git config user.name  "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
           git add -f estado/ || true
@@ -100,5 +126,5 @@ jobs:
           git push
 
       - name: Fila vazia
-        if: steps.preparar.outputs.tem_post != 'true'
+        if: env.PROCESSAR == 'true' && steps.preparar.outputs.tem_post != 'true'
         run: echo "Nao havia pasta nova em entrada/ para esta marca."
