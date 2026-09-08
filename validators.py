@@ -111,6 +111,14 @@ _TOLERADOS = {
 _MILHAR_PONTO = re.compile(r"^-?\d{1,3}(?:\.\d{3})+$")
 
 
+# "12 meses" e o NOME de um horizonte do FipeZap, nao um dado sobre preco.
+# Sem esta mascara a ancoragem reprovava o 12 e queimava uma tentativa do
+# modelo por rodada -- o texto estava certo, a checagem e que lia o rotulo
+# como se fosse figura. A mascara e estreita de proposito: so casa o numero
+# colado na palavra "meses". "subiu 12%" continua tendo de existir nos facts.
+_HORIZONTE = re.compile(r"\b(?:12|24|36)\s*(?:meses|m[eê]s)\b", re.IGNORECASE)
+
+
 def _para_float(txt: str) -> float | None:
     t = txt.replace(" ", "")
     if "," in t and "." in t:          # 1.234,56 -> milhar ponto, decimal vírgula
@@ -194,7 +202,7 @@ def checar_ancoragem(brief: dict, facts: Any, tolerancia: float = 0.051) -> Resu
                      f"valor {d['valor']:g} não existe nos facts de origem")
 
     for origem, texto in _textos_do_brief(brief):
-        for n in extrair_numeros(texto):
+        for n in extrair_numeros(_HORIZONTE.sub(" ", texto)):
             if n in _TOLERADOS or 1900 <= n <= 2100:
                 continue
             if any(abs(n - b) <= tolerancia for b in base):
