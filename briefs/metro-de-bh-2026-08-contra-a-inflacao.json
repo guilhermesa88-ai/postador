@@ -1,0 +1,64 @@
+{
+  "marca": "metro-de-bh",
+  "data": "2026-08",
+  "legenda": "Em 12 meses, o preço do imóvel em BH subiu 2,92% — abaixo dos 4,14% da inflação no mesmo período. Na prática, isso significa que o valor real do metro quadrado caiu: quem comprou há um ano pagou mais caro, considerando o poder de compra.\n\nEnquanto a média das 22 capitais subiu 5,49% em 12 meses (acima da inflação), BH ficou na 20ª posição. Apenas Curitiba e Porto Alegre tiveram alta menor.\n\nNa ponta oposta, Manaus liderou com 11,42%, Salvador com 10,84% e Vitória com 10,16% — todas bem acima do IPCA.\n\nFonte: FipeZap — Índice de Venda Residencial, agosto de 2026\n\n#imoveisbh #belohorizonte #mercadoimobiliario #fipezap #primeiroimovel #metroquadrado",
+  "slides": [
+    {
+      "tipo": "capa",
+      "eyebrow": "Preço × inflação",
+      "titulo": "BH subiu 2,92% em 12 meses — menos que a inflação de 4,14%",
+      "sub": "O preço nominal subiu, mas o valor real caiu. Quem comprou há um ano pagou mais caro.",
+      "fonte": "FipeZap ago/2026"
+    },
+    {
+      "tipo": "grafico",
+      "eyebrow": "12 meses",
+      "titulo": "BH ficou abaixo da inflação",
+      "unidade": "%",
+      "dados": [
+        {
+          "label": "BH",
+          "valor": 2.92
+        },
+        {
+          "label": "IPCA",
+          "valor": 4.14
+        },
+        {
+          "label": "Média capitais",
+          "valor": 5.49
+        }
+      ],
+      "fonte": "FipeZap e IBGE"
+    },
+    {
+      "tipo": "lista",
+      "eyebrow": "Comparação",
+      "titulo": "Das 22 capitais, 19 subiram acima da inflação",
+      "itens": [
+        "Manaus liderou com 11,42% — bem acima do IPCA de 4,14%",
+        "Salvador veio em segundo com 10,84%",
+        "BH ficou em 20º lugar com 2,92%, abaixo dos 4,14% do IPCA",
+        "Apenas Curitiba (2,74%) e Porto Alegre (0,96%) subiram menos que BH"
+      ]
+    },
+    {
+      "tipo": "texto",
+      "eyebrow": "O que isso significa",
+      "titulo": "Subir menos que a inflação é perder valor real",
+      "corpo": "Quando o preço do imóvel sobe 2,92% mas a inflação vai a 4,14%, o valor real cai. O metro quadrado ficou mais caro no papel, mas perdeu poder de compra.\n\nEnquanto isso, a média das 22 capitais subiu 5,49% — acima da inflação de 4,14%. Nessas cidades, o preço do imóvel ganhou valor real.",
+      "fonte": "FipeZap ago/2026"
+    },
+    {
+      "tipo": "fechamento",
+      "eyebrow": "Metro de BH",
+      "titulo": "Todo mês, os números do mercado em BH",
+      "corpo": "Acompanhe os dados do FipeZap, compare BH com as outras capitais e entenda o que os números significam antes de comprar.",
+      "cta": "Siga @metro_de_bh"
+    }
+  ],
+  "selo_ia": "Conteúdo produzido com apoio de IA",
+  "periodo": "2026-08",
+  "hash_pdf": "31f85f8101e19d61",
+  "angulo": "contra-a-inflacao"
+}
