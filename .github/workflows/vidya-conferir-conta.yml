@@ -1,0 +1,45 @@
+name: Vidya - conferir conta Instagram
+on:
+  workflow_dispatch:
+permissions: {}
+jobs:
+  identidade:
+    runs-on: ubuntu-latest
+    timeout-minutes: 3
+    steps:
+      - name: Conferir identidade sem publicar
+        env:
+          IG_ACCESS_TOKEN: ${{ secrets.IG_ACCESS_TOKEN }}
+          IG_USER_ID: ${{ secrets.IG_USER_ID }}
+        run: |
+          python3 - <<'PY'
+          import json, os, re, urllib.request
+          from pathlib import Path
+          class NoRedirect(urllib.request.HTTPRedirectHandler):
+              def redirect_request(self, *args, **kwargs):
+                  return None
+          def check():
+              token = os.environ.get("IG_ACCESS_TOKEN", "")
+              account = os.environ.get("IG_USER_ID", "")
+              if not token or not account:
+                  return {"status": "CONFIGURACAO_AUSENTE"}
+              try:
+                  req = urllib.request.Request(
+                      "https://graph.instagram.com/v23.0/me?fields=id,user_id,username",
+                      headers={"Authorization": "Bearer " + token})
+                  with urllib.request.build_opener(NoRedirect()).open(req, timeout=30) as response:
+                      value = json.loads(response.read(65536))
+                  username = value.get("username", "")
+                  if not re.fullmatch(r"[A-Za-z0-9_.]{1,30}", username):
+                      return {"status": "RESPOSTA_SEM_IDENTIDADE_VALIDA"}
+                  matches_id = account in {str(value.get("id", "")), str(value.get("user_id", ""))}
+                  return {"status": "CONTA_VIDYA_CONFIRMADA" if matches_id and username == "lentesvidya" else "CONTA_DIVERGENTE",
+                          "username": username, "id_configurado_confere": matches_id}
+              except Exception:
+                  return {"status": "CONSULTA_FALHOU", "detalhe": "Verificar validade, permissoes e modalidade Instagram Login. Nenhum segredo foi registrado."}
+          result = check()
+          safe = json.dumps(result, ensure_ascii=False)
+          print(safe)
+          Path(os.environ["GITHUB_STEP_SUMMARY"]).write_text("# Diagnostico Vidya\n\n" + safe + "\n\nConsulta somente leitura. Nenhuma publicacao ou renovacao.", encoding="utf-8")
+          raise SystemExit(0 if result["status"] == "CONTA_VIDYA_CONFIRMADA" else 1)
+          PY
