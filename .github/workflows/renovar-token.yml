@@ -8,30 +8,55 @@ on:
     - cron: '0 9 * * *'
   workflow_dispatch:
 
+concurrency:
+  group: token
+  cancel-in-progress: false
+
+# NOTA DE MANUTENCAO
+#
+# A versao anterior deste workflow chamava `refresh_access_token`, lia o
+# `expires_in` da RESPOSTA e anunciava "token renovado, valido por 60 dias" --
+# mas descartava o token devolvido. O secret nunca era atualizado, entao o
+# numero reportado era a validade de um token que ninguem ia usar. O job ficava
+# verde todo dia ate o dia em que o token vencesse, e ai tudo parava em
+# silencio: mais um check que nao podia falhar.
+#
+# Agora a logica esta em `saude_token.py`, que tem teste, e que:
+#   - confere se o token ARMAZENADO funciona (nao o que veio na resposta);
+#   - compara o token renovado com o armazenado para descobrir, na pratica, se
+#     a renovacao estende no lugar ou exige guardar o novo;
+#   - mantem a contagem em estado/saude-token.json (por impressao, nunca pelo
+#     valor do token);
+#   - SAI COM CODIGO 1 abaixo de 14 dias, para virar e-mail em vez de notice.
+#
+# Nenhum passo usa $(...) nem variavel de shell, pela mesma razao do publicar.yml.
+
 jobs:
   renovar:
     runs-on: ubuntu-latest
+    permissions:
+      contents: write
+
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-python@v5
         with: { python-version: '3.12' }
       - run: pip install requests
 
-      - name: Renovar e avisar se estiver perto de vencer
+      - name: Conferir e renovar o token
+        id: saude
         env:
           IG_ACCESS_TOKEN: ${{ secrets.IG_ACCESS_TOKEN }}
+        run: python saude_token.py
+
+      # Roda mesmo quando o passo acima falha: num dia de prazo curto, a
+      # contagem gravada e justamente o que interessa guardar.
+      - name: Guardar a contagem
+        if: always()
         run: |
-          python - <<'PY'
-          import os, sys, requests
-          t = os.environ['IG_ACCESS_TOKEN']
-          r = requests.get('https://graph.instagram.com/refresh_access_token',
-                           params={'grant_type': 'ig_refresh_token', 'access_token': t},
-                           timeout=30)
-          if r.status_code != 200:
-              print('::error::falha ao renovar:', r.text[:300]); sys.exit(1)
-          dias = r.json().get('expires_in', 0) / 86400
-          print(f'token renovado, valido por {dias:.0f} dias')
-          if dias < 7:
-              print('::warning::token vence em menos de 7 dias')
-          print('::notice::atualize o secret IG_ACCESS_TOKEN com o token novo')
-          PY
+          git config user.name  "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add -f estado/saude-token.json || true
+          git commit -m "token: prazo conferido" || echo "sem mudanca"
+          git pull --rebase --autostash
+          git push
