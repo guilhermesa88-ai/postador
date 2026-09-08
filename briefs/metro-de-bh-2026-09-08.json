@@ -1,0 +1,87 @@
+{
+  "marca": "metro-de-bh",
+  "data": "2026-09-08",
+  "legenda": "BH caiu 0,08% no mês enquanto a média das capitais subiu 0,53%. No acumulado dos últimos doze meses, a diferença é ainda maior: BH subiu 2,92%, a média nacional subiu 5,49%. A cidade aparece na 20ª posição entre as 22 capitais monitoradas.\n\nVitória liderou o mês com alta de 1,31%. Quatro capitais registraram queda: BH, Belém, Campo Grande e Curitiba.\n\nNo horizonte de doze meses, Manaus lidera com 11,42%, seguida por Salvador com 10,84%. Porto Alegre fecha a lista com 0,96%.\n\nDados de agosto de 2026.\n\nFonte: FipeZap — Índice de Venda Residencial\n\n#mercadoimobiliario #belohorizonte #metrodebh #fipezap #imoveisbh #precoimoveis",
+  "slides": [
+    {
+      "tipo": "capa",
+      "eyebrow": "FipeZap · Agosto 2026",
+      "titulo": "BH caiu 0,08% enquanto a média subiu 0,53%",
+      "sub": "A cidade ficou na 19ª posição entre 22 capitais no mês",
+      "rodape_destaque": "4 capitais em queda, 18 em alta"
+    },
+    {
+      "tipo": "grafico",
+      "eyebrow": "Variação mensal · Agosto 2026",
+      "titulo": "BH entre as 4 capitais em queda no mês",
+      "unidade": "%",
+      "fonte": "FipeZap",
+      "dados": [
+        {
+          "label": "Vitória",
+          "valor": 1.31
+        },
+        {
+          "label": "Brasília",
+          "valor": 1.28
+        },
+        {
+          "label": "Aracaju",
+          "valor": 1.07
+        },
+        {
+          "label": "Média geral",
+          "valor": 0.53
+        },
+        {
+          "label": "São Paulo",
+          "valor": 0.37
+        },
+        {
+          "label": "BH",
+          "valor": -0.08
+        },
+        {
+          "label": "Belém",
+          "valor": -0.19
+        },
+        {
+          "label": "Curitiba",
+          "valor": -0.25
+        }
+      ]
+    },
+    {
+      "tipo": "lista",
+      "eyebrow": "Últimos doze meses",
+      "titulo": "BH em 20º lugar no acumulado",
+      "sub": "Todas as 22 capitais acumulam alta no período",
+      "fonte": "FipeZap",
+      "itens": [
+        "<strong>Manaus:</strong> 11,42% em doze meses, maior alta entre todas as capitais",
+        "<strong>Salvador:</strong> 10,84%, segunda colocação no ranking nacional",
+        "<strong>Vitória:</strong> 10,16%, mesma cidade que liderou a variação mensal",
+        "<strong>Belo Horizonte:</strong> 2,92%, acima apenas de Curitiba e Porto Alegre",
+        "<strong>Média nacional:</strong> 5,49%, valor bem acima da variação registrada em BH"
+      ]
+    },
+    {
+      "tipo": "texto",
+      "eyebrow": "Contexto",
+      "titulo": "A distância entre BH e a média nacional",
+      "corpo": "No mês, BH recuou 0,08% enquanto a média das capitais subiu 0,53%.\n\nNo acumulado de doze meses, BH subiu 2,92% e a média subiu 5,49%.\n\nDas 22 capitais, apenas 4 registraram queda em agosto: BH, Belém, Campo Grande e Curitiba. As outras 18 subiram.\n\nNo ranking de doze meses, BH aparece na 20ª posição."
+    },
+    {
+      "tipo": "fechamento",
+      "eyebrow": "Metro de BH",
+      "titulo": "Todo mês, os números do mercado imobiliário de BH",
+      "corpo": "Dados verificáveis, comparação com outras capitais e contexto para quem está comprando o primeiro imóvel.",
+      "cta": "Acompanhe @metro_de_bh",
+      "fonte": "FipeZap — Índice de Venda Residencial"
+    }
+  ],
+  "selo_ia": "Conteúdo produzido com apoio de IA",
+  "periodo": "2026-08",
+  "hash_pdf": "31f85f8101e19d61",
+  "angulo": "padrao"
+}
