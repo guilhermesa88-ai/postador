@@ -54,7 +54,14 @@ jobs:
         run: |
           pip install jinja2 playwright requests jsonschema anthropic pdfplumber
           playwright install --with-deps chromium
-          ffmpeg -version | head -1
+          sudo apt-get update -qq
+          sudo apt-get install -y -qq ffmpeg
+          # `command -v` falha o passo se o binario nao existir. A versao
+          # anterior conferia com `ffmpeg -version | head -1`: como o `head`
+          # sai 0, o pipeline inteiro saia 0 mesmo sem ffmpeg instalado, e o
+          # run so morria la na frente, no Reel. Check que nao pode falhar
+          # nao e check.
+          command -v ffmpeg
 
       # Poppins nao existe como pacote apt no runner. Baixo os cinco pesos do
       # repositorio oficial do Google Fonts, um curl por arquivo -- sem loop,
