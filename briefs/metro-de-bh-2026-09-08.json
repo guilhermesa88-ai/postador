@@ -1,20 +1,18 @@
 {
   "marca": "metro-de-bh",
   "data": "2026-09-08",
-  "legenda": "BH caiu 0,08% em agosto enquanto a média das 22 capitais subiu 0,53%. Quatro capitais registraram queda no mês: BH, Belém, Campo Grande e Curitiba. As 18 restantes subiram.\n\nNo acumulado do ano, BH subiu 0,01% — contra média nacional de 3,44%. A cidade ficou na 21ª posição entre as 22 capitais.\n\nEm agosto, o IPCA nacional caiu 0,4%. Descontando a inflação, o preço real do imóvel em BH ficou ainda mais negativo no mês.\n\nDados: FipeZap — Índice de Venda Residencial, agosto de 2026.\n\n#bhimóveis #preçodoimóvel #mercadoimobiliáriobh #fipezap #belohorizonte #primeiroimóvel",
+  "legenda": "BH registrou queda de 0,08% no preço de venda de imóveis em agosto de 2026, enquanto a média das 22 capitais subiu 0,53%. Foram 4 capitais em queda no mês — BH, Belém, Campo Grande e Curitiba — contra 18 em alta.\n\nNo acumulado do ano, BH subiu 0,01%, na 21ª posição entre as 22 capitais. A média nacional chegou a 3,44% no período.\n\nOs dados são do FipeZap — Índice de Venda Residencial, agosto de 2026.\n\n#MetroDeBH #ImoveisBH #MercadoImobiliario #BeloHorizonte #PrecoImoveis #FipeZap",
   "slides": [
     {
       "tipo": "capa",
-      "eyebrow": "Preço do imóvel · Agosto 2026",
-      "titulo": "BH caiu enquanto a média nacional subiu",
-      "sub": "Cidade registrou -0,08% no mês; média das 22 capitais foi +0,53%",
-      "rodape_destaque": "Posição 19 de 22 capitais"
+      "eyebrow": "FipeZap · Agosto 2026",
+      "titulo": "BH caiu 0,08% enquanto a média subiu 0,53%",
+      "sub": "4 capitais registraram queda no mês; BH foi uma delas"
     },
     {
       "tipo": "grafico",
-      "eyebrow": "Variação mensal",
-      "titulo": "4 capitais caíram em agosto",
-      "sub": "BH, Belém, Campo Grande e Curitiba registraram queda; 18 subiram",
+      "eyebrow": "Variação mensal · Agosto 2026",
+      "titulo": "BH na 19ª posição entre 22 capitais",
       "unidade": "%",
       "fonte": "FipeZap",
       "dados": [
@@ -31,6 +29,10 @@
           "valor": 1.07
         },
         {
+          "label": "Rio de Janeiro",
+          "valor": 0.77
+        },
+        {
           "label": "Média geral",
           "valor": 0.53
         },
@@ -43,14 +45,6 @@
           "valor": -0.08
         },
         {
-          "label": "Belém",
-          "valor": -0.19
-        },
-        {
-          "label": "Campo Grande",
-          "valor": -0.19
-        },
-        {
           "label": "Curitiba",
           "valor": -0.25
         }
@@ -58,28 +52,30 @@
     },
     {
       "tipo": "lista",
-      "eyebrow": "3 horizontes de tempo",
-      "titulo": "BH no fim da fila em todos os prazos",
-      "sub": "Posições entre as 22 capitais monitoradas pelo FipeZap",
+      "eyebrow": "As 4 capitais em queda",
+      "titulo": "Apenas 4 de 22 capitais caíram em agosto",
+      "sub": "18 capitais subiram no mês",
+      "fonte": "FipeZap",
       "itens": [
-        "<strong>No mês:</strong> BH caiu 0,08% e ficou na 19ª posição. Média subiu 0,53%",
-        "<strong>No ano:</strong> BH subiu 0,01% e ficou na 21ª posição. Média subiu 3,44%",
-        "<strong>Acumulado de 2026:</strong> BH subiu 2,92% e ficou na 20ª posição. Média subiu 5,49%"
+        "Curitiba: -0,25%",
+        "Campo Grande: -0,19%",
+        "Belém: -0,19%",
+        "Belo Horizonte: -0,08%"
       ]
     },
     {
       "tipo": "texto",
-      "eyebrow": "Leitura",
-      "titulo": "Preço praticamente parado no ano",
-      "corpo": "BH subiu apenas 0,01% no ano. A média nacional foi 3,44%.\n\nNo acumulado de 2026, BH subiu 2,92%. É menos da metade da média nacional de 5,49%.\n\nEm agosto, o IPCA nacional caiu 0,4%. Com BH em queda de 0,08%, o preço do imóvel na cidade caiu menos que a inflação no mês.",
-      "fonte": "FipeZap e IPCA/IBGE"
+      "eyebrow": "Contexto",
+      "titulo": "BH acumula 0,01% no ano",
+      "corpo": "No acumulado do ano até agosto de 2026, BH subiu 0,01% — na 21ª posição entre as 22 capitais. A média nacional foi de 3,44%.\n\nEm doze meses, BH acumula 2,92%, na 20ª posição. A média nacional foi de 5,49%.\n\nA queda mensal não apaga a alta dos últimos doze meses, mas coloca BH na contramão do movimento nacional de agosto.",
+      "fonte": "FipeZap"
     },
     {
       "tipo": "fechamento",
-      "eyebrow": "@metro_de_bh",
-      "titulo": "Todo mês, os números do mercado em BH",
-      "corpo": "Dados verificáveis. Comparação com as outras capitais. Direto ao ponto.",
-      "cta": "Acompanhe para decidir com o número certo"
+      "eyebrow": "Metro de BH",
+      "titulo": "Dados sem firula",
+      "corpo": "Todo mês a gente traz os números do mercado imobiliário de BH e das outras capitais. Direto da fonte, sem achismo.\n\nSegue a gente para acompanhar.",
+      "cta": "@metro_de_bh"
     }
   ],
   "selo_ia": "Conteúdo produzido com apoio de IA",
