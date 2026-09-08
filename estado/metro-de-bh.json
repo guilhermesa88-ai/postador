@@ -21,6 +21,16 @@
       "permalink": "https://www.instagram.com/reel/DdBgSgsj_s7/",
       "registrado_em": "2026-09-08T10:34:00+00:00",
       "origem": "execucao agendada #19, ainda com o codigo anterior ao motor de angulos: publicou com --angulo padrao. Registrado aqui depois do fato para o historico nao mentir. 'padrao' nao esta em pautas/metro-de-bh.json, entao nao consome nenhum dos seis angulos; na pratica cobre o mesmo assunto de panorama-do-mes, que ja estava consumido."
+    },
+    {
+      "periodo": "2026-08",
+      "hash_pdf": "31f85f8101e19d61",
+      "angulo": "contra-a-inflacao",
+      "formato": "reel",
+      "data": "2026-08",
+      "media_id": "17901857445354820",
+      "permalink": "https://www.instagram.com/reel/DdCKdyEDMxW/",
+      "registrado_em": "2026-09-08T16:55:34.688464+00:00"
     }
   ]
 }
