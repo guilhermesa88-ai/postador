@@ -1,0 +1,12 @@
+{
+  "slug": "estilovidya",
+  "nome": "Vidya",
+  "handle": "@estilovidya",
+  "site": "www.estilovidya.com.br",
+  "bio_atual": "Camisas para despertar o autoconhecimento e viver com propósito.",
+  "_sobre": "Conta de marca ja existente, com audiencia propria (234 seguidores / 52 posts em 08/09/2026). Entra no pipeline pelo caminho de ARTE PRONTA: o conteudo vem de fora, o pipeline hospeda, publica e mede. Nao ha bloco de voz nem cores aqui porque nada e gerado por modelo neste caminho -- quando/se passar a gerar texto, este arquivo ganha `voz` e `pauta` como o metro-de-bh.",
+  "secrets": {
+    "token": "IG_ACCESS_TOKEN_ESTILOVIDYA",
+    "user_id": "IG_USER_ID_ESTILOVIDYA"
+  }
+}

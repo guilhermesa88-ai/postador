@@ -1,0 +1,104 @@
+name: Publicar arte
+
+# Arte pronta: voce entrega o arquivo, o pipeline entrega o post.
+# Nada de cron aqui -- publica quando voce manda, porque quem enche a fila e
+# voce, nao um informe mensal.
+on:
+  workflow_dispatch:
+    inputs:
+      marca:
+        description: 'Perfil de destino'
+        type: choice
+        options: [estilovidya, lentesvidya]
+        default: estilovidya
+      dry_run:
+        description: 'Validar e subir a midia, sem publicar'
+        type: boolean
+        default: false
+
+concurrency:
+  group: publicar-arte
+  cancel-in-progress: false
+
+# NOTA DE MANUTENCAO
+#
+# Nenhum passo usa $(...) nem variavel de shell, pela mesma razao do publicar.yml.
+#
+# SEGREDO POR MARCA. `secrets[format('IG_ACCESS_TOKEN_{0}', ...)]` monta o nome
+# a partir do slug escolhido: estilovidya -> IG_ACCESS_TOKEN_ESTILOVIDYA. Nomes
+# de secret no GitHub sao guardados em maiuscula e a busca no contexto
+# `secrets` nao diferencia caixa. Se algum dia diferenciar, a falha e alta e
+# imediata: `publicar.py` para com "falta a variavel de ambiente
+# IG_ACCESS_TOKEN" no primeiro run. Nao ha caminho silencioso aqui.
+#
+# FILA VAZIA x ARTE INVALIDA. O `arte.py` nao usa codigo de saida para
+# distinguir os dois -- `outcome` nao separa "nao havia nada" de "o que havia
+# esta quebrado". Ele escreve `tem_post` em GITHUB_OUTPUT e sai 1 so quando a
+# arte e invalida. Fila vazia fica verde; JPEG que nao e JPEG fica vermelho.
+
+jobs:
+  publicar:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+          cache: pip
+
+      - name: Instalar dependencias
+        run: |
+          pip install requests
+          sudo apt-get update -qq
+          sudo apt-get install -y -qq ffmpeg
+          # `command -v` falha o passo se o binario nao existir. Sem ffprobe a
+          # duracao do Reel nao e conferida aqui, e o erro so apareceria como
+          # recusa crua da API depois do upload.
+          command -v ffprobe
+
+      - name: Preparar a arte da fila
+        id: preparar
+        run: python arte.py preparar ${{ github.event.inputs.marca }}
+
+      - name: Publicar
+        id: publicar
+        if: steps.preparar.outputs.tem_post == 'true' && github.event.inputs.dry_run != 'true'
+        env:
+          IG_USER_ID:      ${{ secrets[format('IG_USER_ID_{0}', github.event.inputs.marca)] }}
+          IG_ACCESS_TOKEN: ${{ secrets[format('IG_ACCESS_TOKEN_{0}', github.event.inputs.marca)] }}
+          GITHUB_TOKEN:    ${{ github.token }}
+          GH_OWNER:        ${{ github.repository_owner }}
+          GH_REPO:         ${{ github.event.repository.name }}
+        run: python publicar.py --ultima ${{ github.event.inputs.marca }}
+
+      - name: So validar (dry run)
+        if: steps.preparar.outputs.tem_post == 'true' && github.event.inputs.dry_run == 'true'
+        env:
+          IG_USER_ID:      ${{ secrets[format('IG_USER_ID_{0}', github.event.inputs.marca)] }}
+          IG_ACCESS_TOKEN: ${{ secrets[format('IG_ACCESS_TOKEN_{0}', github.event.inputs.marca)] }}
+          GITHUB_TOKEN:    ${{ github.token }}
+          GH_OWNER:        ${{ github.repository_owner }}
+          GH_REPO:         ${{ github.event.repository.name }}
+        run: python publicar.py --ultima ${{ github.event.inputs.marca }} --dry-run
+
+      # Registra no mesmo estado/<marca>.json que o coletor de metricas le.
+      # E o que tira a pasta da fila e o que faz a arte entrar na serie de
+      # desempenho sem uma linha de codigo nova.
+      - name: Registrar o post
+        if: steps.publicar.outcome == 'success' && github.event.inputs.dry_run != 'true'
+        run: |
+          python arte.py registrar ${{ github.event.inputs.marca }}
+          git config user.name  "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add -f estado/ || true
+          git commit -m "estado: arte publicada" || echo "sem mudanca"
+          git pull --rebase --autostash
+          git push
+
+      - name: Fila vazia
+        if: steps.preparar.outputs.tem_post != 'true'
+        run: echo "Nao havia pasta nova em entrada/ para esta marca."

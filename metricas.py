@@ -89,7 +89,11 @@ def _instante(reg: dict) -> datetime | None:
 def elegiveis(marca: str, janela: int) -> list[dict]:
     caminho = ESTADO / f"{marca}.json"
     if not caminho.exists():
-        raise SystemExit(f"nao existe {caminho.relative_to(RAIZ)} — nada publicado ainda")
+        # Marca cadastrada que ainda nao publicou nada nao e falha -- e o estado
+        # normal de um perfil novo. Antes isso derrubava o job e teria pintado
+        # de vermelho a coleta das outras marcas.
+        print(f"{caminho.relative_to(RAIZ)} ainda nao existe — nada publicado.")
+        return []
 
     import json
     historico = json.loads(caminho.read_text(encoding="utf-8")).get("publicados", [])

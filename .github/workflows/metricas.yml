@@ -25,12 +25,32 @@ concurrency:
 # termina em `|| true`. Neste workflow, push que falha em silencio e a serie
 # que para de crescer sem ninguem notar -- exatamente o problema que este
 # workflow existe para resolver. Se o push falhar, o job tem de ficar vermelho.
+#
+# CADA MARCA TEM SEU PROPRIO TOKEN. O metro-de-bh usa os nomes historicos
+# (IG_ACCESS_TOKEN / IG_USER_ID); marca nova usa o nome com sufixo. E por isso
+# que a matriz carrega `sufixo` em vez de derivar do slug: o legado tem sufixo
+# vazio, e inventar regra para acomodar excecao costuma sair pior.
+#
+# `fail-fast: false`: token vencido de uma marca nao pode cancelar a coleta das
+# outras. Cada marca fica verde ou vermelha por conta propria.
 
 jobs:
   coletar:
     runs-on: ubuntu-latest
     permissions:
       contents: write
+
+    strategy:
+      fail-fast: false
+      max-parallel: 1
+      matrix:
+        include:
+          - marca: metro-de-bh
+            sufixo: ''
+          - marca: estilovidya
+            sufixo: '_ESTILOVIDYA'
+          - marca: lentesvidya
+            sufixo: '_LENTESVIDYA'
 
     steps:
       - uses: actions/checkout@v4
@@ -45,12 +65,13 @@ jobs:
 
       # O script sai com codigo 1 se havia post elegivel e nenhuma metrica
       # voltou -- token vencido, conta errada ou nome de metrica aposentado.
-      # Janela vazia (nenhum post recente) sai 0: nao ha o que coletar nao e falha.
+      # Marca sem nada publicado, ou janela vazia, sai 0: nao ha o que coletar
+      # nao e falha.
       - name: Coletar a serie do dia
         env:
-          IG_USER_ID:      ${{ secrets.IG_USER_ID }}
-          IG_ACCESS_TOKEN: ${{ secrets.IG_ACCESS_TOKEN }}
-        run: python metricas.py ${{ vars.MARCA }} --janela ${{ github.event.inputs.janela || '30' }}
+          IG_USER_ID:      ${{ secrets[format('IG_USER_ID{0}', matrix.sufixo)] }}
+          IG_ACCESS_TOKEN: ${{ secrets[format('IG_ACCESS_TOKEN{0}', matrix.sufixo)] }}
+        run: python metricas.py ${{ matrix.marca }} --janela ${{ github.event.inputs.janela || '30' }}
 
       - name: Guardar a serie
         run: |
