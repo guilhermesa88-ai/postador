@@ -1,0 +1,62 @@
+name: Coletar metricas
+
+# Todo dia as 21:00 UTC (18:00 em Brasilia). Depois da rodada de publicacao
+# das 10:30, para o post do dia entrar na serie com meia jornada de vida em vez
+# de zerado -- e todo dia, inclusive fim de semana, porque um post de sexta
+# acumula alcance no sabado e no domingo.
+on:
+  schedule:
+    - cron: '0 21 * * *'
+  workflow_dispatch:
+    inputs:
+      janela:
+        description: 'Quantos dias para tras coletar'
+        type: string
+        default: '30'
+
+concurrency:
+  group: metricas
+  cancel-in-progress: false
+
+# NOTA DE MANUTENCAO
+# Mesma regra do publicar.yml: nenhum passo usa $(...) nem variavel de shell.
+#
+# Uma diferenca deliberada em relacao ao publicar.yml: aqui o `git push` NAO
+# termina em `|| true`. Neste workflow, push que falha em silencio e a serie
+# que para de crescer sem ninguem notar -- exatamente o problema que este
+# workflow existe para resolver. Se o push falhar, o job tem de ficar vermelho.
+
+jobs:
+  coletar:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+          cache: pip
+
+      - name: Instalar dependencias
+        run: pip install requests
+
+      # O script sai com codigo 1 se havia post elegivel e nenhuma metrica
+      # voltou -- token vencido, conta errada ou nome de metrica aposentado.
+      # Janela vazia (nenhum post recente) sai 0: nao ha o que coletar nao e falha.
+      - name: Coletar a serie do dia
+        env:
+          IG_USER_ID:      ${{ secrets.IG_USER_ID }}
+          IG_ACCESS_TOKEN: ${{ secrets.IG_ACCESS_TOKEN }}
+        run: python metricas.py ${{ vars.MARCA }} --janela ${{ github.event.inputs.janela || '30' }}
+
+      - name: Guardar a serie
+        run: |
+          git config user.name  "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add -f metricas/ || true
+          git commit -m "metricas: serie do dia" || echo "sem mudanca"
+          git pull --rebase --autostash
+          git push
