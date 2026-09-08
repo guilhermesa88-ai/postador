@@ -1,0 +1,67 @@
+{
+  "marca": "metro-de-bh",
+  "data": "2026-09-08",
+  "legenda": "O preço do imóvel em BH subiu 2,92% em um ano — abaixo dos 4,14% da inflação medida pelo IPCA. Na prática, o valor real do metro quadrado caiu. Enquanto isso, a média das 22 capitais subiu 5,49%, acima da inflação.\n\nBH ficou na 20ª posição entre as capitais. Só Curitiba (2,74%) e Porto Alegre (0,96%) tiveram alta menor.\n\nDados de agosto de 2026.\n\nFonte: FipeZap — Índice de Venda Residencial\n\n#imoveis #belohorizonte #bh #metroquadrado #fipezap #precodosimoveis",
+  "slides": [
+    {
+      "tipo": "capa",
+      "eyebrow": "Preço vs. Inflação · Ago/2026",
+      "titulo": "BH subiu 2,92% no ano — menos que a inflação de 4,14%",
+      "sub": "O valor real do metro quadrado caiu. A média das capitais subiu 5,49%, acima do IPCA.",
+      "rodape_destaque": "BH ficou na 20ª posição entre 22 capitais"
+    },
+    {
+      "tipo": "grafico",
+      "eyebrow": "Variação acumulada",
+      "titulo": "BH abaixo da inflação",
+      "sub": "Comparação entre a alta de preço em BH, a média das capitais e o IPCA",
+      "unidade": "%",
+      "fonte": "FipeZap · IBGE",
+      "dados": [
+        {
+          "label": "BH",
+          "valor": 2.92
+        },
+        {
+          "label": "IPCA",
+          "valor": 4.14
+        },
+        {
+          "label": "Média das capitais",
+          "valor": 5.49
+        }
+      ]
+    },
+    {
+      "tipo": "lista",
+      "eyebrow": "Ranking anual",
+      "titulo": "As 5 capitais com menor alta",
+      "sub": "BH entre as três com variação mais baixa no período",
+      "fonte": "FipeZap",
+      "itens": [
+        "Porto Alegre: 0,96%",
+        "Curitiba: 2,74%",
+        "Belo Horizonte: 2,92%",
+        "São Paulo: 3,63%",
+        "Campo Grande: 4,58%"
+      ]
+    },
+    {
+      "tipo": "texto",
+      "eyebrow": "O que isso significa",
+      "titulo": "O poder de compra cresceu em BH",
+      "corpo": "Quando o preço do imóvel sobe menos que a inflação, o valor real cai. Quem guardou dinheiro ou teve renda corrigida pelo IPCA ganhou poder de compra.\n\nBH subiu 2,92% no período. O IPCA acumulou 4,14%. BH ficou abaixo.\n\nA média das 22 capitais subiu 5,49% — acima da inflação. BH foi na contramão."
+    },
+    {
+      "tipo": "fechamento",
+      "eyebrow": "Metro de BH",
+      "titulo": "Todo mês, os números do mercado imobiliário de BH",
+      "corpo": "Dados direto da fonte, sem filtro de corretor. Para quem quer comprar o primeiro imóvel e precisa entender o momento do mercado.",
+      "cta": "Segue a gente pro próximo post"
+    }
+  ],
+  "selo_ia": "Conteúdo produzido com apoio de IA",
+  "periodo": "2026-08",
+  "hash_pdf": "31f85f8101e19d61",
+  "angulo": "contra-a-inflacao"
+}
