@@ -139,6 +139,12 @@ def compor(facts: dict, marca: dict, dry_run: bool = False) -> tuple[dict | None
         brief.setdefault("marca", marca["slug"])
         brief.setdefault("data", date.today().isoformat())
         brief.setdefault("selo_ia", "Conteúdo produzido com apoio de IA")
+        # Procedência: de qual informe e de qual ângulo este post saiu. É o que
+        # a guarda usa para não republicar o mesmo dado, e o que permite
+        # rastrear um post de volta ao PDF meses depois.
+        brief.setdefault("periodo", facts.get("periodo"))
+        brief.setdefault("hash_pdf", facts.get("hash_pdf"))
+        brief.setdefault("angulo", os.environ.get("ANGULO", "padrao"))
 
         r = validar(brief, facts, voz)
         log.append(f"tentativa {tentativa}:\n{r}")

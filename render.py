@@ -209,6 +209,9 @@ def render(brief_path: Path) -> Path:
         "formato": "carousel" if len(slides) > 1 else "image",
         "legenda": brief["legenda"],
         "arquivos": arquivos,
+        "periodo": brief.get("periodo"),
+        "hash_pdf": brief.get("hash_pdf"),
+        "angulo": brief.get("angulo", "padrao"),
         "gerado_em": date.today().isoformat(),
     }
     (destino / "manifest.json").write_text(

@@ -77,7 +77,16 @@ def publicar(pasta: Path, dry_run: bool = False) -> int:
     legenda = manifest["legenda"]
 
     try:
-        if manifest["formato"] == "carousel":
+        if manifest["formato"] == "reel":
+            # O manifest nomeia video e capa; nao dependo da ordem da lista,
+            # que ja mudou uma vez e levaria o publicador a mandar o JPEG
+            # como video_url sem reclamar.
+            por_nome = {f.name: u for f, u in zip(arquivos, urls)}
+            video = por_nome[manifest["video"]]
+            capa = por_nome.get(manifest.get("capa", ""))
+            print(f"Publicando Reel de {manifest.get('duracao_s', '?')}s...")
+            r = pub.publish_reel(video, caption=legenda, cover_url=capa)
+        elif manifest["formato"] == "carousel":
             print(f"Publicando carrossel de {len(urls)} imagens...")
             r = pub.publish_carousel(urls, caption=legenda)
         else:
