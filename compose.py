@@ -146,14 +146,19 @@ def compor(facts: dict, marca: dict, angulo: dict,
             ]
             continue
 
-        brief.setdefault("marca", marca["slug"])
-        brief.setdefault("data", date.today().isoformat())
+        # ATRIBUIÇÃO, NÃO setdefault. Estes campos são do pipeline, não do
+        # modelo: quem é a marca, que dia é hoje, de que informe o post saiu.
+        # Com `setdefault` bastava o modelo devolver o campo para o valor dele
+        # vencer -- e foi o que aconteceu no post de 08/09/2026, em que ele
+        # respondeu "data": "2026-08" (o PERÍODO do informe) e o brief foi
+        # gravado como se tivesse sido escrito em agosto. Ninguém checava,
+        # porque `setdefault` parece um valor padrão e na verdade é uma
+        # permissão. O modelo escreve texto; o pipeline carimba procedência.
+        brief["marca"] = marca["slug"]
+        brief["data"] = date.today().isoformat()
+        brief["periodo"] = facts.get("periodo")
+        brief["hash_pdf"] = facts.get("hash_pdf")
         brief.setdefault("selo_ia", "Conteúdo produzido com apoio de IA")
-        # Procedência: de qual informe e de qual ângulo este post saiu. É o que
-        # a guarda usa para não republicar o mesmo dado, e o que permite
-        # rastrear um post de volta ao PDF meses depois.
-        brief.setdefault("periodo", facts.get("periodo"))
-        brief.setdefault("hash_pdf", facts.get("hash_pdf"))
         brief.setdefault("angulo", angulo["nome"])
 
         r = validar(brief, facts, voz)
