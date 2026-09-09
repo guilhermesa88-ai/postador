@@ -1,0 +1,61 @@
+{
+  "marca": "metro-de-bh",
+  "legenda": "BH teve -0,08% no mês, 0,01% no ano e 2,92% em 12 meses. A maior parte da alta aconteceu antes de 2026.\n\nEnquanto a média das capitais subiu 0,53% em agosto, BH caiu. No ano, ficou praticamente estável: 0,01%. Mas nos últimos 12 meses acumula 2,92%.\n\nIsso significa que dos 2,92% de alta acumulada, 2,91 pontos percentuais aconteceram antes deste ano — entre setembro de 2025 e dezembro de 2025.\n\nEm agosto, 18 capitais subiram. BH ficou na 19ª posição entre as 22 monitoradas.\n\nFonte: FipeZap — Índice de Venda Residencial, agosto de 2026.\n\n#imoveisbh #precoimovel #mercadoimobiliario #belohorizonte #fipezap #primeiroape",
+  "slides": [
+    {
+      "tipo": "capa",
+      "eyebrow": "FipeZap · Agosto 2026",
+      "titulo": "A alta de BH aconteceu antes deste ano",
+      "sub": "Nos últimos 12 meses, +2,92%. No ano, +0,01%. No mês, -0,08%."
+    },
+    {
+      "tipo": "grafico",
+      "eyebrow": "Belo Horizonte",
+      "titulo": "Três horizontes, três ritmos diferentes",
+      "unidade": "%",
+      "fonte": "FipeZap",
+      "dados": [
+        {
+          "label": "Mês",
+          "valor": -0.08
+        },
+        {
+          "label": "Ano",
+          "valor": 0.01
+        },
+        {
+          "label": "12 meses",
+          "valor": 2.92
+        }
+      ]
+    },
+    {
+      "tipo": "lista",
+      "eyebrow": "O que cada número mostra",
+      "titulo": "Agosto parou. O ano estagnou. A alta é de 2025.",
+      "itens": [
+        "<strong>Mês:</strong> -0,08% em agosto. BH ficou na 19ª posição entre 22 capitais. A média subiu 0,53%.",
+        "<strong>Ano:</strong> 0,01% de janeiro a agosto. Praticamente estável. BH ficou em 21º lugar.",
+        "<strong>12 meses:</strong> 2,92% de setembro de 2025 a agosto de 2026. Dos 2,92%, cerca de 2,91 pontos vieram antes deste ano."
+      ]
+    },
+    {
+      "tipo": "texto",
+      "eyebrow": "Interpretação",
+      "titulo": "O ritmo mudou no início de 2026",
+      "corpo": "BH acumula 2,92% em 12 meses. Mas no ano inteiro de 2026, até agosto, subiu apenas 0,01%.\n\nIsso significa que a alta aconteceu antes: entre setembro e dezembro de 2025.\n\nDesde janeiro, o mercado está travado. Em agosto, pela primeira vez no ano, o preço caiu.\n\nEnquanto isso, a média das 22 capitais subiu 0,53% no mês e 3,44% no ano."
+    },
+    {
+      "tipo": "fechamento",
+      "eyebrow": "FipeZap · Agosto 2026",
+      "titulo": "BH: -0,08% no mês, 0,01% no ano, 2,92% em 12 meses",
+      "cta": "Acompanhe todo mês os dados do mercado imobiliário de BH",
+      "rodape_destaque": "Fonte: FipeZap — Índice de Venda Residencial"
+    }
+  ],
+  "data": "2026-09-09",
+  "periodo": "2026-08",
+  "hash_pdf": "31f85f8101e19d61",
+  "selo_ia": "Conteúdo produzido com apoio de IA",
+  "angulo": "os-tres-horizontes"
+}
