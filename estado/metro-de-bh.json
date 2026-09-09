@@ -32,6 +32,16 @@
       "permalink": "https://www.instagram.com/reel/DdCKdyEDMxW/",
       "registrado_em": "2026-09-08T16:55:34.688464+00:00",
       "origem": "data corrigida a mao: o modelo devolveu \"data\": \"2026-08\" (o periodo do informe) e o compose.py da epoca usava setdefault, entao o valor dele venceu. Corrigido no codigo -- os campos de procedencia agora sao atribuidos, nao sugeridos."
+    },
+    {
+      "periodo": "2026-08",
+      "hash_pdf": "31f85f8101e19d61",
+      "angulo": "os-tres-horizontes",
+      "formato": "reel",
+      "data": "2026-09-09",
+      "media_id": "17895393021392219",
+      "permalink": "https://www.instagram.com/reel/DdEFHsIiWeQ/",
+      "registrado_em": "2026-09-09T10:47:26.677833+00:00"
     }
   ]
 }
