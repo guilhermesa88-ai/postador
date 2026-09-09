@@ -211,6 +211,16 @@ def fila(marca: str) -> list[Path]:
     return pendentes
 
 
+def _origem(pasta: Path) -> str:
+    """Caminho relativo ao repositorio, quando da. O `importar.py` valida a
+    peca ainda numa pasta provisoria, fora de entrada/ -- e um campo
+    informativo nao pode ser motivo para a validacao explodir."""
+    try:
+        return str(pasta.relative_to(RAIZ))
+    except ValueError:
+        return pasta.name
+
+
 def inspecionar(pasta: Path) -> dict:
     """Le a pasta, valida tudo e devolve o manifest. O formato sai do conteudo:
     1 imagem = post simples, 2 a 10 = carrossel, 1 mp4 = Reel."""
@@ -234,7 +244,7 @@ def inspecionar(pasta: Path) -> dict:
 
     manifest = {"marca": pasta.parent.name, "legenda": legenda,
                 "data": datetime.now(timezone.utc).date().isoformat(),
-                "angulo": f"arte:{pasta.name}", "origem": str(pasta.relative_to(RAIZ))}
+                "angulo": f"arte:{pasta.name}", "origem": _origem(pasta)}
 
     if videos:
         video = videos[0]

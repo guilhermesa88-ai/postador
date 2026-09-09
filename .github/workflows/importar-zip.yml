@@ -1,0 +1,82 @@
+name: Importar zip
+
+# Um zip vira fila, sozinho.
+#
+# Voce arrasta UM arquivo .zip para a pagina de upload do repositorio e da
+# commit. Este workflow dispara no push, extrai para entrada/, valida cada peca
+# e apaga o zip. Nada mais para clicar.
+#
+# POR QUE ZIP E NAO OS ARQUIVOS SOLTOS. Em 09/09/2026 os 20 arquivos de uma
+# fila foram arrastados soltos: cairam todos na raiz e o navegador renomeou os
+# repetidos para "01 (5).jpg", "01 (10).jpg". A numeracao aplicada NAO seguia a
+# ordem das pastas, entao remontar pelo nome teria embaralhado os carrosseis em
+# silencio -- o erro so apareceria publicado, com as telas fora de ordem.
+# Um zip e UM arquivo: nao ha nome repetido para renomear nem estrutura para
+# perder. O problema deixa de existir em vez de ser contornado.
+#
+# FORMA DO ZIP: a pasta de primeiro nivel e a marca.
+#
+#   estilovidya/
+#       05-ev3-03-o-essencial/
+#           legenda.txt
+#           video.mp4
+#           capa.jpg
+
+on:
+  push:
+    paths:
+      - '*.zip'
+      - 'entrada/**.zip'
+  workflow_dispatch:
+
+concurrency:
+  group: importar-zip
+  cancel-in-progress: false
+
+# NOTA DE MANUTENCAO
+#
+# Nenhum passo usa $(...) nem variavel de shell, pela mesma razao do publicar.yml.
+#
+# SEM LOOP DE PUSH. O commit deste workflow REMOVE o zip e adiciona jpg/mp4/txt.
+# Como o gatilho so olha para caminhos .zip, o proprio commit nao dispara outra
+# rodada.
+#
+# O `importar.py` valida cada peca numa pasta provisoria ANTES de mover para
+# entrada/ e so entao apaga o zip. Peca reprovada nao entra na fila e o zip
+# continua no repositorio para voce consertar. Zip que sobra deixa o job
+# vermelho: zip parado que ninguem nota e conteudo que voce acha que esta na
+# fila e nao esta.
+
+jobs:
+  importar:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+          cache: pip
+
+      - name: Instalar dependencias
+        run: |
+          sudo apt-get update -qq
+          sudo apt-get install -y -qq ffmpeg
+          # Sem ffprobe a duracao do Reel nao seria conferida aqui, e o erro so
+          # apareceria como recusa crua da API depois do upload.
+          command -v ffprobe
+
+      - name: Extrair e validar
+        run: python importar.py
+
+      - name: Guardar a fila
+        run: |
+          git config user.name  "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add -A
+          git commit -m "fila: zip importado para entrada/" || echo "sem mudanca"
+          git pull --rebase --autostash
+          git push
