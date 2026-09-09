@@ -47,13 +47,17 @@ import os
 import re
 import subprocess
 import sys
-from datetime import datetime, timezone
+from datetime import datetime, timedelta, timezone
 from pathlib import Path
 
 RAIZ = Path(__file__).parent
 ENTRADA = RAIZ / "entrada"
 SAIDA = RAIZ / "out"
 ESTADO = RAIZ / "estado"
+BRANDS = RAIZ / "brands"
+
+FUSO_BR = timezone(timedelta(hours=-3))
+DIAS = ["seg", "ter", "qua", "qui", "sex", "sab", "dom"]
 
 # Restricoes do Instagram (Content Publishing API, v23.0).
 MAX_LEGENDA = 2200
@@ -279,7 +283,39 @@ def _sinalizar(tem_post: bool) -> None:
             f.write(f"tem_post={'true' if tem_post else 'false'}\n")
 
 
+def dia_de_publicar(marca: str) -> tuple[bool, str]:
+    """A cadencia e config da MARCA, nao do workflow.
+
+    O cron roda todo dia e cada perfil decide se hoje e dia dele, por
+    `dias_da_semana` em brands/<marca>.json (0 = segunda). Assim dois perfis
+    com ritmos diferentes convivem no mesmo agendamento, e mudar o ritmo de um
+    nao mexe no outro nem exige editar YAML.
+
+    Vale so para rodada agendada: disparo manual publica sempre. E a valvula de
+    escape para quando voce quer que saia agora, num dia que nao e o do perfil.
+    """
+    if os.environ.get("GITHUB_EVENT_NAME") != "schedule":
+        return True, "disparo manual — cadencia nao se aplica"
+    caminho = BRANDS / f"{marca}.json"
+    if not caminho.exists():
+        return True, f"sem brands/{marca}.json — publica em toda rodada"
+    dias = json.loads(caminho.read_text(encoding="utf-8")).get("dias_da_semana")
+    if not dias:
+        return True, "sem dias_da_semana — publica em toda rodada"
+    hoje = datetime.now(FUSO_BR).weekday()
+    if hoje in dias:
+        return True, f"hoje e {DIAS[hoje]}, dia de {marca}"
+    return False, (f"hoje e {DIAS[hoje]}; {marca} publica "
+                   f"{'/'.join(DIAS[d] for d in sorted(dias))}")
+
+
 def preparar(marca: str) -> int:
+    pode, motivo = dia_de_publicar(marca)
+    print(f"cadencia: {motivo}")
+    if not pode:
+        _sinalizar(False)
+        return 0
+
     pendentes = fila(marca)
     if not pendentes:
         print(f"nada novo em entrada/{marca}/ — fila vazia.")

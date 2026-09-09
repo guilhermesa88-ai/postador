@@ -2,23 +2,25 @@ name: Publicar arte
 
 # Arte pronta: voce entrega o arquivo, o pipeline entrega o post.
 #
-# CADENCIA. Segunda, quarta e sexta as 09:00 de Brasilia (12:00 UTC), UM post
-# por perfil por rodada -- a fila esvazia espacada, nao de uma vez. Para mudar o
-# ritmo basta trocar o cron: '0 12 * * 1-5' publica todo dia util.
+# CADENCIA MORA NA MARCA, NAO AQUI. O cron roda todo dia as 09:00 de Brasilia
+# (12:00 UTC) e cada perfil decide se hoje e dia dele, pelo `dias_da_semana` do
+# seu brands/<marca>.json (0 = segunda). Um post por perfil por rodada.
 #
-# O gargalo aqui e estoque, nao politica de cadencia: 4 pecas a 3x por semana
-# duram ~9 dias; a 5x por semana acabam em 4. A tabela do mapa de nichos poe
-# 2-3x/semana em +26% ao ano, entao 3x mantem o perfil na faixa que cresce e da
-# tempo de produzir os videos dos Reels que ainda faltam.
+# A versao anterior fixava seg/qua/sex no proprio cron. Com mais de um perfil
+# isso obriga a editar YAML para mudar o ritmo de um so, e um cron por perfil
+# viraria N workflows iguais. Ritmo e config de marca; agendamento e infra.
+#
+# Disparo manual ignora a cadencia de proposito: e a valvula de escape para
+# publicar agora, num dia que nao e o do perfil.
 on:
   schedule:
-    - cron: '0 12 * * 1,3,5'
+    - cron: '0 12 * * *'
   workflow_dispatch:
     inputs:
       marca:
         description: 'Perfil de destino'
         type: choice
-        options: [estilovidya, lentesvidya]
+        options: [estilovidya, lentesvidya, alfalentes]
         default: estilovidya
       dry_run:
         description: 'Validar e subir a midia, sem publicar'
@@ -33,8 +35,8 @@ concurrency:
 #
 # Nenhum passo usa $(...) nem variavel de shell, pela mesma razao do publicar.yml.
 #
-# UM GUARDA SO. Numa rodada agendada os dois perfis entram; num disparo manual,
-# so o escolhido. Em vez de repetir a condicao em cada passo, ela vive em
+# UM GUARDA SO. Numa rodada agendada todos os perfis entram; num disparo
+# manual, so o escolhido. Em vez de repetir a condicao em cada passo, ela vive em
 # `env.PROCESSAR` e guarda apenas o primeiro passo: se `preparar` nao roda,
 # `tem_post` fica vazio e todo o resto pula junto.
 #
@@ -61,7 +63,7 @@ jobs:
       fail-fast: false
       max-parallel: 1
       matrix:
-        marca: [estilovidya, lentesvidya]
+        marca: [estilovidya, lentesvidya, alfalentes]
 
     env:
       PROCESSAR: ${{ github.event_name != 'workflow_dispatch' || github.event.inputs.marca == matrix.marca }}

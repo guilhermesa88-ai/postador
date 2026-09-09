@@ -1,0 +1,17 @@
+{
+  "slug": "alfalentes",
+  "nome": "Alfa Lentes",
+  "handle": "@lab.alfalentes",
+  "_sobre": "Laboratorio optico do grupo; a @lentesvidya se apresenta como 'do grupo @lab.alfalentes'. Entra pelo caminho de ARTE PRONTA. Conteudo tecnico de optica exige rigor: nada de promessa terapeutica.",
+  "_sobre_o_slug": "O handle tem ponto (@lab.alfalentes), mas nome de secret no GitHub so aceita letra, numero e underline. Por isso o slug e 'alfalentes' -- e ele que nomeia a pasta em entrada/, o arquivo de estado e o sufixo dos secrets.",
+  "dias_da_semana": [
+    0,
+    2,
+    4
+  ],
+  "_sobre_cadencia": "0=segunda .. 6=domingo. Seg/qua/sex; ajuste aqui, sem mexer no workflow.",
+  "secrets": {
+    "token": "IG_ACCESS_TOKEN_ALFALENTES",
+    "user_id": "IG_USER_ID_ALFALENTES"
+  }
+}

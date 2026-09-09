@@ -8,5 +8,15 @@
   "secrets": {
     "token": "IG_ACCESS_TOKEN_ESTILOVIDYA",
     "user_id": "IG_USER_ID_ESTILOVIDYA"
-  }
+  },
+  "dias_da_semana": [
+    0,
+    1,
+    2,
+    3,
+    4,
+    5,
+    6
+  ],
+  "_sobre_cadencia": "0=segunda .. 6=domingo. Vale so em rodada agendada; disparo manual publica sempre. Diaria enquanto houver fila."
 }

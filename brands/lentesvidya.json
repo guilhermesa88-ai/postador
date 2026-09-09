@@ -8,5 +8,11 @@
   "secrets": {
     "token": "IG_ACCESS_TOKEN_LENTESVIDYA",
     "user_id": "IG_USER_ID_LENTESVIDYA"
-  }
+  },
+  "dias_da_semana": [
+    0,
+    2,
+    4
+  ],
+  "_sobre_cadencia": "0=segunda .. 6=domingo. Seg/qua/sex por enquanto: sem fila, nao publica nada de qualquer forma."
 }
