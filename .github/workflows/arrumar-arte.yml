@@ -1,0 +1,89 @@
+name: Arrumar arte solta
+
+# WORKFLOW DESCARTAVEL. Apague depois de rodar uma vez.
+#
+# O upload de 09/09 mandou os 20 arquivos da fila para a RAIZ do repositorio em
+# vez das pastas: quem arrasta arquivos soltos perde a estrutura, e o GitHub
+# ainda renomeia os nomes repetidos para "01 (5).jpg", "01 (10).jpg" etc. Os
+# bytes chegaram inteiros -- so o caminho ficou errado.
+#
+# Cada arquivo foi identificado por sha256 contra o original, nao pelo sufixo:
+# a numeracao que o GitHub aplicou nao segue a ordem das pastas, entao deduzir
+# pelo nome teria embaralhado os carrosseis em silencio.
+#
+# O script confere TODOS os hashes antes de mover QUALQUER arquivo. Se um so
+# divergir, ele sai com erro sem ter tocado em nada -- meio caminho andado aqui
+# seria pior que nao comecar.
+
+on:
+  workflow_dispatch:
+
+jobs:
+  arrumar:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Conferir e mover
+        run: |
+          python - <<'PY'
+          import hashlib, shutil, sys
+          from pathlib import Path
+
+          MAPA = [
+              ('01 (10).jpg', 'entrada/estilovidya/01-ev3-01-qual-ideia-vestir/01.jpg', '621d1644dd7acc72'),
+              ('02 (9).jpg', 'entrada/estilovidya/01-ev3-01-qual-ideia-vestir/02.jpg', '13ef7a1f0e2e6fbb'),
+              ('03 (6).jpg', 'entrada/estilovidya/01-ev3-01-qual-ideia-vestir/03.jpg', '89d89005c376853d'),
+              ('04 (7).jpg', 'entrada/estilovidya/01-ev3-01-qual-ideia-vestir/04.jpg', '359ce7a6c2f0b8cb'),
+              ('legenda (8).txt', 'entrada/estilovidya/01-ev3-01-qual-ideia-vestir/legenda.txt', '49feddec0ed98e2d'),
+              ('01.jpg', 'entrada/estilovidya/02-ev3-02-duvida/01.jpg', '414f27d8f465888f'),
+              ('02.jpg', 'entrada/estilovidya/02-ev3-02-duvida/02.jpg', '30ff81aeafd26fe2'),
+              ('03.jpg', 'entrada/estilovidya/02-ev3-02-duvida/03.jpg', '0b6baeb5349e684f'),
+              ('04.jpg', 'entrada/estilovidya/02-ev3-02-duvida/04.jpg', '1832680dea4a2b60'),
+              ('legenda.txt', 'entrada/estilovidya/02-ev3-02-duvida/legenda.txt', '6437ebc7df9c02d6'),
+              ('01 (5).jpg', 'entrada/estilovidya/03-ev3-04-felicidade-e-o-caminho/01.jpg', '9f40a381b572b994'),
+              ('02 (4).jpg', 'entrada/estilovidya/03-ev3-04-felicidade-e-o-caminho/02.jpg', 'd0beb7984098e933'),
+              ('03 (1).jpg', 'entrada/estilovidya/03-ev3-04-felicidade-e-o-caminho/03.jpg', '77487259cbacaee3'),
+              ('04 (2).jpg', 'entrada/estilovidya/03-ev3-04-felicidade-e-o-caminho/04.jpg', '0e10f6fa96f05651'),
+              ('legenda (3).txt', 'entrada/estilovidya/03-ev3-04-felicidade-e-o-caminho/legenda.txt', '5050d4e2f7cf2260'),
+              ('01 (15).jpg', 'entrada/estilovidya/04-ev3-06-tres-estampas/01.jpg', '584bc35805fd98d8'),
+              ('02 (14).jpg', 'entrada/estilovidya/04-ev3-06-tres-estampas/02.jpg', 'b39294ac3c49f84f'),
+              ('03 (11).jpg', 'entrada/estilovidya/04-ev3-06-tres-estampas/03.jpg', '448a026b296daa6e'),
+              ('04 (12).jpg', 'entrada/estilovidya/04-ev3-06-tres-estampas/04.jpg', 'f63072838ed1e4e0'),
+              ('legenda (13).txt', 'entrada/estilovidya/04-ev3-06-tres-estampas/legenda.txt', '030725330d903ed6'),
+          ]
+
+          # 1) conferir tudo antes de mexer em qualquer coisa
+          erros = []
+          for origem, destino, sha in MAPA:
+              p = Path(origem)
+              if not p.exists():
+                  erros.append(f"{origem}: nao existe na raiz")
+                  continue
+              real = hashlib.sha256(p.read_bytes()).hexdigest()[:16]
+              if real != sha:
+                  erros.append(f"{origem}: sha {real} != {sha} esperado")
+          if erros:
+              for e in erros:
+                  print("::error::" + e)
+              sys.exit(1)
+
+          # 2) so agora mover
+          for origem, destino, _ in MAPA:
+              d = Path(destino)
+              d.parent.mkdir(parents=True, exist_ok=True)
+              shutil.move(origem, d)
+              print(f"{origem} -> {destino}")
+          print(f"\n{len(MAPA)} arquivo(s) no lugar.")
+          PY
+
+      - name: Guardar
+        run: |
+          git config user.name  "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add -A
+          git commit -m "arte: mover os 20 arquivos da raiz para entrada/estilovidya/"
+          git pull --rebase --autostash
+          git push
