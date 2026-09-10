@@ -1,0 +1,77 @@
+{
+  "marca": "metro-de-bh",
+  "data": "2026-09-10",
+  "legenda": "Belo Horizonte subiu 0,01% no acumulado do ano, enquanto Vitória liderou com 10,24%. A diferença entre elas chegou a 10,23 pontos percentuais — mais de mil vezes a variação de BH no período.\n\nTodas as 22 capitais monitoradas terminaram o ano no positivo, mas a amplitude entre as pontas mostra mercados em velocidades completamente diferentes. Vitória, Manaus e Aracaju estão em trajetória de alta firme. BH, Curitiba e Porto Alegre mal saíram do lugar.\n\nDados de agosto de 2026.\n\nFonte: FipeZap — Índice de Venda Residencial\n\n#precoimovel #mercadoimobiliario #belohorizonte #fipezap #imoveisbh #metriquadrado",
+  "slides": [
+    {
+      "tipo": "capa",
+      "eyebrow": "FipeZap • Acumulado 2026",
+      "titulo": "BH subiu 0,01% no ano. Vitória subiu 10,24%",
+      "sub": "A diferença entre as pontas da lista chegou a 10,23 pontos percentuais — BH ficou na 21ª posição entre 22 capitais"
+    },
+    {
+      "tipo": "grafico",
+      "eyebrow": "Variação no ano",
+      "titulo": "As cinco que mais subiram e BH",
+      "unidade": "%",
+      "fonte": "FipeZap",
+      "dados": [
+        {
+          "label": "Vitória",
+          "valor": 10.24
+        },
+        {
+          "label": "Manaus",
+          "valor": 9.19
+        },
+        {
+          "label": "Aracaju",
+          "valor": 8.15
+        },
+        {
+          "label": "Salvador",
+          "valor": 7.27
+        },
+        {
+          "label": "Florianópolis",
+          "valor": 6.05
+        },
+        {
+          "label": "Belo Horizonte",
+          "valor": 0.01
+        }
+      ]
+    },
+    {
+      "tipo": "lista",
+      "eyebrow": "Ranking completo",
+      "titulo": "22 capitais no acumulado do ano",
+      "sub": "Variação percentual do preço de venda de imóveis residenciais",
+      "itens": [
+        "1º — Vitória: 10,24%",
+        "2º — Manaus: 9,19%",
+        "3º — Aracaju: 8,15%",
+        "19º — São Paulo: 2,07%",
+        "21º — BH: 0,01%"
+      ]
+    },
+    {
+      "tipo": "texto",
+      "eyebrow": "Leitura",
+      "titulo": "Todas subiram, mas em ritmos diferentes",
+      "corpo": "As 22 capitais fecharam o ano com variação positiva, mas a distância entre Vitória (10,24%) e Belo Horizonte (0,01%) é de <strong>10,23 pontos percentuais</strong>.\n\nA média das capitais subiu 3,44% no período. BH ficou 3,43 p.p. abaixo dessa média.\n\nVitória lidera pelo acumulado do ano. Manaus e Aracaju completam o pódio. Porto Alegre e BH empatam tecnicamente na lanterna, ambos com 0,01%.",
+      "rodape_destaque": "A diferença entre Vitória e BH no ano foi de 10,23 p.p."
+    },
+    {
+      "tipo": "fechamento",
+      "eyebrow": "Metro de BH",
+      "titulo": "Preço do m² em BH e nas outras capitais",
+      "corpo": "Todo mês a gente traz os dados do FipeZap comparando Belo Horizonte com as outras 21 capitais monitoradas.",
+      "cta": "Segue aí pra acompanhar"
+    }
+  ],
+  "periodo": "2026-08",
+  "hash_pdf": "31f85f8101e19d61",
+  "selo_ia": "Conteúdo produzido com apoio de IA",
+  "angulo": "o-topo-e-a-base"
+}
