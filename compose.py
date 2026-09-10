@@ -130,15 +130,40 @@ def compor(facts: dict, marca: dict, angulo: dict,
     mensagens = [{"role": "user", "content": montar_prompt(facts, marca, angulo)}]
 
     for tentativa in range(1, MAX_TENTATIVAS + 1):
-        resp = cliente.messages.create(
-            model=MODELO, max_tokens=4000, messages=mensagens,
-        )
+        try:
+            resp = cliente.messages.create(
+                model=MODELO, max_tokens=4000, messages=mensagens,
+            )
+        except Exception as e:  # noqa: BLE001
+            # LIMITADO DE PROPÓSITO. O SDK levanta erros que carregam o corpo
+            # da requisição inteira, e o prompt traz os facts completos --
+            # numa terceira tentativa, mais duas respostas inteiras do modelo.
+            # Deixar isso subir como traceback enche o log do runner, o GitHub
+            # trunca o passo, e foi exatamente o que aconteceu em 10/09/2026:
+            # o job falhou e NÃO deu para ler por quê. Log ilegível no único
+            # dia em que falha é o mesmo defeito de sempre, de outra forma.
+            #
+            # E falha de chamada é tentativa perdida, não fim de rodada: um 429
+            # ou um "overloaded" na primeira não deve custar o post do dia.
+            detalhe = " ".join(str(e).split())[:300]
+            log.append(f"tentativa {tentativa}: a chamada ao modelo falhou — "
+                       f"{type(e).__name__}: {detalhe}")
+            continue
+
+        if not resp.content:
+            log.append(f"tentativa {tentativa}: resposta sem conteúdo "
+                       f"(stop_reason={resp.stop_reason})")
+            continue
         bruto = resp.content[0].text
 
         try:
             brief = extrair_json(bruto)
         except (ValueError, json.JSONDecodeError) as e:
-            log.append(f"tentativa {tentativa}: JSON inválido — {e}")
+            # `stop_reason` distingue "o modelo escreveu bobagem" de "a
+            # resposta foi cortada no meio por max_tokens" -- consertos
+            # diferentes, e sem isso os dois parecem o mesmo erro.
+            log.append(f"tentativa {tentativa}: JSON inválido — {e} "
+                       f"(stop_reason={resp.stop_reason})")
             mensagens += [
                 {"role": "assistant", "content": bruto},
                 {"role": "user", "content": f"Isso não é JSON válido: {e}. "
