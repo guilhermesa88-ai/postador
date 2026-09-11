@@ -1,0 +1,72 @@
+{
+  "marca": "metro-de-bh",
+  "data": "2026-09-11",
+  "legenda": "4 capitais tiveram queda de preço no mês de agosto: Belo Horizonte (-0,08%), Belém (-0,19%), Campo Grande (-0,19%) e Curitiba (-0,25%). Enquanto isso, a média das 22 capitais subiu 0,53%.\n\nBH ficou na 19ª posição entre as capitais monitoradas. No acumulado de 12 meses, a cidade subiu 2,92%, contra 5,49% da média nacional.\n\nFonte: FipeZap — Índice de Venda Residencial, agosto de 2026.\n\n#MetroDeBH #PreçoImóveis #MercadoImobiliário #BeloHorizonte #FipeZap #ImóveisBH",
+  "slides": [
+    {
+      "tipo": "capa",
+      "eyebrow": "Preço de imóveis • Ago/2026",
+      "titulo": "4 capitais caíram enquanto a média subiu 0,53%",
+      "sub": "BH, Belém, Campo Grande e Curitiba registraram queda no mês",
+      "rodape_destaque": "Média nacional: +0,53%"
+    },
+    {
+      "tipo": "grafico",
+      "eyebrow": "Variação mensal",
+      "titulo": "As 4 capitais em queda em agosto",
+      "unidade": "%",
+      "fonte": "FipeZap",
+      "dados": [
+        {
+          "label": "Curitiba",
+          "valor": -0.25
+        },
+        {
+          "label": "Belém",
+          "valor": -0.19
+        },
+        {
+          "label": "Campo Grande",
+          "valor": -0.19
+        },
+        {
+          "label": "Belo Horizonte",
+          "valor": -0.08
+        },
+        {
+          "label": "Média das 22",
+          "valor": 0.53
+        }
+      ]
+    },
+    {
+      "tipo": "lista",
+      "eyebrow": "Contexto",
+      "titulo": "O que os números mostram",
+      "itens": [
+        "18 capitais subiram no mês — de Natal (+0,03%) a Vitória (+1,31%)",
+        "4 capitais caíram: BH, Belém, Campo Grande e Curitiba",
+        "A média das 22 capitais subiu 0,53%, puxada pelas altas",
+        "No acumulado de 12 meses, todas as 22 capitais estão em alta"
+      ]
+    },
+    {
+      "tipo": "texto",
+      "eyebrow": "BH nos rankings",
+      "titulo": "19ª posição no mês, 20ª em 12 meses",
+      "corpo": "Belo Horizonte caiu 0,08% em agosto, ficando na 19ª posição entre as 22 capitais monitoradas.\n\nNos últimos 12 meses, BH subiu 2,92% — menos da metade da média nacional de 5,49%. A cidade ocupa a 20ª posição nesse horizonte.\n\nPara comparação: Manaus lidera os 12 meses com +11,42%, e Porto Alegre fecha a lista com +0,96%."
+    },
+    {
+      "tipo": "fechamento",
+      "eyebrow": "Fonte",
+      "titulo": "De onde vêm os números",
+      "corpo": "Os dados são do FipeZap — Índice de Venda Residencial, que monitora preços de venda de imóveis em 22 capitais brasileiras.\n\nO índice é calculado pela Fipe com base em anúncios de venda. Referência: agosto de 2026.",
+      "cta": "Acompanhe todo mês no @metro_de_bh",
+      "fonte": "FipeZap • Ago/2026"
+    }
+  ],
+  "periodo": "2026-08",
+  "hash_pdf": "31f85f8101e19d61",
+  "selo_ia": "Conteúdo produzido com apoio de IA",
+  "angulo": "quem-esta-em-queda"
+}
