@@ -18,5 +18,7 @@
     5,
     6
   ],
-  "_sobre_cadencia": "0=segunda .. 6=domingo. Vale so em rodada agendada; disparo manual publica sempre. Diaria enquanto houver fila."
+  "_sobre_cadencia": "0=segunda .. 6=domingo. Vale so em rodada agendada; disparo manual publica sempre. Diaria enquanto houver fila.",
+  "posts_por_dia": 4,
+  "_nota_posts_por_dia": "Quantos posts por dia nas rodadas agendadas. O workflow acorda 4x/dia (12,15,18,21 UTC = 09,12,15,18 em Brasilia) e o arte.py conta no estado/ quantos ja sairam hoje. Marca sem este campo vale 1."
 }
