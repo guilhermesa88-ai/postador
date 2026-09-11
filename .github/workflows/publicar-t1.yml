@@ -131,16 +131,47 @@ jobs:
           python quadro.py facts/fipezap-capitais.json metro-de-bh \
             --horizonte-opcional "${{ github.event.inputs.horizonte }}"
 
+      # O PUBLICADOR PRECISA DE MAIS QUE O TOKEN DO INSTAGRAM.
+      #
+      # A API do Instagram nao aceita upload direto: ela BUSCA a midia numa
+      # URL publica. O `storage_github.py` publica o arquivo no proprio
+      # repositorio para gerar essa URL -- e para isso precisa de GH_OWNER,
+      # GH_REPO e GITHUB_TOKEN.
+      #
+      # A rodada #2 morreu exatamente aqui, com "falta a variavel de ambiente
+      # GH_OWNER": o reel foi gerado e conferido, o manifest foi escrito, e o
+      # publicador parou na primeira linha. Eu havia copiado do publicar.yml
+      # so as duas variaveis que pareciam obvias (as do Instagram) em vez de
+      # copiar o bloco inteiro que ja funcionava.
+      #
+      # Nada foi publicado pela metade -- o `env()` do publicar.py falha ANTES
+      # de qualquer chamada de rede, que e o desenho certo.
       - name: Publicar
+        id: publicar
         if: steps.gerar.outputs.tem_reel == 'true' && github.event.inputs.dry_run != 'true'
+        continue-on-error: true
         env:
           IG_USER_ID:      ${{ secrets.IG_USER_ID }}
           IG_ACCESS_TOKEN: ${{ secrets.IG_ACCESS_TOKEN }}
+          GITHUB_TOKEN:    ${{ github.token }}
+          GH_OWNER:        ${{ github.repository_owner }}
+          GH_REPO:         ${{ github.event.repository.name }}
         run: python publicar.py --ultima metro-de-bh
 
+      # `outcome == 'success'` e nao `tem_reel`: registrar um post que NAO foi
+      # ao ar faria a guarda queimar o horizonte para sempre, e o assunto
+      # ficaria sem post sem ninguem entender por que.
       - name: Registrar o post
-        if: steps.gerar.outputs.tem_reel == 'true' && github.event.inputs.dry_run != 'true'
+        if: steps.publicar.outcome == 'success' && github.event.inputs.dry_run != 'true'
         run: python guarda.py --registrar-ultima metro-de-bh
+
+      # Se o publicador falhou, o job tem de ficar VERMELHO -- o
+      # continue-on-error acima serve para chegar ate aqui, nao para perdoar.
+      - name: Falhar se a publicacao falhou
+        if: steps.publicar.outcome == 'failure'
+        run: |
+          echo "::error::o publicar.py falhou; veja o passo Publicar acima"
+          exit 1
 
       - name: Sem publicacao nesta rodada
         if: steps.gerar.outputs.tem_reel != 'true'
