@@ -14,7 +14,20 @@ name: Publicar arte
 # publicar agora, num dia que nao e o do perfil.
 on:
   schedule:
-    - cron: '0 12 * * *'
+    # 12, 15, 18 e 21 UTC = 09h, 12h, 15h e 18h em Brasilia.
+    #
+    # QUATRO RODADAS, NAO QUATRO POSTS. Quantos posts cada marca faz por dia e
+    # `posts_por_dia` no brands/<marca>.json; o arte.py conta no estado/ quantos
+    # ja sairam hoje e recusa quando a cota fecha. Marca sem o campo vale 1, e
+    # por isso lentesvidya e alfalentes seguem com um post por dia de cadencia
+    # mesmo com o cron acordando quatro vezes -- tres dessas rodadas vao achar
+    # a cota cumprida e sair verdes.
+    #
+    # Nenhum destes minutos coincide com publicar.yml (10:30) nem com
+    # publicar-t1.yml (:30), e todos caem no MESMO dia UTC -- a cota compara
+    # data UTC, e um slot depois da meia-noite UTC zeraria a conta no meio da
+    # tarde de Brasilia.
+    - cron: '0 12,15,18,21 * * *'
   workflow_dispatch:
     inputs:
       marca:
@@ -116,14 +129,23 @@ jobs:
       # Registra no mesmo estado/<marca>.json que o coletor de metricas le.
       # E o que tira a pasta da fila e o que faz a arte entrar na serie de
       # desempenho sem uma linha de codigo nova.
-      - name: Registrar o post
+      # Registra E TIRA DA FILA, na ordem certa: o `limpar_fila.py` so remove
+      # depois de existir registro com media_id, entao rodar o registrar antes
+      # dele nao e detalhe de estilo, e o que autoriza a remocao.
+      #
+      # O `git add -A entrada/` e o que faz a remocao virar commit. Sem ele o
+      # arquivo sai do runner e volta no checkout seguinte, e a fila nunca
+      # encolheria de verdade.
+      - name: Registrar o post e tirar da fila
         if: steps.publicar.outcome == 'success' && github.event.inputs.dry_run != 'true'
         run: |
           python arte.py registrar ${{ matrix.marca }}
+          python limpar_fila.py ${{ matrix.marca }}
           git config user.name  "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
           git add -f estado/ || true
-          git commit -m "estado: arte publicada" || echo "sem mudanca"
+          git add -A entrada/ || true
+          git commit -m "estado: arte publicada; fila: pasta removida" || echo "sem mudanca"
           git pull --rebase --autostash
           git push
 
