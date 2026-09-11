@@ -319,12 +319,63 @@ def dia_de_publicar(marca: str) -> tuple[bool, str]:
                    f"{'/'.join(DIAS[d] for d in sorted(dias))}")
 
 
+def cota_do_dia(marca: str) -> tuple[bool, str]:
+    """Quantos posts esta marca ainda pode publicar hoje.
+
+    POR QUE CONTAR NO HISTORICO E NAO OLHAR A HORA DO CRON.
+
+    Para dar 4 posts/dia a uma marca, o obvio seria rodar o workflow em quatro
+    horarios e cada marca aceitar so "o seu" horario. Isso quebra na pratica:
+    rodada agendada do GitHub Actions atrasa, e as vezes atrasa o suficiente
+    para cruzar a virada da hora. O slot seria simplesmente perdido, em
+    silencio, e ninguem descobriria sem contar posts na mao.
+
+    Contando no `estado/<marca>.json`, o mecanismo fica robusto a atraso: se
+    faltou publicar, qualquer rodada seguinte do dia cobre. E so consegue
+    REDUZIR a publicacao -- no pior caso posta menos, nunca mais que a cota.
+
+    A data comparada e a UTC porque e essa que o `inspecionar()` grava em
+    `data` e que o `registrar()` leva para o historico. Comparar com a data de
+    Brasilia faria a cota zerar tres horas antes do registro virar o dia, e a
+    marca ganharia um post extra nessa janela.
+    """
+    caminho = BRANDS / f"{marca}.json"
+    cota = 1
+    if caminho.exists():
+        cota = json.loads(caminho.read_text(encoding="utf-8")).get("posts_por_dia", 1)
+    if not isinstance(cota, int) or cota < 1:
+        raise SystemExit(
+            f"brands/{marca}.json: posts_por_dia = {cota!r}; "
+            f"esperava um inteiro >= 1")
+
+    hoje = datetime.now(timezone.utc).date().isoformat()
+    estado = ESTADO / f"{marca}.json"
+    if not estado.exists():
+        return True, f"nada publicado ainda; cota {cota}/dia"
+    pubs = json.loads(estado.read_text(encoding="utf-8")).get("publicados", [])
+    feitos = sum(1 for r in pubs if r.get("data") == hoje)
+    if feitos < cota:
+        return True, f"{feitos} de {cota} publicados hoje ({hoje})"
+    return False, (f"cota do dia cumprida: {feitos} de {cota} em {hoje}")
+
+
 def preparar(marca: str) -> int:
     pode, motivo = dia_de_publicar(marca)
     print(f"cadencia: {motivo}")
     if not pode:
         _sinalizar(False)
         return 0
+
+    # A cota vale SO para rodada agendada, igual ao dia_de_publicar: disparo
+    # manual continua sendo a valvula de escape para publicar agora.
+    if os.environ.get("GITHUB_EVENT_NAME") == "schedule":
+        tem_cota, motivo_cota = cota_do_dia(marca)
+        print(f"cota: {motivo_cota}")
+        if not tem_cota:
+            _sinalizar(False)
+            return 0
+    else:
+        print("cota: disparo manual — nao se aplica")
 
     pendentes = fila(marca)
     if not pendentes:
