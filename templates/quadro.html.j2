@@ -1,0 +1,224 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<style>
+  /* ------------------------------------------------------------------
+     T1 — quadro progressivo. 1080x1920.
+
+     Diferenca central em relacao ao reel.html.j2: ali as cenas TROCAM
+     (uma entra, a outra sai). Aqui o quadro NAO sai. Ele entra vazio, com
+     as posicoes numeradas a vista, e cada linha preenche no seu keyframe.
+
+     E isso que sustenta 86 segundos: o espectador ve quantas revelacoes
+     faltam antes de ver conteudo nenhum. Se o quadro entrasse vazio SEM os
+     numeros, a promessa nao estaria na tela e o formato viraria slideshow.
+
+     As porcentagens vem calculadas do quadro.py -- linha_do_tempo().
+     ------------------------------------------------------------------ */
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  html, body {
+    width: {{ W }}px; height: {{ H }}px; overflow: hidden;
+    background: {{ c.surface }}; color: {{ c.ink }};
+    font-family: {{ t.familia }};
+    -webkit-font-smoothing: antialiased;
+  }
+
+  /* ALTURA E ORCAMENTO, NAO SOBRA.
+     Na primeira versao o .quadro tinha flex:1 e o .fecho ia depois. Com dez
+     linhas de 108px o conteudo somava ~1974px e a frase de fecho era empurrada
+     para FORA dos 1920 -- o video ficava sem a unica frase escrita por codigo,
+     e nada no log dizia isso. So apareceu na folha de frames.
+     Agora o quadro toma altura natural e as medidas abaixo fecham a conta:
+     120 + 200 (cabeca) + 86 (regra) + 1086 (10x96 + 9x14) + 216 (fecho) + 130. */
+  .palco { position: relative; width: {{ W }}px; height: {{ H }}px;
+           padding: 120px 80px 130px; display: flex; flex-direction: column; }
+
+  .barra-topo {
+    position: absolute; top: 0; left: 0; width: {{ W }}px; height: 12px;
+    background: {{ c.acento }}; z-index: 10;
+  }
+
+  /* cabecalho: persistente, no ar do primeiro ao ultimo frame ---------- */
+  .cabeca h1 {
+    font-size: 70px; line-height: 1.04; font-weight: {{ t.peso_titulo }};
+    letter-spacing: -.03em;
+  }
+  .cabeca .sub {
+    font-size: 38px; font-weight: 300; color: {{ c.ink_secundario }};
+    margin-top: 22px;
+  }
+  /* ALTURA FIXA, e nao "o que o texto pedir".
+     O titulo e escrito por codigo e muda de comprimento conforme o sinal dos
+     dados: "onde o imovel menos subiu" (2 linhas) ou "com a menor variacao de
+     preco" (3 linhas). Com altura automatica, a variante de 3 linhas empurrou
+     o quadro 79px para baixo e ele invadiu a faixa de legenda -- pego pelo
+     conferir_altura(), mas o conserto certo e o layout nao depender do
+     comprimento do texto. Agora o quadro comeca sempre no mesmo y. */
+  .cabeca { height: {{ ALT_CABECA }}px; overflow: hidden;
+            animation: entra-cabeca {{ total_s }}s ease forwards; opacity: 0; }
+  @keyframes entra-cabeca {
+    0% { opacity: 0; transform: translateY(24px); }
+    2.2%, 100% { opacity: 1; transform: translateY(0); }
+  }
+
+  .regra { height: 2px; background: {{ c.regra }}; margin: 40px 0 34px; }
+
+  /* o quadro ---------------------------------------------------------- */
+  .quadro { display: flex; flex-direction: column; gap: 12px; }
+
+  .linha {
+    display: grid; grid-template-columns: 96px 1fr;
+    align-items: center; gap: 22px;
+    height: 94px;
+  }
+
+  /* O NUMERO DA POSICAO NUNCA ANIMA. Ele esta na tela desde o inicio --
+     e a contagem restante. Animar junto com o conteudo destruiria o
+     mecanismo inteiro. */
+  .linha .pos {
+    font-size: 56px; font-weight: {{ t.peso_titulo }};
+    color: {{ c.ink_muted }}; text-align: right;
+    font-variant-numeric: tabular-nums;
+  }
+
+  /* O sulco vazio: mostra que ali VAI ter algo. */
+  .corpo {
+    position: relative; height: 94px; border-radius: 10px;
+    background: {{ c.surface_alt }};
+    display: flex; align-items: center;
+    overflow: hidden;
+  }
+
+  .preenche {
+    position: absolute; inset: 0 auto 0 0; width: 0;
+    background: {{ c.baseline }};
+    animation-duration: {{ total_s }}s; animation-timing-function: ease-out;
+    animation-fill-mode: forwards;
+  }
+  .linha.marca .preenche { background: {{ c.acento }}; }
+
+  .conteudo {
+    position: relative; z-index: 2;
+    display: flex; align-items: center; justify-content: space-between;
+    width: 100%; padding: 0 30px;
+    opacity: 0;
+    animation-duration: {{ total_s }}s; animation-timing-function: ease;
+    animation-fill-mode: forwards;
+  }
+  .conteudo .nome {
+    font-size: 42px; font-weight: 500; letter-spacing: -.01em;
+    white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+    max-width: 560px;
+  }
+  .conteudo .val {
+    font-size: 46px; font-weight: {{ t.peso_titulo }};
+    font-variant-numeric: tabular-nums;
+  }
+  .linha.marca .conteudo .nome,
+  .linha.marca .conteudo .val { color: #fff; }
+
+  {% for l in linhas %}
+  @keyframes enche-{{ l.pos }} {
+    0%, {{ '%.3f'|format(l.p) }}% { width: 0; }
+    {{ '%.3f'|format(l.p_fim) }}%, 100% { width: {{ '%.2f'|format(l.largura_pct) }}%; }
+  }
+  @keyframes surge-{{ l.pos }} {
+    0%, {{ '%.3f'|format(l.p) }}% { opacity: 0; transform: translateX(-14px); }
+    {{ '%.3f'|format(l.p_fim) }}%, 100% { opacity: 1; transform: translateX(0); }
+  }
+  .linha-{{ l.pos }} .preenche { animation-name: enche-{{ l.pos }}; }
+  .linha-{{ l.pos }} .conteudo { animation-name: surge-{{ l.pos }}; }
+  {% endfor %}
+
+  /* legenda queimada ---------------------------------------------------
+     UMA faixa, nao duas. A frase de fecho e simplesmente a ULTIMA legenda:
+     ela entra no instante em que a narracao dela comeca, como todas as
+     outras. Manter um elemento separado para o fecho significaria dois
+     lugares para a mesma frase e duas chances de dessincronizar.
+
+     Cada legenda vive no intervalo REAL do WAV dela -- as porcentagens vem
+     de linha_do_tempo_falada(), medidas do arquivo de audio, nao estimadas.
+     ------------------------------------------------------------------- */
+  .faixa {
+    position: absolute; left: 80px; right: 80px;
+    top: {{ TOPO_FAIXA }}px; height: {{ ALT_FAIXA }}px;
+    display: flex; align-items: center;
+  }
+  .legenda {
+    position: absolute; left: 0; right: 0;
+    font-size: 44px; line-height: 1.26; font-weight: 600;
+    letter-spacing: -.01em;
+    color: {{ c.ink }};
+    opacity: 0;
+    animation-duration: {{ total_s }}s; animation-timing-function: ease;
+    animation-fill-mode: forwards;
+  }
+  .legenda.item { font-size: 50px; font-weight: {{ t.peso_titulo }}; }
+
+  {% for g in legendas %}
+  @keyframes leg-{{ g.i }} {
+    0%, {{ '%.3f'|format(g.p) }}% { opacity: 0; transform: translateY(10px); }
+    {{ '%.3f'|format(g.p_fim) }}% { opacity: 1; transform: translateY(0); }
+    {{ '%.3f'|format(g.p_sai) }}% { opacity: 1; transform: translateY(0); }
+    {{ '%.3f'|format(g.p_sai + 0.35) }}%, 100% { opacity: 0; transform: translateY(0); }
+  }
+  .legenda-{{ g.i }} { animation-name: leg-{{ g.i }}; }
+  {% endfor %}
+
+  /* A ULTIMA legenda nao sai: e o fecho, e fica na tela ate o corte. */
+  {% if legendas %}
+  @keyframes leg-{{ legendas[-1].i }} {
+    0%, {{ '%.3f'|format(legendas[-1].p) }}% { opacity: 0; transform: translateY(10px); }
+    {{ '%.3f'|format(legendas[-1].p_fim) }}%, 100% { opacity: 1; transform: translateY(0); }
+  }
+  {% endif %}
+
+  .rodape {
+    position: absolute; left: 80px; right: 80px; bottom: 52px;
+    display: flex; justify-content: space-between; align-items: flex-end;
+    font-size: 28px; color: {{ c.ink_muted }};
+  }
+</style>
+</head>
+<body>
+  <div class="barra-topo"></div>
+  <div class="palco">
+
+    <div class="cabeca">
+      <h1>{{ gancho }}</h1>
+      {% if gancho_sub %}<div class="sub">{{ gancho_sub }}</div>{% endif %}
+    </div>
+
+    <div class="regra"></div>
+
+    <div class="quadro">
+      {% for l in linhas %}
+      <div class="linha linha-{{ l.pos }}{% if l.e_marca %} marca{% endif %}">
+        <div class="pos">{{ l.pos }}</div>
+        <div class="corpo">
+          <div class="preenche"></div>
+          <div class="conteudo">
+            <span class="nome">{{ l.label }}</span>
+            <span class="val">{{ l.texto }}</span>
+          </div>
+        </div>
+      </div>
+      {% endfor %}
+    </div>
+
+    <div class="faixa">
+      {% for g in legendas %}
+      <div class="legenda legenda-{{ g.i }}{% if g.item %} item{% endif %}">{{ g.texto }}</div>
+      {% endfor %}
+    </div>
+
+    <div class="rodape">
+      <span>{{ marca.handle }}</span>
+      {% if selo_ia %}<span>{{ selo_ia }}</span>{% endif %}
+    </div>
+
+  </div>
+</body>
+</html>
