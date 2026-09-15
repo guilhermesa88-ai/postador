@@ -1,0 +1,85 @@
+{
+  "marca": "metro-de-bh",
+  "data": "2026-09-15",
+  "legenda": "18 das 22 capitais monitoradas subiram em agosto. Vitória liderou com 1,31%, seguida por Brasília (1,28%) e Aracaju (1,07%). BH ficou entre as 4 que caíram, com -0,08%. A média geral das capitais subiu 0,53% no mês.\n\nFonte: FipeZap — Índice de Venda Residencial, agosto de 2026.\n\n#metrodebh #preçoimovel #imoveisbh #mercadoimobiliario #fipezap #primeiroimovel",
+  "slides": [
+    {
+      "tipo": "capa",
+      "eyebrow": "Preço de venda — agosto 2026",
+      "titulo": "18 capitais subiram no mês",
+      "sub": "BH ficou entre as 4 em queda, com -0,08%"
+    },
+    {
+      "tipo": "grafico",
+      "eyebrow": "Variação mensal",
+      "titulo": "Vitória liderou com 1,31%",
+      "sub": "Brasília veio logo atrás, com 1,28%",
+      "unidade": "%",
+      "fonte": "FipeZap",
+      "dados": [
+        {
+          "label": "Vitória",
+          "valor": 1.31
+        },
+        {
+          "label": "Brasília",
+          "valor": 1.28
+        },
+        {
+          "label": "Aracaju",
+          "valor": 1.07
+        },
+        {
+          "label": "Recife",
+          "valor": 0.88
+        },
+        {
+          "label": "Goiânia",
+          "valor": 0.77
+        },
+        {
+          "label": "Rio de Janeiro",
+          "valor": 0.77
+        },
+        {
+          "label": "Média das capitais",
+          "valor": 0.53
+        },
+        {
+          "label": "Belo Horizonte",
+          "valor": -0.08
+        }
+      ]
+    },
+    {
+      "tipo": "lista",
+      "eyebrow": "As 5 maiores altas em agosto",
+      "titulo": "Vitória no topo",
+      "sub": "Rio de Janeiro empatou com Goiânia em 5º lugar",
+      "itens": [
+        "Vitória: 1,31%",
+        "Brasília: 1,28%",
+        "Aracaju: 1,07%",
+        "Recife: 0,88%",
+        "Goiânia e Rio de Janeiro: 0,77%"
+      ]
+    },
+    {
+      "tipo": "texto",
+      "eyebrow": "O contexto",
+      "titulo": "BH na contramão da maioria",
+      "corpo": "Das 22 capitais monitoradas, 18 subiram em agosto. A média geral foi de 0,53%.\n\nBH caiu 0,08% e ficou na 19ª posição. Outras 3 capitais também recuaram: Belém (-0,19%), Campo Grande (-0,19%) e Curitiba (-0,25%).\n\nNo acumulado de 12 meses, todas as 22 capitais estão em alta. BH subiu 2,92% no período, ficando na 20ª posição."
+    },
+    {
+      "tipo": "fechamento",
+      "eyebrow": "Metro de BH",
+      "titulo": "Dados do mercado imobiliário de BH",
+      "cta": "Acompanhe os próximos posts para mais análises",
+      "rodape_destaque": "Fonte: FipeZap — Índice de Venda Residencial, agosto de 2026"
+    }
+  ],
+  "periodo": "2026-08",
+  "hash_pdf": "31f85f8101e19d61",
+  "selo_ia": "Conteúdo produzido com apoio de IA",
+  "angulo": "quem-esta-subindo"
+}
