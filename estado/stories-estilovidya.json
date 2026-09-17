@@ -13,7 +13,7 @@
       "published_at": "2026-09-17T02:18:34.508894+00:00"
     },
     "EV-CAPI-001-20260917": {
-      "status": "creating",
+      "status": "published",
       "sha256": "924cb2428c92f7382b1cd53638a45c32f3fa263c7815f1015815b4cf923f5dff",
       "started_at": "2026-09-17T11:24:36.023592+00:00",
       "approved_by": "Guilherme",
@@ -39,7 +39,8 @@
           "media_id": "17991945822040997",
           "published_at": "2026-09-17T11:25:07.079457+00:00"
         }
-      ]
+      ],
+      "published_at": "2026-09-17T11:25:08.788498+00:00"
     }
   }
 }
