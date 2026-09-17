@@ -2,12 +2,13 @@
   "schema": 1,
   "items": {
     "EV-S001": {
-      "status": "creating",
+      "status": "processing",
       "sha256": "7ff989d530cce585bddd209928cf8cb773f0aeaa824568096d2142d107fd3596",
       "started_at": "2026-09-17T02:18:22.309041+00:00",
       "image_url": "https://raw.githubusercontent.com/guilhermesa88-ai/postador/912a9e061a292f306f00b2f10a5d6038659221fe/entrada-stories/estilovidya/EV-S001/arte.jpg",
       "approved_by": "Codex, sob autorizacao expressa de Guilherme para implementacao e piloto real",
-      "approved_at": "2026-09-17T02:11:08.569304+00:00"
+      "approved_at": "2026-09-17T02:11:08.569304+00:00",
+      "container_id": "17983722447077739"
     }
   }
 }
