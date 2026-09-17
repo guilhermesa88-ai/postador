@@ -74,6 +74,31 @@ def load_queue(root):
         start, end = date(item["publish_after"]), date(item["publish_before"])
         if end <= start:
             raise Blocked(f"{sid}: janela de publicacao invalida.")
+        if "images" in item:
+            frames = item["images"]
+            if not isinstance(frames, list) or not 1 <= len(frames) <= 10:
+                raise Blocked("Sequencia precisa ter de 1 a 10 imagens.")
+            checked = []
+            for frame in frames:
+                name = frame.get("file", "")
+                if not re.fullmatch(r"[a-zA-Z0-9_-]+\.jpg", name):
+                    raise Blocked("Nome de imagem invalido.")
+                media = manifest.parent / name
+                if media.is_symlink() or manifest.is_symlink() or manifest.parent.is_symlink():
+                    raise Blocked("Links simbolicos nao sao aceitos na fila.")
+                data = media.read_bytes()
+                validate_image(data)
+                sha = hashlib.sha256(data).hexdigest()
+                if sha != frame.get("sha256"):
+                    raise Blocked(f"{sid}: imagem mudou depois da aprovacao.")
+                checked.append({"path": media.relative_to(root).as_posix(), "sha256": sha})
+            if len({f["sha256"] for f in checked}) != len(checked):
+                raise Blocked("Imagem repetida dentro da sequencia.")
+            sequence_hash = hashlib.sha256("\n".join(f["sha256"] for f in checked).encode()).hexdigest()
+            if sequence_hash != item.get("sha256"):
+                raise Blocked("Ordem ou conteudo da sequencia mudou depois da aprovacao.")
+            result.append({**item, "frames": checked})
+            continue
         media = manifest.parent / "arte.jpg"
         if media.is_symlink() or manifest.is_symlink() or manifest.parent.is_symlink():
             raise Blocked("Links simbolicos nao sao aceitos na fila.")
@@ -91,13 +116,16 @@ def select(items, state, now, daily_limit):
     if any(v["status"] != "published" for v in entries.values()):
         raise Blocked("Tentativa pendente/incerta: conciliar recibo antes de continuar.")
     today = now.astimezone(BR).date()
-    count = sum(date(v["published_at"]).astimezone(BR).date() == today
+    count = sum(date(v.get("started_at", v["published_at"])).astimezone(BR).date() == today
                 for v in entries.values())
     if count >= daily_limit:
         return None
     hashes = {v["sha256"] for v in entries.values()}
+    for receipt in entries.values():
+        hashes.update(f["sha256"] for f in receipt.get("frames", []))
     for item in items:
-        if item["id"] in entries or item["sha256"] in hashes:
+        frame_hashes = {f["sha256"] for f in item.get("frames", [])}
+        if item["id"] in entries or item["sha256"] in hashes or frame_hashes & hashes:
             continue
         if date(item["publish_after"]) <= now < date(item["publish_before"]):
             return item
@@ -135,7 +163,7 @@ class Meta:
             raise Blocked("Meta retornou erro; verificar acesso sem repetir POST.")
         return result
 
-    def check(self):
+    def check(self, required=1):
         info = self.request("GET", self.account_id, fields="id,username,account_type")
         if str(info.get("username", "")).lower() != "estilovidya":
             raise Blocked("Conta diferente de @estilovidya.")
@@ -147,7 +175,9 @@ class Meta:
             row = quota["data"][0]
             usage = row["quota_usage"]
             limit = row["config"]["quota_total"]
-            if type(usage) is not int or type(limit) is not int or not 0 <= usage < limit - 5:
+            if type(required) is not int or not 1 <= required <= 10:
+                raise ValueError()
+            if type(usage) is not int or type(limit) is not int or not 0 <= usage <= limit - 5 - required:
                 raise ValueError()
         except (KeyError, IndexError, TypeError, ValueError):
             raise Blocked("Cota indisponivel ou sem margem para publicar.") from None
@@ -262,6 +292,39 @@ def publish_one(item, state, api, save, url, now):
     return receipt
 
 
+def publish_sequence(item, state, api, save, urls, now):
+    """Uma unidade diaria, recibo por imagem; falha parcial exige conciliacao."""
+    frames = item["frames"]
+    if len(urls) != len(frames) or not frames:
+        raise Blocked("URLs diferentes da sequencia aprovada.")
+    if item["id"] in state["items"]:
+        raise Blocked("Sequencia ja iniciada; conferir recibo.")
+    receipt = {"status": "creating", "sha256": item["sha256"],
+               "started_at": now.isoformat(), "approved_by": item["approved_by"],
+               "approved_at": item["approved_at"], "frames": []}
+    state["items"][item["id"]] = receipt
+    save(state)
+    for index, (frame, url) in enumerate(zip(frames, urls), 1):
+        row = {"index": index, "status": "creating", "sha256": frame["sha256"],
+               "image_url": url, "started_at": stamp()}
+        receipt["frames"].append(row)
+        save(state)
+        row["container_id"] = api.create(url)
+        row["status"] = "processing"
+        save(state)
+        api.ready(row["container_id"])
+        row["status"] = "publishing"
+        save(state)
+        row["media_id"] = api.publish(row["container_id"])
+        row["status"] = "published"
+        row["published_at"] = stamp()
+        save(state)
+    receipt["status"] = "published"
+    receipt["published_at"] = stamp()
+    save(state)
+    return receipt
+
+
 def main():
     parser = argparse.ArgumentParser()
     parser.add_argument("--publish", action="store_true")
@@ -271,8 +334,8 @@ def main():
     if config.get("expected_username") != "estilovidya":
         raise Blocked("Configuracao nao pertence a EstiloVidya.")
     limit = config.get("daily_limit")
-    if type(limit) is not int or not 1 <= limit <= 3:
-        raise Blocked("Limite diario deve estar entre 1 e 3.")
+    if type(limit) is not int or not 1 <= limit <= 8:
+        raise Blocked("Limite diario deve estar entre 1 e 8 sequencias.")
     state = read_json(root / STATE)
     if state.get("schema") != 1 or not isinstance(state.get("items"), dict):
         raise Blocked("Estado invalido.")
@@ -282,6 +345,8 @@ def main():
     if not args.publish:
         print(json.dumps({"mode": "dry-run", "approved": len(items),
                           "next_id": item["id"] if item else None,
+                          "next_images": len(item.get("frames", [item])) if item else 0,
+                          "daily_sequence_limit": limit,
                           "enabled": config.get("enabled") is True}))
         return
     if config.get("enabled") is not True:
@@ -293,13 +358,22 @@ def main():
     journal = Journal(root)
     journal.check()
     revision = journal.git("rev-parse", "HEAD")
-    url = media_url(root, item, revision)
-    check_remote(url, item["sha256"])
+    frames = item.get("frames", [item])
+    urls = [media_url(root, frame, revision) for frame in frames]
+    # Valida todas as imagens antes do primeiro POST: evita meia sequencia
+    # quando uma das imagens ainda nao esta disponivel publicamente.
+    for frame, url in zip(frames, urls):
+        check_remote(url, frame["sha256"])
     api = Meta(os.environ.get("IG_USER_ID_ESTILOVIDYA", ""),
                os.environ.get("IG_ACCESS_TOKEN_ESTILOVIDYA", ""), config["api_version"])
-    api.check()
-    receipt = publish_one(item, state, api, journal.save, url, now)
-    print(json.dumps({"published": item["id"], "media_id": receipt["media_id"]}))
+    api.check(required=len(frames))
+    if "frames" in item:
+        receipt = publish_sequence(item, state, api, journal.save, urls, now)
+        media_ids = [f["media_id"] for f in receipt["frames"]]
+    else:
+        receipt = publish_one(item, state, api, journal.save, urls[0], now)
+        media_ids = [receipt["media_id"]]
+    print(json.dumps({"published": item["id"], "media_ids": media_ids}))
 
 
 if __name__ == "__main__":
