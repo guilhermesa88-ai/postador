@@ -198,7 +198,15 @@
       "started_at": "2026-09-17T23:20:37.609990+00:00",
       "approved_by": "Guilherme",
       "approved_at": "2026-09-17T11:51:14.941675+00:00",
-      "frames": []
+      "frames": [
+        {
+          "index": 1,
+          "status": "creating",
+          "sha256": "e856746f46ac9e4ca278553d584c74590b471598a5394e15b8648cc1dfe5f73c",
+          "image_url": "https://raw.githubusercontent.com/guilhermesa88-ai/postador/7d314381c59278827f169aaaf6ac315a3c6c9e26/entrada-stories/estilovidya/EV-CAPI-007-20260917/01.jpg",
+          "started_at": "2026-09-17T23:20:41.359850+00:00"
+        }
+      ]
     }
   }
 }
