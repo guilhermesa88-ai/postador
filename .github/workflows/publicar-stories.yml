@@ -1,0 +1,51 @@
+name: Stories EstiloVidya
+on:
+  schedule:
+    # 09:15, 14:15 e 19:15 Brasilia. Actions pode atrasar.
+    - cron: '15 12,17,22 * * *'
+  workflow_dispatch:
+    inputs:
+      publish:
+        description: 'Publicar um Story aprovado (config enabled precisa ser true)'
+        type: boolean
+        default: false
+permissions:
+  contents: write
+concurrency:
+  group: stories-estilovidya
+  cancel-in-progress: false
+jobs:
+  stories:
+    if: github.repository == 'guilhermesa88-ai/postador' && github.ref == 'refs/heads/main'
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: main
+          fetch-depth: 0
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - run: pip install -r requirements-stories.txt
+      - name: Testes
+        run: python -m unittest discover -s tests_stories -v
+      - name: Validar fila sem publicar
+        run: python stories.py
+      - name: Configurar recibos
+        run: |
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+      - name: Publicar no maximo um Story
+        if: github.event_name == 'schedule' || inputs.publish == true
+        env:
+          IG_USER_ID_ESTILOVIDYA: ${{ secrets.IG_USER_ID_ESTILOVIDYA }}
+          IG_ACCESS_TOKEN_ESTILOVIDYA: ${{ secrets.IG_ACCESS_TOKEN_ESTILOVIDYA }}
+        run: python stories.py --publish
+      - name: Guardar recibo mesmo em caso de falha
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: recibo-stories-${{ github.run_id }}-${{ github.run_attempt }}
+          path: estado/stories-estilovidya.json
+          retention-days: 30
