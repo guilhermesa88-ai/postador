@@ -1,12 +1,13 @@
 name: Stories EstiloVidya
 on:
   schedule:
-    # 09:15, 14:15 e 19:15 Brasilia. Actions pode atrasar.
-    - cron: '15 12,17,22 * * *'
+    # 08:15, 10:15, 12:15, 14:15, 16:15, 18:15, 20:15, 22:15 Brasilia.
+    # 01:15 UTC pertence ao dia anterior em Brasilia. Actions pode atrasar.
+    - cron: '15 1,11,13,15,17,19,21,23 * * *'
   workflow_dispatch:
     inputs:
       publish:
-        description: 'Publicar um Story aprovado (config enabled precisa ser true)'
+        description: 'Publicar uma sequencia aprovada (config enabled precisa ser true)'
         type: boolean
         default: false
 permissions:
@@ -18,7 +19,7 @@ jobs:
   stories:
     if: github.repository == 'guilhermesa88-ai/postador' && github.ref == 'refs/heads/main'
     runs-on: ubuntu-latest
-    timeout-minutes: 15
+    timeout-minutes: 75
     steps:
       - uses: actions/checkout@v4
         with:
@@ -36,7 +37,7 @@ jobs:
         run: |
           git config user.name 'github-actions[bot]'
           git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
-      - name: Publicar no maximo um Story
+      - name: Publicar no maximo uma sequencia
         if: github.event_name == 'schedule' || inputs.publish == true
         env:
           IG_USER_ID_ESTILOVIDYA: ${{ secrets.IG_USER_ID_ESTILOVIDYA }}
