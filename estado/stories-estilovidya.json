@@ -11,6 +11,14 @@
       "container_id": "17983722447077739",
       "media_id": "17950140543257236",
       "published_at": "2026-09-17T02:18:34.508894+00:00"
+    },
+    "EV-CAPI-001-20260917": {
+      "status": "creating",
+      "sha256": "924cb2428c92f7382b1cd53638a45c32f3fa263c7815f1015815b4cf923f5dff",
+      "started_at": "2026-09-17T11:24:36.023592+00:00",
+      "approved_by": "Guilherme",
+      "approved_at": "2026-09-17T02:46:57.620479+00:00",
+      "frames": []
     }
   }
 }
