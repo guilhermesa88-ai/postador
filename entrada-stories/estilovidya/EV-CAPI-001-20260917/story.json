@@ -1,0 +1,20 @@
+{
+  "id": "EV-CAPI-001-20260917",
+  "approved": true,
+  "approved_by": "Guilherme",
+  "approved_at": "2026-09-17T02:46:57.620479+00:00",
+  "approval_source": "Aprovado. Esse pode ser o primeiro storys do dia de amanha. Esse ja pode colocar na sequencia do postador.",
+  "publish_after": "2026-09-17T08:15:00-03:00",
+  "publish_before": "2026-09-17T10:15:00-03:00",
+  "sha256": "924cb2428c92f7382b1cd53638a45c32f3fa263c7815f1015815b4cf923f5dff",
+  "images": [
+    {
+      "file": "01.jpg",
+      "sha256": "d1af3f167801d2ca780facc012288f59ce7702fec98ec893486e658a05b6fbca"
+    },
+    {
+      "file": "02.jpg",
+      "sha256": "213d9ddb6acb6988c616a069fc268092fb44747c9de1199fab02542680b91a5e"
+    }
+  ]
+}
