@@ -1,6 +1,6 @@
 {
   "enabled": true,
   "expected_username": "estilovidya",
-  "daily_limit": 3,
+  "daily_limit": 8,
   "api_version": "v23.0"
 }
