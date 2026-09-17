@@ -1,0 +1,20 @@
+{
+  "id": "EV-CAPI-005-20260917",
+  "approved": true,
+  "approved_by": "Guilherme",
+  "approved_at": "2026-09-17T11:51:14.898232+00:00",
+  "approval_source": "Aprovados. Coloque na ordem certa e mande para serem publicados amanha. Data esclarecida: coloque na fila para os proximos horarios disponiveis.",
+  "publish_after": "2026-09-17T16:15:00-03:00",
+  "publish_before": "2026-09-17T18:15:00-03:00",
+  "sha256": "83d7854fdf975cefdba4890ac695a5b12fcd23f45cb5e6350a21aa6a5d167984",
+  "images": [
+    {
+      "file": "01.jpg",
+      "sha256": "2be5cf50ae3a41fad4bff7536858f8ba7ac904058514ab88be0877075ff95399"
+    },
+    {
+      "file": "02.jpg",
+      "sha256": "b9953bdb5521fcff6bc6e0071b094d7610e58d435fcbbdb3dc6dcf474f37c006"
+    }
+  ]
+}
