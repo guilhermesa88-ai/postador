@@ -161,6 +161,14 @@
         }
       ],
       "published_at": "2026-09-17T19:23:39.856631+00:00"
+    },
+    "EV-CAPI-006-20260917": {
+      "status": "creating",
+      "sha256": "bc63fa877a15110308b8a4b4cc82ceecc53f642a989896fd959250fd15d6baab",
+      "started_at": "2026-09-17T21:24:00.875627+00:00",
+      "approved_by": "Guilherme",
+      "approved_at": "2026-09-17T11:51:14.924977+00:00",
+      "frames": []
     }
   }
 }
