@@ -1,0 +1,9 @@
+{
+  "id": "EV-S001",
+  "approved": true,
+  "approved_by": "Codex, sob autorizacao expressa de Guilherme para implementacao e piloto real",
+  "approved_at": "2026-09-17T02:11:08.569304+00:00",
+  "publish_after": "2026-09-17T02:11:08.569304+00:00",
+  "publish_before": "2026-09-17T08:11:08.569304+00:00",
+  "sha256": "7ff989d530cce585bddd209928cf8cb773f0aeaa824568096d2142d107fd3596"
+}
