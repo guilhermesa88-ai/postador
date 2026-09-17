@@ -151,11 +151,13 @@
         },
         {
           "index": 2,
-          "status": "publishing",
+          "status": "published",
           "sha256": "b9953bdb5521fcff6bc6e0071b094d7610e58d435fcbbdb3dc6dcf474f37c006",
           "image_url": "https://raw.githubusercontent.com/guilhermesa88-ai/postador/b65a16580f9bb54ba8d0735f37f1a22b79c1ab56/entrada-stories/estilovidya/EV-CAPI-005-20260917/02.jpg",
           "started_at": "2026-09-17T19:23:25.965822+00:00",
-          "container_id": "17983836315077739"
+          "container_id": "17983836315077739",
+          "media_id": "18134061790633995",
+          "published_at": "2026-09-17T19:23:38.109621+00:00"
         }
       ]
     }
