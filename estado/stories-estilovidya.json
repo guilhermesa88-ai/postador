@@ -328,6 +328,13 @@
           "container_id": "17983958901077739",
           "media_id": "18090163373360870",
           "published_at": "2026-09-18T15:24:38.825288+00:00"
+        },
+        {
+          "index": 2,
+          "status": "creating",
+          "sha256": "6d27ef1ef9eba82ec37ff5515b27e867b93ed4192c8b04bbe60548e8466b8cb6",
+          "image_url": "https://raw.githubusercontent.com/guilhermesa88-ai/postador/0b666c040c174c0952021ec23fc7dc1ea7249afb/entrada-stories/estilovidya/EV-CAPI-ESS-003-20260918/02.jpg",
+          "started_at": "2026-09-18T15:24:40.343026+00:00"
         }
       ]
     }
