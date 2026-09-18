@@ -1,0 +1,21 @@
+{
+  "id": "EV-CAPI-ESS-004-20260918",
+  "approved": true,
+  "approved_by": "Guilherme",
+  "approved_at": "2026-09-18T00:59:38.246640+00:00",
+  "approval_source": "Aprovado. Pode colocar em ordem e agendar as postagens para amanhã",
+  "title": "Receita de amizade",
+  "publish_after": "2026-09-18T14:15:00-03:00",
+  "publish_before": "2026-09-18T16:15:00-03:00",
+  "sha256": "8d525114955aee47477ba03e154f8eddfd0dbf8f9ef3ff22c8dc789cde7b18e9",
+  "images": [
+    {
+      "file": "01.jpg",
+      "sha256": "7d4502e1b59bc291e08c92d9b4c39746c0babb5bddbb20f18745f8ef97f0afa9"
+    },
+    {
+      "file": "02.jpg",
+      "sha256": "354d4889cecfa10d2ff0fe96b7a937cb4d9424d4cbc467f3ad3d402be0b320bc"
+    }
+  ]
+}
