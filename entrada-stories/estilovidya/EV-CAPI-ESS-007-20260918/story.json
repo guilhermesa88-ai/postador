@@ -1,0 +1,21 @@
+{
+  "id": "EV-CAPI-ESS-007-20260918",
+  "approved": true,
+  "approved_by": "Guilherme",
+  "approved_at": "2026-09-18T00:59:39.443013+00:00",
+  "approval_source": "Aprovado. Pode colocar em ordem e agendar as postagens para amanhã",
+  "title": "Look do encontro",
+  "publish_after": "2026-09-18T20:15:00-03:00",
+  "publish_before": "2026-09-18T22:15:00-03:00",
+  "sha256": "5c2bff419d33907cac7443bab66df2277a61f750f08427e34bd85d338ec3146c",
+  "images": [
+    {
+      "file": "01.jpg",
+      "sha256": "2d9fc71f4a0cf88552336438cf6da3faba0b15207f67e95322957e9008ba1a55"
+    },
+    {
+      "file": "02.jpg",
+      "sha256": "414ac032225835c339baf51ad2458c3d12292906c0dff8340eb34d7677130fd6"
+    }
+  ]
+}
