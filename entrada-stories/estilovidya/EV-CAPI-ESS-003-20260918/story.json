@@ -1,0 +1,21 @@
+{
+  "id": "EV-CAPI-ESS-003-20260918",
+  "approved": true,
+  "approved_by": "Guilherme",
+  "approved_at": "2026-09-18T00:59:37.698108+00:00",
+  "approval_source": "Aprovado. Pode colocar em ordem e agendar as postagens para amanhã",
+  "title": "Visita importante",
+  "publish_after": "2026-09-18T12:15:00-03:00",
+  "publish_before": "2026-09-18T14:15:00-03:00",
+  "sha256": "8793901159cf2c0be633b18ea83df74d9d0381b3e86bd81f42bdd1c9cbf34cd2",
+  "images": [
+    {
+      "file": "01.jpg",
+      "sha256": "de03153c436f6dc486d01bd1bacdb99536e28c5e73b958a49eb784c282bd848f"
+    },
+    {
+      "file": "02.jpg",
+      "sha256": "6d27ef1ef9eba82ec37ff5515b27e867b93ed4192c8b04bbe60548e8466b8cb6"
+    }
+  ]
+}
