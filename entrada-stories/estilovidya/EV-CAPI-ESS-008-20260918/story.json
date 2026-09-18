@@ -1,0 +1,21 @@
+{
+  "id": "EV-CAPI-ESS-008-20260918",
+  "approved": true,
+  "approved_by": "Guilherme",
+  "approved_at": "2026-09-18T00:59:39.855096+00:00",
+  "approval_source": "Aprovado. Pode colocar em ordem e agendar as postagens para amanhã",
+  "title": "Fim do expediente",
+  "publish_after": "2026-09-18T22:15:00-03:00",
+  "publish_before": "2026-09-18T23:59:59-03:00",
+  "sha256": "d4fd9eface116fffb2b20772d2e7a8efe5c4afaf3d9b38c4d4af27e214705680",
+  "images": [
+    {
+      "file": "01.jpg",
+      "sha256": "6da86e04a77834451e135d0d9cccc8accca1fceed402c3c1efbefbc82b017ff2"
+    },
+    {
+      "file": "02.jpg",
+      "sha256": "ff76d2f984e2829adf2a5bc20b1469a8aba3bbfe7eb8f82c3a7fd53322b83d73"
+    }
+  ]
+}
