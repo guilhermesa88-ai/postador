@@ -1,0 +1,21 @@
+{
+  "id": "EV-CAPI-ESS-002-20260918",
+  "approved": true,
+  "approved_by": "Guilherme",
+  "approved_at": "2026-09-18T00:59:37.016930+00:00",
+  "approval_source": "Aprovado. Pode colocar em ordem e agendar as postagens para amanhã",
+  "title": "Modo avião",
+  "publish_after": "2026-09-18T10:15:00-03:00",
+  "publish_before": "2026-09-18T12:15:00-03:00",
+  "sha256": "76dbf2a1ea4382910c127d31969a517195888f0e7c2787c9478359786ab79cb7",
+  "images": [
+    {
+      "file": "01.jpg",
+      "sha256": "0205602b4d50f801707987dad95a5dd79a1ad8691b4b6a884d565c1d7154bb30"
+    },
+    {
+      "file": "02.jpg",
+      "sha256": "bc73313448a4f5bd23db6cd42347014f700c8f3b6f5e471dc9cb7fdc779f8391"
+    }
+  ]
+}
