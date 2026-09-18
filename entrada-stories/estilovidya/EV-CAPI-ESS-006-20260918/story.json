@@ -1,0 +1,21 @@
+{
+  "id": "EV-CAPI-ESS-006-20260918",
+  "approved": true,
+  "approved_by": "Guilherme",
+  "approved_at": "2026-09-18T00:59:39.057522+00:00",
+  "approval_source": "Aprovado. Pode colocar em ordem e agendar as postagens para amanhã",
+  "title": "Menos bagagem",
+  "publish_after": "2026-09-18T18:15:00-03:00",
+  "publish_before": "2026-09-18T20:15:00-03:00",
+  "sha256": "75df9052aa7bb2a66bc1c93913c127c5cf6a7404520249ee7a999ec1532d8665",
+  "images": [
+    {
+      "file": "01.jpg",
+      "sha256": "b92933a3a1877c401149e9a5524a71dc92024d6e9bcf58510f7c86751f087b81"
+    },
+    {
+      "file": "02.jpg",
+      "sha256": "e4f3a29867d96adce352b2fc714d05192d8d97aae82e888c4b0c0ce41ef4c700"
+    }
+  ]
+}
