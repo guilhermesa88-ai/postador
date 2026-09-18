@@ -1,0 +1,21 @@
+{
+  "id": "EV-CAPI-ESS-001-20260918",
+  "approved": true,
+  "approved_by": "Guilherme",
+  "approved_at": "2026-09-18T00:59:36.624966+00:00",
+  "approval_source": "Aprovado. Pode colocar em ordem e agendar as postagens para amanhã",
+  "title": "Prioridade do dia",
+  "publish_after": "2026-09-18T08:15:00-03:00",
+  "publish_before": "2026-09-18T10:15:00-03:00",
+  "sha256": "86dc80c9e0310e21ef0f39a65dc169a19782872dc80f6f826d25b861102aeaf4",
+  "images": [
+    {
+      "file": "01.jpg",
+      "sha256": "3a66f39dbda32724509fdb7da4866b9fd42243729a26ccd3d6db22ee3d2de4b7"
+    },
+    {
+      "file": "02.jpg",
+      "sha256": "a06364e029abc26478e3263a9e02e7aafd657ffbeda5f7801b0095916eadceec"
+    }
+  ]
+}
