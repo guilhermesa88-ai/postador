@@ -1,0 +1,21 @@
+{
+  "id": "EV-CAPI-ESS-005-20260918",
+  "approved": true,
+  "approved_by": "Guilherme",
+  "approved_at": "2026-09-18T00:59:38.695897+00:00",
+  "approval_source": "Aprovado. Pode colocar em ordem e agendar as postagens para amanhã",
+  "title": "Pequena vitória",
+  "publish_after": "2026-09-18T16:15:00-03:00",
+  "publish_before": "2026-09-18T18:15:00-03:00",
+  "sha256": "4370b8f525c858b25733d9b3e9f96f3976c3508ced78ce9b1d5392b92ea5b1f1",
+  "images": [
+    {
+      "file": "01.jpg",
+      "sha256": "123c8e5e2781a64a8b9250f8f93840d3bd22d4a11bb62963577c02045a1b87c2"
+    },
+    {
+      "file": "02.jpg",
+      "sha256": "9842af480965603e2b2d63a7fd2c5e3848f6009be2b12d08510500f0e2c7bb89"
+    }
+  ]
+}
