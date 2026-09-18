@@ -403,7 +403,7 @@
       "published_at": "2026-09-18T19:23:06.125263+00:00"
     },
     "EV-CAPI-ESS-006-20260918": {
-      "status": "creating",
+      "status": "published",
       "sha256": "75df9052aa7bb2a66bc1c93913c127c5cf6a7404520249ee7a999ec1532d8665",
       "started_at": "2026-09-18T21:23:28.171498+00:00",
       "approved_by": "Guilherme",
@@ -429,7 +429,8 @@
           "media_id": "17909314398537393",
           "published_at": "2026-09-18T21:24:00.858789+00:00"
         }
-      ]
+      ],
+      "published_at": "2026-09-18T21:24:02.513496+00:00"
     }
   }
 }
