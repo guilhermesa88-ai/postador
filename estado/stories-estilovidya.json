@@ -261,7 +261,7 @@
       "frames": [
         {
           "index": 1,
-          "status": "processing",
+          "status": "publishing",
           "sha256": "3a66f39dbda32724509fdb7da4866b9fd42243729a26ccd3d6db22ee3d2de4b7",
           "image_url": "https://raw.githubusercontent.com/guilhermesa88-ai/postador/f0325f37c0dc6013757b6191af2d349d296984b4/entrada-stories/estilovidya/EV-CAPI-ESS-001-20260918/01.jpg",
           "started_at": "2026-09-18T11:23:44.007717+00:00",
