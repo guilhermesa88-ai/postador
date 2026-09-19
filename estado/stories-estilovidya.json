@@ -461,6 +461,14 @@
         }
       ],
       "published_at": "2026-09-18T23:23:42.801609+00:00"
+    },
+    "EV-CAPI-ESS-008-20260918": {
+      "status": "creating",
+      "sha256": "d4fd9eface116fffb2b20772d2e7a8efe5c4afaf3d9b38c4d4af27e214705680",
+      "started_at": "2026-09-19T01:23:36.114913+00:00",
+      "approved_by": "Guilherme",
+      "approved_at": "2026-09-18T00:59:39.855096+00:00",
+      "frames": []
     }
   }
 }
