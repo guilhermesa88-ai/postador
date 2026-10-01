@@ -1,0 +1,88 @@
+{
+  "marca": "metro-de-bh",
+  "data": "2026-10-01",
+  "legenda": "BH subiu 0,18% em setembro — menos da metade da média nacional de 0,58%.\n\nA capital ficou na 19ª posição entre as 22 capitais monitoradas. No topo do ranking, Fortaleza liderou com alta de 1,67%, seguida por Vitória (1,63%) e Recife (1,49%). Na outra ponta, Campo Grande teve a maior queda: -1,55%.\n\nDas 22 capitais, 19 subiram e 3 caíram no mês.\n\nA distância entre BH e a média mostra como o mercado local reagiu de forma bem mais contida que o conjunto das capitais brasileiras.\n\nFonte: FipeZap — Índice de Venda Residencial, set/2026\n\n#MetroDeBH #MercadoImobiliario #BeloHorizonte #FipeZap #PrecoImoveis #DadosImobiliarios",
+  "slides": [
+    {
+      "tipo": "capa",
+      "eyebrow": "FipeZap • Setembro 2026",
+      "titulo": "BH subiu metade da média nacional no mês",
+      "sub": "A capital ficou em 19º lugar entre 22 capitais, com alta de 0,18% — enquanto a média foi 0,58%"
+    },
+    {
+      "tipo": "grafico",
+      "eyebrow": "Ranking mensal",
+      "titulo": "BH ficou na 19ª posição em setembro",
+      "sub": "Variação mensal do preço de venda nas 22 capitais",
+      "unidade": "%",
+      "fonte": "FipeZap",
+      "dados": [
+        {
+          "label": "Fortaleza",
+          "valor": 1.67
+        },
+        {
+          "label": "Vitória",
+          "valor": 1.63
+        },
+        {
+          "label": "Recife",
+          "valor": 1.49
+        },
+        {
+          "label": "Média nacional",
+          "valor": 0.58
+        },
+        {
+          "label": "Curitiba",
+          "valor": 0.29
+        },
+        {
+          "label": "Belo Horizonte",
+          "valor": 0.18
+        },
+        {
+          "label": "Belém",
+          "valor": -0.14
+        },
+        {
+          "label": "Manaus",
+          "valor": -0.31
+        },
+        {
+          "label": "Campo Grande",
+          "valor": -1.55
+        }
+      ]
+    },
+    {
+      "tipo": "lista",
+      "eyebrow": "Contexto",
+      "titulo": "BH e a média nacional em setembro",
+      "itens": [
+        "BH subiu 0,18% — a variação mais baixa entre as capitais em alta",
+        "A média nacional foi 0,58%, e BH ficou 0,4 ponto abaixo",
+        "19 capitais subiram, 3 caíram (Belém, Manaus e Campo Grande)",
+        "BH ficou 4 posições acima das capitais em queda",
+        "Fortaleza liderou com 1,67%, enquanto BH teve 0,18%"
+      ]
+    },
+    {
+      "tipo": "texto",
+      "eyebrow": "Leitura",
+      "titulo": "A distância para a média mostra mercados distintos",
+      "corpo": "BH subiu no mês, mas com intensidade bem menor que o conjunto das capitais.\n\nEnquanto a média nacional foi 0,58%, BH ficou em 0,18% — uma diferença de 0,4 ponto percentual.\n\nO ranking coloca BH na 19ª posição, à frente apenas de Curitiba (0,29%) e das três capitais que caíram.\n\nNo topo, Fortaleza (1,67%), Vitória (1,63%) e Recife (1,49%) puxaram a média para cima. Na base, Campo Grande teve a maior queda: -1,55%."
+    },
+    {
+      "tipo": "fechamento",
+      "eyebrow": "Metro de BH",
+      "titulo": "Dados do mercado imobiliário de Belo Horizonte",
+      "corpo": "Acompanhe os números do preço de venda e aluguel na capital e região metropolitana.\n\nTodo post traz a fonte e compara BH com as outras capitais.",
+      "cta": "Siga @metro_de_bh para receber os próximos dados"
+    }
+  ],
+  "periodo": "2026-09",
+  "hash_pdf": "e328e33680bc2f4d",
+  "selo_ia": "Conteúdo produzido com apoio de IA",
+  "angulo": "panorama-do-mes"
+}
