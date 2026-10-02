@@ -1,0 +1,64 @@
+{
+  "marca": "metro-de-bh",
+  "data": "2026-10-02",
+  "legenda": "Em 12 meses, o preço do m² em BH subiu 1,97% — mas a inflação foi de 4,45%. Na prática, o valor real caiu. BH ficou em 19º lugar entre as 22 capitais no acumulado de 12 meses. A média geral subiu 5,51%, acima do IPCA.\n\nQuando o preço sobe menos que a inflação, o poder de compra de quem juntou dinheiro aumenta — mas quem já tem imóvel viu o patrimônio perder valor real.\n\nDados do FipeZap de setembro de 2026.\n\n#BeloHorizonte #MercadoImobiliario #PrecoImovel #IPCA #FipeZap #BH",
+  "slides": [
+    {
+      "tipo": "capa",
+      "eyebrow": "Preço vs. inflação",
+      "titulo": "BH subiu 1,97% em 12 meses — o IPCA foi de 4,45%",
+      "sub": "O preço nominal subiu, mas o valor real caiu. Quem guardou dinheiro ganhou poder de compra.",
+      "fonte": "FipeZap set/2026"
+    },
+    {
+      "tipo": "grafico",
+      "eyebrow": "Comparação 12 meses",
+      "titulo": "BH ficou abaixo da inflação e da média",
+      "unidade": "%",
+      "fonte": "FipeZap e IBGE",
+      "dados": [
+        {
+          "label": "BH",
+          "valor": 1.97
+        },
+        {
+          "label": "IPCA",
+          "valor": 4.45
+        },
+        {
+          "label": "Média capitais",
+          "valor": 5.51
+        }
+      ]
+    },
+    {
+      "tipo": "lista",
+      "eyebrow": "O que isso significa",
+      "titulo": "Quando o preço sobe menos que a inflação",
+      "itens": [
+        "O preço nominal subiu 1,97%, mas o IPCA foi de 4,45% no mesmo período",
+        "Na prática, o valor real do m² caiu: um imóvel que custava R$ 100 mil vale menos em poder de compra hoje",
+        "Quem juntou dinheiro nesse período ganhou: a poupança rendeu mais que o preço do imóvel",
+        "A média das capitais subiu 5,51%, acima da inflação — BH foi na contramão"
+      ]
+    },
+    {
+      "tipo": "texto",
+      "eyebrow": "Contexto",
+      "titulo": "BH registrou a 4ª menor alta entre as capitais",
+      "corpo": "Das 22 capitais monitoradas, BH ficou em 19º lugar no acumulado de 12 meses. Só Campo Grande (1,0%), Curitiba (1,86%) e Porto Alegre (0,85%) subiram menos.\n\nVitória liderou com 11,93%, seguida por Manaus (10,54%) e Salvador (10,38%). A média geral foi de 5,51% — todas acima do IPCA de 4,45%, exceto as quatro capitais citadas.",
+      "fonte": "FipeZap set/2026"
+    },
+    {
+      "tipo": "fechamento",
+      "eyebrow": "Metro de BH",
+      "titulo": "Dados do mercado imobiliário de Belo Horizonte",
+      "cta": "Acompanhe para receber os próximos números",
+      "rodape_destaque": "Fonte: FipeZap — Índice de Venda Residencial, set/2026"
+    }
+  ],
+  "periodo": "2026-09",
+  "hash_pdf": "e328e33680bc2f4d",
+  "selo_ia": "Conteúdo produzido com apoio de IA",
+  "angulo": "contra-a-inflacao"
+}
