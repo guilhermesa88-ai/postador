@@ -1,377 +1,377 @@
 {
   "fonte": "FipeZap — Índice de Venda Residencial",
-  "fonte_url": "https://downloads.fipe.org.br/indices/fipezap/fipezap-202609-residencial-venda.pdf",
+  "fonte_url": "https://downloads.fipe.org.br/indices/fipezap/fipezap-202608-residencial-venda.pdf",
   "descricao": "Variação percentual do preço de venda de imóveis residenciais nas 22 capitais monitoradas, em três horizontes",
-  "periodo": "2026-09",
-  "extraido_em": "2026-10-04T14:13:58.395647+00:00",
-  "hash_pdf": "e328e33680bc2f4d",
+  "periodo": "2026-08",
+  "extraido_em": "2026-10-04T21:20:40.651469+00:00",
+  "hash_pdf": "31f85f8101e19d61",
   "horizontes": {
     "mensal": {
-      "indice_geral_pct": 0.58,
+      "indice_geral_pct": 0.53,
       "capitais": [
         {
-          "cidade": "Fortaleza",
-          "variacao_pct": 1.67
-        },
-        {
           "cidade": "Vitória",
-          "variacao_pct": 1.63
-        },
-        {
-          "cidade": "Recife",
-          "variacao_pct": 1.49
-        },
-        {
-          "cidade": "São Luís",
-          "variacao_pct": 1.38
-        },
-        {
-          "cidade": "Maceió",
-          "variacao_pct": 0.87
-        },
-        {
-          "cidade": "Aracaju",
-          "variacao_pct": 0.84
-        },
-        {
-          "cidade": "Cuiabá",
-          "variacao_pct": 0.83
+          "variacao_pct": 1.31
         },
         {
           "cidade": "Brasília",
-          "variacao_pct": 0.81
+          "variacao_pct": 1.28
         },
         {
-          "cidade": "Rio de Janeiro",
-          "variacao_pct": 0.76
+          "cidade": "Aracaju",
+          "variacao_pct": 1.07
         },
         {
-          "cidade": "Teresina",
-          "variacao_pct": 0.71
-        },
-        {
-          "cidade": "Florianópolis",
-          "variacao_pct": 0.56
+          "cidade": "Recife",
+          "variacao_pct": 0.88
         },
         {
           "cidade": "Goiânia",
-          "variacao_pct": 0.53
+          "variacao_pct": 0.77
         },
         {
-          "cidade": "João Pessoa",
-          "variacao_pct": 0.52
+          "cidade": "Rio de Janeiro",
+          "variacao_pct": 0.77
         },
         {
-          "cidade": "São Paulo",
-          "variacao_pct": 0.52
-        },
-        {
-          "cidade": "Porto Alegre",
-          "variacao_pct": 0.47
-        },
-        {
-          "cidade": "Salvador",
-          "variacao_pct": 0.44
-        },
-        {
-          "cidade": "Natal",
-          "variacao_pct": 0.4
-        },
-        {
-          "cidade": "Curitiba",
-          "variacao_pct": 0.29
-        },
-        {
-          "cidade": "Belo Horizonte",
-          "variacao_pct": 0.18
-        },
-        {
-          "cidade": "Belém",
-          "variacao_pct": -0.14
+          "cidade": "São Luís",
+          "variacao_pct": 0.71
         },
         {
           "cidade": "Manaus",
-          "variacao_pct": -0.31
+          "variacao_pct": 0.7
+        },
+        {
+          "cidade": "Fortaleza",
+          "variacao_pct": 0.56
+        },
+        {
+          "cidade": "João Pessoa",
+          "variacao_pct": 0.56
+        },
+        {
+          "cidade": "Florianópolis",
+          "variacao_pct": 0.52
+        },
+        {
+          "cidade": "Salvador",
+          "variacao_pct": 0.51
+        },
+        {
+          "cidade": "Porto Alegre",
+          "variacao_pct": 0.44
+        },
+        {
+          "cidade": "São Paulo",
+          "variacao_pct": 0.37
+        },
+        {
+          "cidade": "Cuiabá",
+          "variacao_pct": 0.23
+        },
+        {
+          "cidade": "Maceió",
+          "variacao_pct": 0.12
+        },
+        {
+          "cidade": "Teresina",
+          "variacao_pct": 0.11
+        },
+        {
+          "cidade": "Natal",
+          "variacao_pct": 0.03
+        },
+        {
+          "cidade": "Belo Horizonte",
+          "variacao_pct": -0.08
+        },
+        {
+          "cidade": "Belém",
+          "variacao_pct": -0.19
         },
         {
           "cidade": "Campo Grande",
-          "variacao_pct": -1.55
+          "variacao_pct": -0.19
+        },
+        {
+          "cidade": "Curitiba",
+          "variacao_pct": -0.25
         }
       ],
-      "bh_pct": 0.18,
+      "bh_pct": -0.08,
       "bh_posicao": 19,
       "total_capitais": 22,
       "capitais_em_queda": [
+        "Belo Horizonte",
         "Belém",
-        "Manaus",
-        "Campo Grande"
+        "Campo Grande",
+        "Curitiba"
       ],
-      "quantas_em_queda": 3,
+      "quantas_em_queda": 4,
       "capitais_em_alta": [
-        "Fortaleza",
         "Vitória",
-        "Recife",
-        "São Luís",
-        "Maceió",
-        "Aracaju",
-        "Cuiabá",
         "Brasília",
-        "Rio de Janeiro",
-        "Teresina",
-        "Florianópolis",
+        "Aracaju",
+        "Recife",
         "Goiânia",
+        "Rio de Janeiro",
+        "São Luís",
+        "Manaus",
+        "Fortaleza",
         "João Pessoa",
-        "São Paulo",
-        "Porto Alegre",
+        "Florianópolis",
         "Salvador",
-        "Natal",
-        "Curitiba",
-        "Belo Horizonte"
+        "Porto Alegre",
+        "São Paulo",
+        "Cuiabá",
+        "Maceió",
+        "Teresina",
+        "Natal"
       ],
-      "quantas_em_alta": 19
+      "quantas_em_alta": 18
     },
     "ano": {
-      "indice_geral_pct": 4.04,
+      "indice_geral_pct": 3.44,
       "capitais": [
         {
           "cidade": "Vitória",
-          "variacao_pct": 12.04
+          "variacao_pct": 10.24
+        },
+        {
+          "cidade": "Manaus",
+          "variacao_pct": 9.19
+        },
+        {
+          "cidade": "Aracaju",
+          "variacao_pct": 8.15
+        },
+        {
+          "cidade": "Salvador",
+          "variacao_pct": 7.27
+        },
+        {
+          "cidade": "Florianópolis",
+          "variacao_pct": 6.05
+        },
+        {
+          "cidade": "Brasília",
+          "variacao_pct": 5.88
+        },
+        {
+          "cidade": "Fortaleza",
+          "variacao_pct": 5.62
+        },
+        {
+          "cidade": "Teresina",
+          "variacao_pct": 5.54
+        },
+        {
+          "cidade": "Natal",
+          "variacao_pct": 5.33
+        },
+        {
+          "cidade": "Recife",
+          "variacao_pct": 5.04
+        },
+        {
+          "cidade": "João Pessoa",
+          "variacao_pct": 5.03
+        },
+        {
+          "cidade": "Goiânia",
+          "variacao_pct": 4.79
+        },
+        {
+          "cidade": "Campo Grande",
+          "variacao_pct": 4.16
+        },
+        {
+          "cidade": "Belém",
+          "variacao_pct": 4.0
+        },
+        {
+          "cidade": "São Luís",
+          "variacao_pct": 3.89
+        },
+        {
+          "cidade": "Rio de Janeiro",
+          "variacao_pct": 3.55
+        },
+        {
+          "cidade": "Maceió",
+          "variacao_pct": 3.54
+        },
+        {
+          "cidade": "Cuiabá",
+          "variacao_pct": 3.49
+        },
+        {
+          "cidade": "São Paulo",
+          "variacao_pct": 2.07
+        },
+        {
+          "cidade": "Curitiba",
+          "variacao_pct": 0.06
+        },
+        {
+          "cidade": "Belo Horizonte",
+          "variacao_pct": 0.01
+        },
+        {
+          "cidade": "Porto Alegre",
+          "variacao_pct": 0.01
+        }
+      ],
+      "bh_pct": 0.01,
+      "bh_posicao": 21,
+      "total_capitais": 22,
+      "capitais_em_queda": [],
+      "quantas_em_queda": 0,
+      "capitais_em_alta": [
+        "Vitória",
+        "Manaus",
+        "Aracaju",
+        "Salvador",
+        "Florianópolis",
+        "Brasília",
+        "Fortaleza",
+        "Teresina",
+        "Natal",
+        "Recife",
+        "João Pessoa",
+        "Goiânia",
+        "Campo Grande",
+        "Belém",
+        "São Luís",
+        "Rio de Janeiro",
+        "Maceió",
+        "Cuiabá",
+        "São Paulo",
+        "Curitiba",
+        "Belo Horizonte",
+        "Porto Alegre"
+      ],
+      "quantas_em_alta": 22
+    },
+    "doze_meses": {
+      "indice_geral_pct": 5.49,
+      "capitais": [
+        {
+          "cidade": "Manaus",
+          "variacao_pct": 11.42
+        },
+        {
+          "cidade": "Salvador",
+          "variacao_pct": 10.84
+        },
+        {
+          "cidade": "Vitória",
+          "variacao_pct": 10.16
+        },
+        {
+          "cidade": "Brasília",
+          "variacao_pct": 9.44
         },
         {
           "cidade": "Aracaju",
           "variacao_pct": 9.06
         },
         {
-          "cidade": "Manaus",
-          "variacao_pct": 8.85
-        },
-        {
-          "cidade": "Salvador",
-          "variacao_pct": 7.73
-        },
-        {
           "cidade": "Fortaleza",
-          "variacao_pct": 7.39
-        },
-        {
-          "cidade": "Brasília",
-          "variacao_pct": 6.74
-        },
-        {
-          "cidade": "Florianópolis",
-          "variacao_pct": 6.65
-        },
-        {
-          "cidade": "Recife",
-          "variacao_pct": 6.61
-        },
-        {
-          "cidade": "Teresina",
-          "variacao_pct": 6.29
+          "variacao_pct": 8.89
         },
         {
           "cidade": "Natal",
-          "variacao_pct": 5.76
+          "variacao_pct": 8.4
+        },
+        {
+          "cidade": "Florianópolis",
+          "variacao_pct": 8.2
         },
         {
           "cidade": "João Pessoa",
-          "variacao_pct": 5.58
-        },
-        {
-          "cidade": "Goiânia",
-          "variacao_pct": 5.34
+          "variacao_pct": 8.12
         },
         {
           "cidade": "São Luís",
-          "variacao_pct": 5.32
+          "variacao_pct": 7.25
         },
         {
-          "cidade": "Maceió",
-          "variacao_pct": 4.45
+          "cidade": "Teresina",
+          "variacao_pct": 7.23
         },
         {
-          "cidade": "Cuiabá",
-          "variacao_pct": 4.35
-        },
-        {
-          "cidade": "Rio de Janeiro",
-          "variacao_pct": 4.34
+          "cidade": "Goiânia",
+          "variacao_pct": 7.18
         },
         {
           "cidade": "Belém",
-          "variacao_pct": 3.85
+          "variacao_pct": 6.56
         },
         {
-          "cidade": "São Paulo",
-          "variacao_pct": 2.6
+          "cidade": "Recife",
+          "variacao_pct": 6.25
+        },
+        {
+          "cidade": "Maceió",
+          "variacao_pct": 5.5
+        },
+        {
+          "cidade": "Rio de Janeiro",
+          "variacao_pct": 5.12
+        },
+        {
+          "cidade": "Cuiabá",
+          "variacao_pct": 4.99
         },
         {
           "cidade": "Campo Grande",
-          "variacao_pct": 2.54
+          "variacao_pct": 4.58
         },
         {
-          "cidade": "Porto Alegre",
-          "variacao_pct": 0.48
-        },
-        {
-          "cidade": "Curitiba",
-          "variacao_pct": 0.36
+          "cidade": "São Paulo",
+          "variacao_pct": 3.63
         },
         {
           "cidade": "Belo Horizonte",
-          "variacao_pct": 0.19
+          "variacao_pct": 2.92
+        },
+        {
+          "cidade": "Curitiba",
+          "variacao_pct": 2.74
+        },
+        {
+          "cidade": "Porto Alegre",
+          "variacao_pct": 0.96
         }
       ],
-      "bh_pct": 0.19,
-      "bh_posicao": 22,
+      "bh_pct": 2.92,
+      "bh_posicao": 20,
       "total_capitais": 22,
       "capitais_em_queda": [],
       "quantas_em_queda": 0,
       "capitais_em_alta": [
-        "Vitória",
-        "Aracaju",
         "Manaus",
         "Salvador",
-        "Fortaleza",
+        "Vitória",
         "Brasília",
-        "Florianópolis",
-        "Recife",
-        "Teresina",
+        "Aracaju",
+        "Fortaleza",
         "Natal",
+        "Florianópolis",
         "João Pessoa",
-        "Goiânia",
         "São Luís",
-        "Maceió",
-        "Cuiabá",
-        "Rio de Janeiro",
+        "Teresina",
+        "Goiânia",
         "Belém",
-        "São Paulo",
+        "Recife",
+        "Maceió",
+        "Rio de Janeiro",
+        "Cuiabá",
         "Campo Grande",
-        "Porto Alegre",
-        "Curitiba",
-        "Belo Horizonte"
-      ],
-      "quantas_em_alta": 22
-    },
-    "doze_meses": {
-      "indice_geral_pct": 5.51,
-      "capitais": [
-        {
-          "cidade": "Vitória",
-          "variacao_pct": 11.93
-        },
-        {
-          "cidade": "Manaus",
-          "variacao_pct": 10.54
-        },
-        {
-          "cidade": "Salvador",
-          "variacao_pct": 10.38
-        },
-        {
-          "cidade": "Fortaleza",
-          "variacao_pct": 10.2
-        },
-        {
-          "cidade": "Brasília",
-          "variacao_pct": 9.8
-        },
-        {
-          "cidade": "Aracaju",
-          "variacao_pct": 9.68
-        },
-        {
-          "cidade": "Natal",
-          "variacao_pct": 8.39
-        },
-        {
-          "cidade": "Florianópolis",
-          "variacao_pct": 8.31
-        },
-        {
-          "cidade": "João Pessoa",
-          "variacao_pct": 7.99
-        },
-        {
-          "cidade": "São Luís",
-          "variacao_pct": 7.75
-        },
-        {
-          "cidade": "Teresina",
-          "variacao_pct": 7.51
-        },
-        {
-          "cidade": "Goiânia",
-          "variacao_pct": 7.14
-        },
-        {
-          "cidade": "Recife",
-          "variacao_pct": 7.14
-        },
-        {
-          "cidade": "Belém",
-          "variacao_pct": 6.1
-        },
-        {
-          "cidade": "Rio de Janeiro",
-          "variacao_pct": 5.57
-        },
-        {
-          "cidade": "Maceió",
-          "variacao_pct": 5.41
-        },
-        {
-          "cidade": "Cuiabá",
-          "variacao_pct": 5.34
-        },
-        {
-          "cidade": "São Paulo",
-          "variacao_pct": 3.64
-        },
-        {
-          "cidade": "Belo Horizonte",
-          "variacao_pct": 1.97
-        },
-        {
-          "cidade": "Curitiba",
-          "variacao_pct": 1.86
-        },
-        {
-          "cidade": "Campo Grande",
-          "variacao_pct": 1.0
-        },
-        {
-          "cidade": "Porto Alegre",
-          "variacao_pct": 0.85
-        }
-      ],
-      "bh_pct": 1.97,
-      "bh_posicao": 19,
-      "total_capitais": 22,
-      "capitais_em_queda": [],
-      "quantas_em_queda": 0,
-      "capitais_em_alta": [
-        "Vitória",
-        "Manaus",
-        "Salvador",
-        "Fortaleza",
-        "Brasília",
-        "Aracaju",
-        "Natal",
-        "Florianópolis",
-        "João Pessoa",
-        "São Luís",
-        "Teresina",
-        "Goiânia",
-        "Recife",
-        "Belém",
-        "Rio de Janeiro",
-        "Maceió",
-        "Cuiabá",
         "São Paulo",
         "Belo Horizonte",
         "Curitiba",
-        "Campo Grande",
         "Porto Alegre"
       ],
       "quantas_em_alta": 22
@@ -380,10 +380,10 @@
   "inflacao_ipca": {
     "fonte": "IPCA/IBGE, conforme a tabela comparativa do informe do FipeZap",
     "observacao": "Cada campo e uma coluna da linha do IPCA na tabela do informe. Compare cada horizonte com o horizonte correspondente do indice; nunca cruze horizontes.",
-    "mensal_pct": 0.7,
-    "mes_anterior_pct": -0.32,
-    "ano_pct": 3.83,
-    "doze_meses_pct": 4.45,
-    "trecho_literal": "IPCA* IBGE +0,70% -0,32% +3,83% +4,45%"
+    "mensal_pct": -0.4,
+    "mes_anterior_pct": 0.07,
+    "ano_pct": 3.02,
+    "doze_meses_pct": 4.14,
+    "trecho_literal": "IPCA* IBGE -0,40% +0,07% +3,02% +4,14%"
   }
 }
