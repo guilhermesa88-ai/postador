@@ -1,0 +1,64 @@
+{
+  "marca": "metro-de-bh",
+  "data": "2026-10-05",
+  "legenda": "Em BH, quase toda a alta dos últimos 12 meses aconteceu antes de 2026. O acumulado em 12 meses é de 1,97%, mas no ano são apenas 0,19% — dez vezes menos. E no último mês, 0,18%. O ritmo praticamente parou em 2026. Nos 12 meses até setembro de 2026, BH ficou na 19ª posição entre 22 capitais. No acumulado do ano, caiu para a última posição. A diferença entre os três horizontes mostra que a valorização de BH se concentrou no fim de 2025. Desde janeiro, o mercado anda de lado.\n\nFonte: FipeZap — Índice de Venda Residencial, setembro de 2026\n\n#MetroDeBH #MercadoImobiliarioBH #PrecoDeImoveis #BeloHorizonte #DadosImobiliarios #FipeZap",
+  "slides": [
+    {
+      "tipo": "capa",
+      "eyebrow": "Preço de imóvel em BH",
+      "titulo": "A alta de 12 meses não está acontecendo agora",
+      "sub": "BH acumula 1,97% em 12 meses, mas apenas 0,19% no ano. A valorização aconteceu antes de 2026.",
+      "fonte": "FipeZap set/2026"
+    },
+    {
+      "tipo": "grafico",
+      "eyebrow": "Três horizontes, três ritmos",
+      "titulo": "BH em 12 meses, no ano e no mês",
+      "unidade": "%",
+      "fonte": "FipeZap",
+      "dados": [
+        {
+          "label": "12 meses",
+          "valor": 1.97
+        },
+        {
+          "label": "No ano",
+          "valor": 0.19
+        },
+        {
+          "label": "Setembro",
+          "valor": 0.18
+        }
+      ]
+    },
+    {
+      "tipo": "lista",
+      "eyebrow": "O que os três números dizem",
+      "titulo": "A mesma história ou uma diferente?",
+      "itens": [
+        "<strong>12 meses: 1,97%</strong> — Parece que BH subiu quase 2%. Mas esse número inclui os nove meses anteriores a 2026.",
+        "<strong>No ano: 0,19%</strong> — De janeiro a setembro de 2026, BH acumulou dez vezes menos. O ritmo mudou.",
+        "<strong>Setembro: 0,18%</strong> — O último mês sozinho já responde por quase todo o acumulado do ano. O mercado anda devagar.",
+        "<strong>A diferença</strong> — Se 12 meses dá 1,97% e o ano dá 0,19%, a maior parte da alta aconteceu antes de 2026."
+      ]
+    },
+    {
+      "tipo": "texto",
+      "eyebrow": "Contexto",
+      "titulo": "BH está na última posição no acumulado do ano",
+      "corpo": "Nos 12 meses até setembro, BH ficou na 19ª posição entre as 22 capitais monitoradas. No acumulado de 2026, caiu para a 22ª — a última.\n\nA média das capitais subiu 4,04% no ano. BH subiu 0,19%. Curitiba, a penúltima, subiu 0,36%.\n\nEm 12 meses, a média das capitais foi de 5,51%. BH ficou em 1,97%.",
+      "fonte": "FipeZap set/2026"
+    },
+    {
+      "tipo": "fechamento",
+      "eyebrow": "Metro de BH",
+      "titulo": "Acompanhe os dados do mercado de BH",
+      "corpo": "Todo mês, a gente publica os números do FipeZap e do Imovelweb para Belo Horizonte e região metropolitana. Sem achismo, só dado.",
+      "cta": "Segue a gente para não perder o próximo."
+    }
+  ],
+  "periodo": "2026-09",
+  "hash_pdf": "e328e33680bc2f4d",
+  "selo_ia": "Conteúdo produzido com apoio de IA",
+  "angulo": "os-tres-horizontes"
+}
