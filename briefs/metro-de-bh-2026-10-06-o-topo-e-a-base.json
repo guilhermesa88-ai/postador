@@ -1,0 +1,77 @@
+{
+  "marca": "metro-de-bh",
+  "data": "2026-10-06",
+  "legenda": "BH subiu 0,19% no acumulado do ano. Vitória liderou com 12,04%, seguida por Aracaju com 9,06%. A diferença entre a primeira colocada e BH chegou a 11,9 pontos percentuais.\n\nTodas as 22 capitais monitoradas subiram no ano. BH ficou na última posição do ranking.\n\nDados do FipeZap — Índice de Venda Residencial, setembro de 2026.\n\n#imoveisbh #mercadoimobiliario #belohorizonte #primeiroimovel #fipezap #preçosdeimoveis",
+  "slides": [
+    {
+      "tipo": "capa",
+      "eyebrow": "FipeZap • Acumulado do ano",
+      "titulo": "Vitória subiu 12,04% no ano; BH subiu 0,19%",
+      "sub": "A diferença entre as duas capitais chegou a 11,9 pontos percentuais"
+    },
+    {
+      "tipo": "grafico",
+      "eyebrow": "Variação no ano",
+      "titulo": "As cinco que mais subiram e BH",
+      "unidade": "%",
+      "fonte": "FipeZap set/2026",
+      "dados": [
+        {
+          "label": "Vitória",
+          "valor": 12.04
+        },
+        {
+          "label": "Aracaju",
+          "valor": 9.06
+        },
+        {
+          "label": "Manaus",
+          "valor": 8.85
+        },
+        {
+          "label": "Salvador",
+          "valor": 7.73
+        },
+        {
+          "label": "Fortaleza",
+          "valor": 7.39
+        },
+        {
+          "label": "Belo Horizonte",
+          "valor": 0.19
+        }
+      ]
+    },
+    {
+      "tipo": "lista",
+      "eyebrow": "Ranking completo",
+      "titulo": "BH na última posição entre 22 capitais",
+      "sub": "Variação percentual acumulada no ano (jan-set 2026)",
+      "itens": [
+        "Vitória: 12,04%",
+        "Aracaju: 9,06%",
+        "Manaus: 8,85%",
+        "Curitiba: 0,36%",
+        "Belo Horizonte: 0,19%"
+      ],
+      "rodape_destaque": "A média das 22 capitais subiu 4,04% no ano"
+    },
+    {
+      "tipo": "texto",
+      "eyebrow": "O que isso significa",
+      "titulo": "BH ficou 11,9 p.p. abaixo da líder",
+      "corpo": "Vitória subiu 12,04% no acumulado do ano. Belo Horizonte subiu 0,19% no mesmo período.\n\nA diferença entre as duas capitais foi de 11,9 pontos percentuais.\n\nTodas as 22 capitais monitoradas tiveram alta no ano. BH ficou na última posição, abaixo da média de 4,04%."
+    },
+    {
+      "tipo": "fechamento",
+      "eyebrow": "Metro de BH",
+      "titulo": "Dados do mercado imobiliário de BH",
+      "corpo": "Todo mês a gente traz os números do FipeZap: quanto o preço subiu ou caiu, como BH se compara às outras capitais, e o que cada bairro fez.\n\nSem achismo. Só o dado.",
+      "cta": "Segue a gente para acompanhar os próximos"
+    }
+  ],
+  "periodo": "2026-09",
+  "hash_pdf": "e328e33680bc2f4d",
+  "selo_ia": "Conteúdo produzido com apoio de IA",
+  "angulo": "o-topo-e-a-base"
+}
